@@ -8,13 +8,22 @@ Description:
 #ifndef HOMEWORK_1_KNIGHT_HPP
 #define HOMEWORK_1_KNIGHT_HPP
 
-
 #include <array>
+#include <memory>
+#include "fib_helper.hpp"
 
 class Knight {
-public:
-    static constexpr int max_number_of_knights{100000};
-    std::array<bool, max_number_of_knights> knight{false};
+public: // Methods
+    void setValidFibPairs();
+public: // Members
+    static constexpr int max_number_of_knights{100};
+    std::array<unsigned int, max_number_of_knights> valid_knights{0};
+    unsigned int num_valid_knights{0};
+    unsigned int seat_num{0};
+    bool found{false};
+    std::shared_ptr<FibHelper> fib_helper;
+
+
 };
 
 

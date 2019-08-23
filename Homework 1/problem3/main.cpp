@@ -6,18 +6,31 @@ Description:
  Knights of the order of Fibonacci
 */
 #include <iostream>
+#include <memory>
 #include "knight.hpp"
+#include "fib_helper.hpp"
+
 
 /**
  * Main Function
  * Executes the program
  */
-
 int main()
 {
     // Declare variables
+    // Create the fib helper class
+    auto fib_helper = std::make_shared<FibHelper>();
+
+    // Initialize the Knights
     std::array<Knight, Knight::max_number_of_knights> knights;
-    std::array<bool, Knight::max_number_of_knights> found{false};
+    unsigned int counter{1};
+    for(auto &knight : knights) {
+        knight.fib_helper = fib_helper;
+        knight.seat_num = counter;
+        knight.setValidFibPairs();
+        counter++;
+    }
+
     unsigned long num_knights;
 
     // Prompt User
@@ -32,6 +45,7 @@ int main()
     if (num_knights > Knight::max_number_of_knights) {
         std::cout << "Too many knights, either lower amount or raise max_number_of_knights value" << std::endl;
     }
+
     // Determine if fibonacci number
 
     // Find suitable candidates up to n
