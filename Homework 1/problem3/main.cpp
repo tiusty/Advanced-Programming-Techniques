@@ -7,9 +7,17 @@ Description:
 */
 #include <iostream>
 #include <memory>
+#include <algorithm>
 #include "knight.hpp"
 #include "fib_helper.hpp"
 
+bool sortKnights (const Knight& i,const Knight& j) {
+    if(j.num_valid_knights == 0 || i.num_valid_knights == 0) {
+        return false;
+    } else {
+        return (i.num_valid_knights<j.num_valid_knights);
+    }
+}
 
 /**
  * Main Function
@@ -27,7 +35,6 @@ int main()
     for(auto &knight : knights) {
         knight.fib_helper = fib_helper;
         knight.seat_num = counter;
-        knight.setValidFibPairs();
         counter++;
     }
 
@@ -46,6 +53,16 @@ int main()
     if (num_knights > Knight::max_number_of_knights) {
         std::cout << "Too many knights, either lower amount or raise max_number_of_knights value" << std::endl;
     }
+
+    // Determine all the valid fib numbers
+    for(Knight &knight : knights) {
+        knight.setValidFibPairs(num_knights);
+    }
+
+    // Sort Knights
+    std::sort(knights.begin(), knights.begin() + num_knights, sortKnights);
+
+
 
     // Determine if fibonacci number
 
