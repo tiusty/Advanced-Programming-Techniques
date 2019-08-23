@@ -31,9 +31,10 @@ int main()
         counter++;
     }
 
-    unsigned long num_knights;
+    // Determines the number of knights the user desires
+    unsigned long num_knights{0};
 
-    // Prompt User
+    // Prompt User for number of knights desired
     std::cout << "How many knights do you want to seat?" << std::endl;
     std::cin >> num_knights;
 
