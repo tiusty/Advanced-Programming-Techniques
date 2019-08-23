@@ -12,7 +12,7 @@ Description:
 
 class FibHelper {
 public: // Methods
-    FibHelper();
+    FibHelper() = default;
 
     /**
      * Checks two numbers and see if it is a valid fibonacci pair
@@ -22,20 +22,18 @@ public: // Methods
      *         False -> THe two numbers are not a valid fibonacci pair
      */
     bool checkFibPairs(unsigned int num1, unsigned int num2);
+
+    /**
+     * Generates the cache of fibonacci numbers for easy access later
+     */
+    void generateFibCache();
 public: // Members
     /**
      * Determines the max number of fibonacci numbers to store
      */
     static constexpr int max_fib_iter{100};
-
-private: // Methods
-    /**
-     * Generates the cache of fibonacci numbers for easy access later
-     */
-    void generateFibCache();
-
-private: // Members
     std::array<unsigned int, max_fib_iter> fib_cache{0};
+
 
 };
 

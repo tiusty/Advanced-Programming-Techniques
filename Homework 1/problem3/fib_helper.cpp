@@ -10,11 +10,6 @@ Description:
 
 constexpr int FibHelper::max_fib_iter;
 
-FibHelper::FibHelper()
-{
-    generateFibCache();
-}
-
 void FibHelper::generateFibCache()
 {
     fib_cache.at(0) = 1;

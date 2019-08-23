@@ -28,6 +28,7 @@ int main()
     // Declare variables
     // Create the fib helper class
     auto fib_helper = std::make_shared<FibHelper>();
+    fib_helper->generateFibCache();
 
     // Initialize the Knights
     std::array<Knight, Knight::max_number_of_knights> knights;
