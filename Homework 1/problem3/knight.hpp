@@ -8,10 +8,12 @@ Description:
 #ifndef HOMEWORK_1_KNIGHT_HPP
 #define HOMEWORK_1_KNIGHT_HPP
 
+
 #include <array>
 
 class Knight {
-    static constexpr int max_number_of_knights{10000};
+public:
+    static constexpr int max_number_of_knights{100000};
     std::array<bool, max_number_of_knights> knight{false};
 };
 
