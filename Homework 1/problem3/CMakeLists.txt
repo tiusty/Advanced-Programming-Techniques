@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(${PROJECT_NAME}
         main.cpp
         knight.cpp
-        )
+        knights.cpp)
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE
