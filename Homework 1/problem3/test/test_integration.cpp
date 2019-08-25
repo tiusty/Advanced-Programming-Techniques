@@ -57,3 +57,21 @@ TEST(TestIntegration, TestKnightOrders5)
     ASSERT_EQ(knights.seating_order.at(4),5);
 }
 
+/**
+ *
+ * Test that 10 knights can't be seated
+ */
+TEST(TestIntegration, TestKnightOrders10)
+{
+    // Arrange
+    auto fib_helper = std::make_shared<FibHelper>();
+    fib_helper->generateFibCache();
+    Knights knights{fib_helper};
+    unsigned int num_knights{10};
+
+    // Act
+    knights.determineSeatingOrder(num_knights);
+
+    // Assert
+    ASSERT_EQ(knights.seating_index,0);
+}

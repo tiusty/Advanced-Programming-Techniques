@@ -38,12 +38,12 @@ Knights::Knights(const std::shared_ptr<FibHelper>& fib_helper)
 
 void Knights::initializeKnights(unsigned int knights_num)
 {
-    if(knights_num > Knights::max_number_of_knights)
+    if(knights_num > Knight::max_number_of_knights)
     {
         std::cout << "Error: Tried to set more knights then max, please increase max number to run" << std::endl;
         exit(1);
     }
-    
+
     // Stores the desired number of knights
     num_knights = knights_num;
 
@@ -69,9 +69,9 @@ bool Knights::determineValidSeating(const Knight& already_seated, const Knight& 
 
     // For any un-found knights search for a knight that has the already_seated knights num
     //  as a valid neighbor
-    for(unsigned int valid_knight : potential_neighbor.valid_knights)
+    for(int i=0; i<potential_neighbor.num_valid_knights; i++)
     {
-        if(valid_knight == already_seated.seat_num)
+        if(potential_neighbor.valid_knights.at(i) == already_seated.seat_num)
         {
             valid = true;
             break;

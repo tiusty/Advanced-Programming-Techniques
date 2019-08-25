@@ -21,7 +21,6 @@ Description:
  */
 class Knights {
 public: // Methods
-
     /**
      * Constructor which allows passing in the fib helper
      * @param fib_helper A shared pointer to the fib helper
@@ -36,12 +35,16 @@ public: // Methods
 
 public: // Members
     /**
-     * Stores the maximum number of knights that can be tried to be
-     * seated
+     * Stores the current seating order
      */
-    static constexpr int max_number_of_knights{30};
-private: // Methods
+    std::array<unsigned int, Knight::max_number_of_knights> seating_order{0};
 
+    /**
+     * Stores the current index to which the seating order is valid
+     */
+    unsigned int seating_index{0};
+
+private: // Methods
     /**
      * Initialize the knights depending on the number that
      *  want to be seated
@@ -76,17 +79,7 @@ private: // Members
      *  number of knights seated is dependent on what the num_knights
      *  is initialized to
      */
-    std::array<Knight, Knights::max_number_of_knights> knights;
-
-    /**
-     * Stores the current seating order
-     */
-    std::array<unsigned int, Knights::max_number_of_knights> seating_order{0};
-
-    /**
-     * Stores the current index to which the seating order is valid
-     */
-    unsigned int seating_index{0};
+    std::array<Knight, Knight::max_number_of_knights> knights;
 
     /**
      * Stores the number of knights that want to be seated
