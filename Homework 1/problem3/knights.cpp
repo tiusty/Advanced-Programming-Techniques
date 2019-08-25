@@ -93,7 +93,10 @@ bool Knights::findNeighbor(Knight &seated_knight)
     return found_neighbor;
 }
 
-void Knights::determineSeatingOrder() {
+void Knights::determineSeatingOrder(unsigned int num_knights) {
+
+    initializeKnights(num_knights);
+
     bool result{false};
     for(unsigned int i=0; i<num_knights;i++)
     {
@@ -120,26 +123,3 @@ void Knights::determineSeatingOrder() {
         std::cout << "No solution exists" << std::endl;
     }
 }
-
-bool Knights::foundKnightSeat(unsigned int found_knight)
-{
-    bool condition_still_valid{true};
-    for(Knight &knight : knights)
-    {
-        for(unsigned int &valid_knight : knight.valid_knights)
-        {
-            if(found_knight == valid_knight)
-            {
-                valid_knight = 0;
-                knight.num_valid_knights--;
-                if(knight.num_valid_knights == 0 and not knight.found)
-                {
-                    condition_still_valid = false;
-                }
-            }
-        }
-    }
-
-    return condition_still_valid;
-}
-

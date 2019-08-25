@@ -42,8 +42,7 @@ int main()
     }
 
     // Initialize the number of knights and set the corresponding data
-    knights.initializeKnights(num_knights);
-    knights.determineSeatingOrder();
+    knights.determineSeatingOrder(num_knights);
     
 
     return 0;

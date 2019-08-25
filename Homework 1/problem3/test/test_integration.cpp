@@ -2,7 +2,8 @@
 Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 8/24/2019
-Description: 
+Description:
+ Integration tests to test full program
 */
 
 #include <gtest/gtest.h>
@@ -10,6 +11,9 @@ Description:
 #include <knights.hpp>
 #include <fib_helper.hpp>
 
+/**
+ * Test that 7 knights are properly seated
+ */
 TEST(TestIntegration, TestKnightOrders7)
 {
     // Arrange
@@ -19,8 +23,7 @@ TEST(TestIntegration, TestKnightOrders7)
     unsigned int num_knights{7};
 
     // Act
-    knights.initializeKnights(num_knights);
-    knights.determineSeatingOrder();
+    knights.determineSeatingOrder(num_knights);
 
     // Assert
     ASSERT_EQ(knights.seating_order.at(0),4);
@@ -32,6 +35,9 @@ TEST(TestIntegration, TestKnightOrders7)
     ASSERT_EQ(knights.seating_order.at(6),5);
 }
 
+/**
+ * Test that 5 knights are properly seated
+ */
 TEST(TestIntegration, TestKnightOrders5)
 {
     // Arrange
@@ -41,8 +47,7 @@ TEST(TestIntegration, TestKnightOrders5)
     unsigned int num_knights{5};
 
     // Act
-    knights.initializeKnights(num_knights);
-    knights.determineSeatingOrder();
+    knights.determineSeatingOrder(num_knights);
 
     // Assert
     ASSERT_EQ(knights.seating_order.at(0),4);
