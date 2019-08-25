@@ -8,9 +8,6 @@ if(UNITTESTS)
     include(cmake/gtest.cmake)
 endif()
 
-# Want to use c++ 14
-set(CMAKE_CXX_STANDARD 14)
-
 # Add the directories for the different problems
 add_subdirectory(problem1)
 add_subdirectory(problem2)
