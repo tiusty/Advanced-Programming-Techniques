@@ -8,8 +8,8 @@ Description:
 
 #include <gtest/gtest.h>
 
-#include <knights.hpp>
-#include <fib_helper.hpp>
+#include "knights.hpp"
+#include "fib_helper.hpp"
 
 /**
  * Test that 7 knights are properly seated

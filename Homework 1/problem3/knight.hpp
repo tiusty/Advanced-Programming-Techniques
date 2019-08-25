@@ -16,7 +16,6 @@ class Knight {
 public: // Methods
     void setValidFibPairs(unsigned int num_knights);
 public: // Members
-    static constexpr int max_number_of_knights{100};
     std::array<unsigned int, max_number_of_knights> valid_knights{0};
     unsigned int num_valid_knights{0};
     unsigned int seat_num{0};

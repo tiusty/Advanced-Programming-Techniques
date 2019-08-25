@@ -1,8 +1,10 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 8/23/2019
-Description: 
+Last date modified: 8/24/2019
+Description:
+ A helper class which stores a cache of the fib numbers and
+ also allows basic functionality with the fib numbers
 */
 
 #ifndef HOMEWORK_1_FIBHELPER_HPP
@@ -10,6 +12,10 @@ Description:
 
 #include <array>
 
+/**
+ * Helper class to deal with fib numbers more easily
+ *  Stores a cache of a number of fib numbers for easy access
+ */
 class FibHelper {
 public: // Methods
     FibHelper() = default;
@@ -32,9 +38,11 @@ public: // Members
      * Determines the max number of fibonacci numbers to store
      */
     static constexpr int max_fib_iter{100};
+
+    /**
+     * Stores a cache of all the fib numbers so they can be easily accessed
+     */
     std::array<unsigned int, max_fib_iter> fib_cache{0};
-
-
 };
 
 

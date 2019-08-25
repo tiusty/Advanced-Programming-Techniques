@@ -11,6 +11,7 @@ Description:
 
 #include <array>
 #include <memory>
+
 #include "fib_helper.hpp"
 #include "knight.hpp"
 
@@ -29,34 +30,16 @@ public: // Methods
 
     /**
      * Given a number of knights to seat, determines the appropriate seating order
-     * @param num_knights The number of knights to seat
+     * @param knights_num The number of knights to seat
      */
-    void determineSeatingOrder(unsigned int num_knights);
+    void determineSeatingOrder(unsigned int knights_num);
 
 public: // Members
     /**
-     * Stores all the potential knights that can be seated. Actual
-     *  number of knights seated is dependent on what the num_knights
-     *  is initialized to
+     * Stores the maximum number of knights that can be tried to be
+     * seated
      */
-    std::array<Knight, Knight::max_number_of_knights> knights;
-
-    /**
-     * Stores the current seating order
-     */
-    std::array<unsigned int, Knight::max_number_of_knights> seating_order{0};
-
-    /**
-     * Stores the current index to which the seating order is valid
-     */
-    unsigned int seating_index{0};
-
-    /**
-     * Stores the number of knights that want to be seated
-     */
-    unsigned int num_knights{0};
-
-    static constexpr int max_seating_char_length=100;
+    static constexpr int max_number_of_knights{30};
 private: // Methods
 
     /**
@@ -86,6 +69,34 @@ private: // Methods
      *         False -> The knight has no valid neighbors
      */
     bool findNeighbor(Knight &seated_knight);
+
+private: // Members
+    /**
+     * Stores all the potential knights that can be seated. Actual
+     *  number of knights seated is dependent on what the num_knights
+     *  is initialized to
+     */
+    std::array<Knight, Knights::max_number_of_knights> knights;
+
+    /**
+     * Stores the current seating order
+     */
+    std::array<unsigned int, Knights::max_number_of_knights> seating_order{0};
+
+    /**
+     * Stores the current index to which the seating order is valid
+     */
+    unsigned int seating_index{0};
+
+    /**
+     * Stores the number of knights that want to be seated
+     */
+    unsigned int num_knights{0};
+
+    /**
+     * Stores the length of the char for the seating string
+     */
+    static constexpr int max_seating_char_length=100;
 };
 
 
