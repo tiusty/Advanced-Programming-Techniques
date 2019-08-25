@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 8/23/2019
+Last date modified: 8/24/2019
 Description:
  Knights of the order of Fibonacci
 */
