@@ -10,7 +10,6 @@ Description:
 
 #include <algorithm>
 #include <iostream>
-#include <sstream>
 
 /**
  * A sorting function used to sort from least number of valid neighbors to most
@@ -144,13 +143,15 @@ void Knights::determineSeatingOrder(unsigned int knights_num)
     if(result)
     {
         std::cout << "Solution found" << std::endl;
-        std::stringstream ss;
-        ss << "K";
+
+        // Create the string to output the seating order and then print it
+        char output_str[max_seating_char_length];
+        sprintf(output_str, "K");
         for(unsigned int i=0; i < knights_num; i++)
         {
-            ss << "," << seating_order.at(i);
+            sprintf(output_str, "%s,%d", output_str, seating_order.at(i));
         }
-        std::cout << ss.str() << std::endl;
+        std::cout << output_str << std::endl;
     }
     else
     {
