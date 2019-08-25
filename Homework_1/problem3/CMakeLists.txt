@@ -37,6 +37,7 @@ target_include_directories(${FIB_HELPER}
             ${CMAKE_CURRENT_LIST_DIR}
         )
 
+# If unittests are defined then add the unittests
 if(UNITTESTS)
     add_subdirectory(test)
 endif()
