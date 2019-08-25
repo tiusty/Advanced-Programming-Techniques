@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 2.8)
 project(Homework_1)
 
 # If unittests are defined then clone down gtest repo for gtest sources files
