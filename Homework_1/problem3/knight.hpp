@@ -33,7 +33,7 @@ public: // Members
     /**
      * An array of the possible valid knights that can be neighbors
      */
-    std::array<unsigned int, Knight::max_number_of_knights> valid_knights{0};
+    std::array<unsigned int, Knight::max_number_of_knights> valid_knights{{0}};
 
     /**
      * The number of valid knights that there are

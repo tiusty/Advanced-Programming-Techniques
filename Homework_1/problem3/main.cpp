@@ -8,6 +8,8 @@ Description:
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <cstdlib>
+
 #include "knights.hpp"
 #include "fib_helper.hpp"
 

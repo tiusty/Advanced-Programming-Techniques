@@ -6,6 +6,7 @@ Description:
  Determines the number of ones needed to add to a number while dividing by 7 so that there are no reminders.
 */
 #include <iostream>
+#include <cstdlib>
 
 /**
  * Main function

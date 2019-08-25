@@ -37,7 +37,7 @@ public: // Members
     /**
      * Stores the current seating order
      */
-    std::array<unsigned int, Knight::max_number_of_knights> seating_order{0};
+    std::array<unsigned int, Knight::max_number_of_knights> seating_order{{0}};
 
     /**
      * Stores the current index to which the seating order is valid
