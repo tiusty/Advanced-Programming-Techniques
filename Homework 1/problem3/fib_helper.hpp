@@ -17,7 +17,11 @@ Description:
  *  Stores a cache of a number of fib numbers for easy access
  */
 class FibHelper {
+
 public: // Methods
+    /**
+     * Default ctor
+     */
     FibHelper() = default;
 
     /**
@@ -33,6 +37,7 @@ public: // Methods
      * Generates the cache of fibonacci numbers for easy access later
      */
     void generateFibCache();
+
 public: // Members
     /**
      * Determines the max number of fibonacci numbers to store

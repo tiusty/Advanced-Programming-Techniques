@@ -1,8 +1,9 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 8/23/2019
-Description: 
+Last date modified: 8/24/2019
+Description:
+ Contains funciontality for the fib helper class
 */
 
 #include <iostream>

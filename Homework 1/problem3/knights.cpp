@@ -2,7 +2,8 @@
 Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 8/24/2019
-Description: 
+Description:
+ Contains the functionality for the knights class
 */
 
 #include "knights.hpp"
