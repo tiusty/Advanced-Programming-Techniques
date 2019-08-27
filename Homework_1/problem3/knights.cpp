@@ -12,7 +12,7 @@ Description:
 #include <iostream>
 
 /**
- * A sorting function used to sort from least number of valid neighbors to most
+ * A sorting function used to sort from least number of valid neighbors to most.
  * Used to speed up matching since it tries to match the most restrictive knights
  * first
  */
@@ -44,10 +44,11 @@ void Knights::initializeKnights(unsigned int numberKnights)
         exit(1);
     }
 
-    // Stores the desired number of knights
+    // Stores the desired number of knights to be seated
     numKnights = numberKnights;
 
     // Determine all the valid neighbors (fib numbers) for each knight
+    // This is used later to reduce the complexity of the loop
     for(Knight &knight : knights) {
         knight.setValidFibPairs(numKnights);
     }
@@ -67,8 +68,8 @@ bool Knights::determineValidSeating(const Knight& alreadySeated, const Knight& p
         return false;
     }
 
-    // For any un-found knights search for a knight that has the already_seated knights num
-    //  as a valid neighbor
+    // For any knights waiting to be seated (not found), if that potential knight has the current knight stored
+    //  as a valid neighbor (valid knight) then return true
     for(int i=0; i < potentialNeighbor.numValidKnights; i++)
     {
         if(potentialNeighbor.validKnights.at(i) == alreadySeated.seatNum)
@@ -91,6 +92,7 @@ bool Knights::findNeighbor(Knight &seatedKnight)
     seatingIndex++;
 
     // End condition if all the knights are found
+    // Starts chain of recursive founds to end recursive calls
     if(seatingIndex == numKnights)
     {
         return true;
@@ -141,7 +143,7 @@ void Knights::determineSeatingOrder(unsigned int knightsNum)
         }
     }
 
-    // Determine result of the brute force
+    // Determine result of the search
     if(result)
     {
         std::cout << "Solution found" << std::endl;

@@ -34,7 +34,8 @@ public: // Members
     static constexpr int kMaxNumberOfKnights{30};
 
     /**
-     * An array of the possible valid knights that can be neighbors
+     * An array of the possible valid knights that can be neighbors.
+     *  Prevents needing to brute force every combination
      * Stores in array to avoid using dynamic memory
      */
     std::array<unsigned int, Knight::kMaxNumberOfKnights> validKnights{{0}};

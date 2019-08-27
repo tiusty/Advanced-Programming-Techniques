@@ -13,6 +13,7 @@ constexpr int FibHelper::kMaxFibIter;
 
 void FibHelper::generateFibCache()
 {
+    // Standard fibonacci calculator
     fibCache.at(0) = 1;
     fibCache.at(1) = 1;
     for(int i = 2 ; i < kMaxFibIter; i++) {
@@ -41,7 +42,7 @@ bool FibHelper::checkFibPairs(unsigned int num1, unsigned int num2)
 
     // If the array ends and a pair isn't found then throw a warning that
     //  the number of fib iterations may have been too small
-    std::cout << "Warning; CheckFibPairs loop ended, the cache may have not stored enough fib numbers" << std::endl;
+    std::cout << "Warning: CheckFibPairs loop ended, the cache may have not stored enough fib numbers" << std::endl;
     return false;
 }
 
