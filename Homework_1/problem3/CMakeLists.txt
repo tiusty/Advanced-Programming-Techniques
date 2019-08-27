@@ -5,7 +5,7 @@ set(FIB_HELPER fib_helper)
 set(KNIGHTS knights)
 
 add_executable(${PROJECT_NAME}
-        main.cpp
+        Hmk1_Problem3.cpp
         )
 
 target_include_directories(${PROJECT_NAME}
@@ -41,6 +41,8 @@ if(UNITTESTS)
     add_subdirectory(test)
 endif()
 
-install(TARGETS ${PROJECT_NAME}
-        DESTINATION ${PROJECT_SOURCE_DIR}
-        )
+install(CODE "
+    EXECUTE_PROCESS(COMMAND ln -s ${PROJECT_NAME}
+       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+       )
+    ")

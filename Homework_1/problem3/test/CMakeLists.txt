@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(Homework_1_Tests)
+project(Hmk1_Problem3_Tests)
 
 add_executable(${PROJECT_NAME}
         test_main.cpp

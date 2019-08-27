@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
-project(Hmk1_Problem3)
+project(Hmk1_Problem1)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} Hmk1_Problem1.cpp)
 
-install(TARGETS ${PROJECT_NAME}
-        DESTINATION ${PROJECT_SOURCE_DIR}
-        )
+install(CODE "
+    EXECUTE_PROCESS(COMMAND ln -s ${PROJECT_NAME}
+       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+       )
+    ")
