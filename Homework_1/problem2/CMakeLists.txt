@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(problem2)
+project(Hmk1_Problem2)
 
 add_executable(${PROJECT_NAME} main.cpp)
 

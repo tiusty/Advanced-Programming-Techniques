@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(problem3)
+project(Hmk1_Problem3)
 
 set(FIB_HELPER fib_helper)
 set(KNIGHTS knights)
