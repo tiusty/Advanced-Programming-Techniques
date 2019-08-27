@@ -6,7 +6,7 @@ Description:
  Contains the functionality for the knights class
 */
 
-#include "knights.hpp"
+#include "table.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -24,7 +24,7 @@ bool sortKnights (const Knight& i,const Knight& j) {
     }
 }
 
-Knights::Knights(const std::shared_ptr<FibHelper>& fibHelper)
+Table::Table(const std::shared_ptr<FibHelper>& fibHelper)
 {
     unsigned int counter{1};
 
@@ -36,7 +36,7 @@ Knights::Knights(const std::shared_ptr<FibHelper>& fibHelper)
     }
 }
 
-void Knights::initializeKnights(unsigned int numberKnights)
+void Table::initializeKnights(unsigned int numberKnights)
 {
     if(numberKnights > Knight::kMaxNumberOfKnights)
     {
@@ -57,7 +57,7 @@ void Knights::initializeKnights(unsigned int numberKnights)
     std::sort(knights.begin(), knights.begin() + numKnights, sortKnights);
 }
 
-bool Knights::determineValidSeating(const Knight& alreadySeated, const Knight& potentialNeighbor)
+bool Table::determineValidSeating(const Knight& alreadySeated, const Knight& potentialNeighbor)
 {
     bool valid = false;
 
@@ -82,7 +82,7 @@ bool Knights::determineValidSeating(const Knight& alreadySeated, const Knight& p
     return valid;
 }
 
-bool Knights::findNeighbor(Knight &seatedKnight)
+bool Table::findNeighbor(Knight &seatedKnight)
 {
     // Since the knight is seated, mark it as found and increment the seating_index
     bool foundNeighbor{false};
@@ -127,7 +127,7 @@ bool Knights::findNeighbor(Knight &seatedKnight)
     return foundNeighbor;
 }
 
-void Knights::determineSeatingOrder(unsigned int knightsNum)
+void Table::determineSeatingOrder(unsigned int knightsNum)
 {
     // Initialize the knights for the number that wants to be seated
     initializeKnights(knightsNum);

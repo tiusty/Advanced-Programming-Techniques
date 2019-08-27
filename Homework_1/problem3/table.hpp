@@ -1,13 +1,13 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 8/24/2019
+Last date modified: 8/27/2019
 Description:
- Stores a bunch of knights that want to be seated
+ Stores a bunch of knights and corresponding helper functions for seating them
 */
 
-#ifndef HOMEWORK_1_KNIGHTS_HPP
-#define HOMEWORK_1_KNIGHTS_HPP
+#ifndef HOMEWORK_1_TABLE_HPP
+#define HOMEWORK_1_TABLE_HPP
 
 #include <array>
 #include <memory>
@@ -19,13 +19,13 @@ Description:
  * Class stores a bunch of knights that want to be seated. It also
  *  stores functions related to managing the knights
  */
-class Knights {
+class Table {
 public: // Methods
     /**
      * Constructor which allows passing in the fib helper
      * @param fibHelper A shared pointer to the fib helper
      */
-    explicit Knights(const std::shared_ptr<FibHelper>& fibHelper);
+    explicit Table(const std::shared_ptr<FibHelper>& fibHelper);
 
     /**
      * Given a number of knights to seat, determines the appropriate seating order
@@ -95,4 +95,4 @@ private: // Members
 };
 
 
-#endif //HOMEWORK_1_KNIGHTS_HPP
+#endif //HOMEWORK_1_TABLE_HPP

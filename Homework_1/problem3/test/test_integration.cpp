@@ -8,7 +8,7 @@ Description:
 
 #include <gtest/gtest.h>
 
-#include "knights.hpp"
+#include "table.hpp"
 #include "fib_helper.hpp"
 
 /**
@@ -19,20 +19,20 @@ TEST(TestIntegration, TestKnightOrders7)
     // Arrange
     auto fib_helper = std::make_shared<FibHelper>();
     fib_helper->generateFibCache();
-    Knights knights{fib_helper};
+    Table table{fib_helper};
     unsigned int num_knights{7};
 
     // Act
-    knights.determineSeatingOrder(num_knights);
+    table.determineSeatingOrder(num_knights);
 
     // Assert
-    ASSERT_EQ(knights.seatingOrder.at(0), 4);
-    ASSERT_EQ(knights.seatingOrder.at(1), 1);
-    ASSERT_EQ(knights.seatingOrder.at(2), 7);
-    ASSERT_EQ(knights.seatingOrder.at(3), 6);
-    ASSERT_EQ(knights.seatingOrder.at(4), 2);
-    ASSERT_EQ(knights.seatingOrder.at(5), 3);
-    ASSERT_EQ(knights.seatingOrder.at(6), 5);
+    ASSERT_EQ(table.seatingOrder.at(0), 4);
+    ASSERT_EQ(table.seatingOrder.at(1), 1);
+    ASSERT_EQ(table.seatingOrder.at(2), 7);
+    ASSERT_EQ(table.seatingOrder.at(3), 6);
+    ASSERT_EQ(table.seatingOrder.at(4), 2);
+    ASSERT_EQ(table.seatingOrder.at(5), 3);
+    ASSERT_EQ(table.seatingOrder.at(6), 5);
 }
 
 /**
@@ -43,7 +43,7 @@ TEST(TestIntegration, TestKnightOrders5)
     // Arrange
     auto fib_helper = std::make_shared<FibHelper>();
     fib_helper->generateFibCache();
-    Knights knights{fib_helper};
+    Table knights{fib_helper};
     unsigned int num_knights{5};
 
     // Act
@@ -66,7 +66,7 @@ TEST(TestIntegration, TestKnightOrders10)
     // Arrange
     auto fib_helper = std::make_shared<FibHelper>();
     fib_helper->generateFibCache();
-    Knights knights{fib_helper};
+    Table knights{fib_helper};
     unsigned int num_knights{10};
 
     // Act

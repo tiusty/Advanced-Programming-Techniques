@@ -9,7 +9,7 @@ Description:
 #include <memory>
 #include <cstdlib>
 
-#include "knights.hpp"
+#include "table.hpp"
 #include "fib_helper.hpp"
 
 /**
@@ -23,8 +23,8 @@ int main()
     auto fibHelper = std::make_shared<FibHelper>();
     fibHelper->generateFibCache();
 
-    // Initialize the Knights
-    Knights knights{fibHelper};
+    // Initialize the table
+    Table table{fibHelper};
 
     // Determines the number of knights the user desires
     unsigned long numberKnights{0};
@@ -45,7 +45,7 @@ int main()
     }
 
     // Initialize the number of knights and set the corresponding data
-    knights.determineSeatingOrder(numberKnights);
+    table.determineSeatingOrder(numberKnights);
     
 
     return 0;

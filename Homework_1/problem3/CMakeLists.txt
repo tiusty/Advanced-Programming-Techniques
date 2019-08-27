@@ -19,7 +19,7 @@ target_link_libraries(${PROJECT_NAME}
         )
 
 add_library(${KNIGHTS}
-        knights.cpp
+        table.cpp
         knight.cpp
         )
 
