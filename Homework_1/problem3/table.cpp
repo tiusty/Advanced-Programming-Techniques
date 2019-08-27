@@ -129,17 +129,22 @@ bool Table::findNeighbor(Knight &seatedKnight)
 
 void Table::determineSeatingOrder(unsigned int knightsNum)
 {
+    bool result{false};
+
     // Initialize the knights for the number that wants to be seated
     initializeKnights(knightsNum);
 
-    bool result{false};
-    // Start searching for potential seating orders
-    for(unsigned int i=0; i < knightsNum; i++)
+    // Make sure a valid solution exists
+    if(checkPossibleValidSolution())
     {
-        result = findNeighbor(knights.at(i));
-        if(result)
+        // If a solution can exist, then start searching for potential seating orders
+        for(unsigned int i=0; i < knightsNum; i++)
         {
-            break;
+            result = findNeighbor(knights.at(i));
+            if(result)
+            {
+                break;
+            }
         }
     }
 
@@ -161,4 +166,32 @@ void Table::determineSeatingOrder(unsigned int knightsNum)
     {
         std::cout << "No solution exists" << std::endl;
     }
+}
+
+bool Table::checkPossibleValidSolution()
+{
+    unsigned int onlyOneValidNeighbor{0};
+
+    // Check for the number of valid neighbors each knight has
+    // If it only has one valid neighbor then increment the counter variable above
+    for(int i=0; i<numKnights; i++)
+    {
+        if(knights.at(i).numValidKnights == 1)
+        {
+            onlyOneValidNeighbor++;
+        }
+    }
+
+    // If there are more than 2 knights with one valid neighbor then return false since a potential
+    //  solution does not exit. I.e because of the king, there can only be 2 knights with one neighbor
+    //  and if there needs to be more than that, then there is no possible way to sit them.
+
+    // i.e numKnights = 10
+    // valid neighbors
+    //  8 => 5
+    //  9 => 4
+    //  10 => 3
+    // therefore no way to arrange them such that a solution can exist
+    return onlyOneValidNeighbor <= 2;
+
 }

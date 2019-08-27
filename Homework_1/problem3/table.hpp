@@ -74,6 +74,14 @@ private: // Methods
      */
     bool findNeighbor(Knight &seatedKnight);
 
+    /**
+     * Checks to see if there is a possible valid solution. If not then quit before checking combinations
+     *  Used as an optimization to avoid checking for combinations if a combo cannot exist.
+     * @return True -> There could potentially be a  possible solution
+     *         False -> There could not be a valid solution
+     */
+    bool checkPossibleValidSolution();
+
 private: // Members
     /**
      * Stores all the potential knights that can be seated. Actual
