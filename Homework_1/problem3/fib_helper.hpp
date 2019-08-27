@@ -46,6 +46,7 @@ public: // Members
 
     /**
      * Stores a cache of all the fib numbers so they can be easily accessed
+     * Stores in array to avoid using dynamic memory
      */
     std::array<unsigned int, kMaxFibIter> fibCache{{0}};
 };

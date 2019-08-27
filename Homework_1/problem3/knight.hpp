@@ -35,6 +35,7 @@ public: // Members
 
     /**
      * An array of the possible valid knights that can be neighbors
+     * Stores in array to avoid using dynamic memory
      */
     std::array<unsigned int, Knight::kMaxNumberOfKnights> validKnights{{0}};
 

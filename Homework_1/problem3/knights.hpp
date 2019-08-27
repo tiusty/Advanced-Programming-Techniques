@@ -36,6 +36,7 @@ public: // Methods
 public: // Members
     /**
      * Stores the current seating order
+     * Stores in array to avoid using dynamic memory
      */
     std::array<unsigned int, Knight::kMaxNumberOfKnights> seatingOrder{{0}};
 
@@ -78,6 +79,7 @@ private: // Members
      * Stores all the potential knights that can be seated. Actual
      *  number of knights seated is dependent on what the num_knights
      *  is initialized to
+     * Stores in array to avoid using dynamic memory
      */
     std::array<Knight, Knight::kMaxNumberOfKnights> knights;
 
