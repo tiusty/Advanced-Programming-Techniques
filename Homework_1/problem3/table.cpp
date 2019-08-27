@@ -174,7 +174,7 @@ bool Table::checkPossibleValidSolution()
 
     // Check for the number of valid neighbors each knight has
     // If it only has one valid neighbor then increment the counter variable above
-    for(int i=0; i<numKnights; i++)
+    for(unsigned int i=0; i<numKnights; i++)
     {
         if(knights.at(i).numValidKnights == 1)
         {

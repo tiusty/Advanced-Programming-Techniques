@@ -40,3 +40,7 @@ target_include_directories(${FIB_HELPER}
 if(UNITTESTS)
     add_subdirectory(test)
 endif()
+
+install(TARGETS ${PROJECT_NAME}
+        DESTINATION ${PROJECT_SOURCE_DIR}
+        )
