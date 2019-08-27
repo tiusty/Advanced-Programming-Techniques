@@ -9,13 +9,13 @@ Description:
 #include <iostream>
 #include "fib_helper.hpp"
 
-constexpr int FibHelper::maxFibIter;
+constexpr int FibHelper::kMaxFibIter;
 
 void FibHelper::generateFibCache()
 {
     fibCache.at(0) = 1;
     fibCache.at(1) = 1;
-    for(int i = 2 ; i < maxFibIter; i++) {
+    for(int i = 2 ; i < kMaxFibIter; i++) {
         fibCache.at(i) = fibCache.at(i - 1) + fibCache.at(i - 2);
     }
 }

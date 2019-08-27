@@ -38,7 +38,7 @@ Knights::Knights(const std::shared_ptr<FibHelper>& fibHelper)
 
 void Knights::initializeKnights(unsigned int numberKnights)
 {
-    if(numberKnights > Knight::maxNumberOfKnights)
+    if(numberKnights > Knight::kMaxNumberOfKnights)
     {
         std::cout << "Error: Tried to set more knights then max, please increase max number to run" << std::endl;
         exit(1);
@@ -130,8 +130,8 @@ void Knights::determineSeatingOrder(unsigned int knightsNum)
     // Initialize the knights for the number that wants to be seated
     initializeKnights(knightsNum);
 
-    // Start brute force method of seating
     bool result{false};
+    // Start searching for potential seating orders
     for(unsigned int i=0; i < knightsNum; i++)
     {
         result = findNeighbor(knights.at(i));

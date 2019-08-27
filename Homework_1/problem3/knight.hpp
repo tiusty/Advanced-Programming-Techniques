@@ -31,12 +31,12 @@ public: // Members
      * Stores the maximum number of knights that can be tried to be
      * seated
      */
-    static constexpr int maxNumberOfKnights{30};
+    static constexpr int kMaxNumberOfKnights{30};
 
     /**
      * An array of the possible valid knights that can be neighbors
      */
-    std::array<unsigned int, Knight::maxNumberOfKnights> validKnights{{0}};
+    std::array<unsigned int, Knight::kMaxNumberOfKnights> validKnights{{0}};
 
     /**
      * The number of valid knights that there are

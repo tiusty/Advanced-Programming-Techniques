@@ -37,7 +37,7 @@ public: // Members
     /**
      * Stores the current seating order
      */
-    std::array<unsigned int, Knight::maxNumberOfKnights> seatingOrder{{0}};
+    std::array<unsigned int, Knight::kMaxNumberOfKnights> seatingOrder{{0}};
 
     /**
      * Stores the current index to which the seating order is valid
@@ -79,7 +79,7 @@ private: // Members
      *  number of knights seated is dependent on what the num_knights
      *  is initialized to
      */
-    std::array<Knight, Knight::maxNumberOfKnights> knights;
+    std::array<Knight, Knight::kMaxNumberOfKnights> knights;
 
     /**
      * Stores the number of knights that want to be seated
