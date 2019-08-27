@@ -39,9 +39,10 @@ int main()
         std::cout << "You need to seat at least one knight" << std::endl;
         exit(1);
     }
-    if (numberKnights > Knight::kMaxNumberOfKnights)
+    else if (numberKnights > Knight::kMaxNumberOfKnights)
     {
         std::cout << "Too many knights, either lower amount or raise max_number_of_knights value" << std::endl;
+        exit(1);
     }
 
     // Initialize the number of knights and set the corresponding data

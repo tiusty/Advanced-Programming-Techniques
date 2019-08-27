@@ -154,7 +154,7 @@ void Table::determineSeatingOrder(unsigned int knightsNum)
         std::cout << "Solution found" << std::endl;
 
         // Create the string to output the seating order and then print it
-        char outputStr[maxSeatingCharLength];
+        char outputStr[kMaxSeatingCharLength];
         sprintf(outputStr, "K");
         for(unsigned int i=0; i < knightsNum; i++)
         {

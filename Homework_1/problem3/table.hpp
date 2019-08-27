@@ -99,7 +99,7 @@ private: // Members
     /**
      * Stores the length of the char for the seating string
      */
-    static constexpr int maxSeatingCharLength=100;
+    static constexpr int kMaxSeatingCharLength=100;
 };
 
 
