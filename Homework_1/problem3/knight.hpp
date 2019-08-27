@@ -14,6 +14,9 @@ Description:
 
 #include "fib_helper.hpp"
 
+/**
+ * Stores an single instance of a knight and its properties
+ */
 class Knight {
 public: // Methods
 
