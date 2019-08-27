@@ -26,13 +26,13 @@ TEST(TestIntegration, TestKnightOrders7)
     knights.determineSeatingOrder(num_knights);
 
     // Assert
-    ASSERT_EQ(knights.seating_order.at(0),4);
-    ASSERT_EQ(knights.seating_order.at(1),1);
-    ASSERT_EQ(knights.seating_order.at(2),7);
-    ASSERT_EQ(knights.seating_order.at(3),6);
-    ASSERT_EQ(knights.seating_order.at(4),2);
-    ASSERT_EQ(knights.seating_order.at(5),3);
-    ASSERT_EQ(knights.seating_order.at(6),5);
+    ASSERT_EQ(knights.seatingOrder.at(0), 4);
+    ASSERT_EQ(knights.seatingOrder.at(1), 1);
+    ASSERT_EQ(knights.seatingOrder.at(2), 7);
+    ASSERT_EQ(knights.seatingOrder.at(3), 6);
+    ASSERT_EQ(knights.seatingOrder.at(4), 2);
+    ASSERT_EQ(knights.seatingOrder.at(5), 3);
+    ASSERT_EQ(knights.seatingOrder.at(6), 5);
 }
 
 /**
@@ -50,11 +50,11 @@ TEST(TestIntegration, TestKnightOrders5)
     knights.determineSeatingOrder(num_knights);
 
     // Assert
-    ASSERT_EQ(knights.seating_order.at(0),4);
-    ASSERT_EQ(knights.seating_order.at(1),1);
-    ASSERT_EQ(knights.seating_order.at(2),2);
-    ASSERT_EQ(knights.seating_order.at(3),3);
-    ASSERT_EQ(knights.seating_order.at(4),5);
+    ASSERT_EQ(knights.seatingOrder.at(0), 4);
+    ASSERT_EQ(knights.seatingOrder.at(1), 1);
+    ASSERT_EQ(knights.seatingOrder.at(2), 2);
+    ASSERT_EQ(knights.seatingOrder.at(3), 3);
+    ASSERT_EQ(knights.seatingOrder.at(4), 5);
 }
 
 /**
@@ -73,5 +73,5 @@ TEST(TestIntegration, TestKnightOrders10)
     knights.determineSeatingOrder(num_knights);
 
     // Assert
-    ASSERT_EQ(knights.seating_index,0);
+    ASSERT_EQ(knights.seatingIndex, 0);
 }

@@ -42,12 +42,12 @@ public: // Members
     /**
      * Determines the max number of fibonacci numbers to store
      */
-    static constexpr int max_fib_iter{100};
+    static constexpr int maxFibIter{100};
 
     /**
      * Stores a cache of all the fib numbers so they can be easily accessed
      */
-    std::array<unsigned int, max_fib_iter> fib_cache{{0}};
+    std::array<unsigned int, maxFibIter> fibCache{{0}};
 };
 
 

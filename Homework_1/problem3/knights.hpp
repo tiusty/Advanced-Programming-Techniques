@@ -23,55 +23,55 @@ class Knights {
 public: // Methods
     /**
      * Constructor which allows passing in the fib helper
-     * @param fib_helper A shared pointer to the fib helper
+     * @param fibHelper A shared pointer to the fib helper
      */
-    explicit Knights(const std::shared_ptr<FibHelper>& fib_helper);
+    explicit Knights(const std::shared_ptr<FibHelper>& fibHelper);
 
     /**
      * Given a number of knights to seat, determines the appropriate seating order
-     * @param knights_num The number of knights to seat
+     * @param knightsNum The number of knights to seat
      */
-    void determineSeatingOrder(unsigned int knights_num);
+    void determineSeatingOrder(unsigned int knightsNum);
 
 public: // Members
     /**
      * Stores the current seating order
      */
-    std::array<unsigned int, Knight::max_number_of_knights> seating_order{{0}};
+    std::array<unsigned int, Knight::maxNumberOfKnights> seatingOrder{{0}};
 
     /**
      * Stores the current index to which the seating order is valid
      */
-    unsigned int seating_index{0};
+    unsigned int seatingIndex{0};
 
 private: // Methods
     /**
      * Initialize the knights depending on the number that
      *  want to be seated
-     * @param num_knights The number of knights that are going to
+     * @param numberKnights The number of knights that are going to
      * be seated
      */
-    void initializeKnights(unsigned int num_knights);
+    void initializeKnights(unsigned int numberKnights);
 
     /**
      * Given a seated knight and a potential neighbor, determines if that neighbor
      *  is a valid neighbor
-     * @param already_seated The knight that is already seated that is looking for a neighbor
-     * @param potential_neighbor A potential knight that is being tested to see if it can sit next
+     * @param alreadySeated The knight that is already seated that is looking for a neighbor
+     * @param potentialNeighbor A potential knight that is being tested to see if it can sit next
      *  to the already seated knight
      * @return True -> The neighbor can sit next to the already seated knight
      *         False -> The neighbor is not a valid neighbor
      */
-    bool determineValidSeating(const Knight &already_seated,const Knight &potential_neighbor);
+    bool determineValidSeating(const Knight &alreadySeated, const Knight &potentialNeighbor);
 
     /**
      * Given a seated knight, the function tries to find a suitable neighbor and seats them
      *  if it finds one
-     * @param seated_knight The knight that was just seated
+     * @param seatedKnight The knight that was just seated
      * @return True -> There is a valid neighbor that was seated
      *         False -> The knight has no valid neighbors
      */
-    bool findNeighbor(Knight &seated_knight);
+    bool findNeighbor(Knight &seatedKnight);
 
 private: // Members
     /**
@@ -79,17 +79,17 @@ private: // Members
      *  number of knights seated is dependent on what the num_knights
      *  is initialized to
      */
-    std::array<Knight, Knight::max_number_of_knights> knights;
+    std::array<Knight, Knight::maxNumberOfKnights> knights;
 
     /**
      * Stores the number of knights that want to be seated
      */
-    unsigned int num_knights{0};
+    unsigned int numKnights{0};
 
     /**
      * Stores the length of the char for the seating string
      */
-    static constexpr int max_seating_char_length=100;
+    static constexpr int maxSeatingCharLength=100;
 };
 
 

@@ -9,30 +9,30 @@ Description:
 #include <iostream>
 #include "fib_helper.hpp"
 
-constexpr int FibHelper::max_fib_iter;
+constexpr int FibHelper::maxFibIter;
 
 void FibHelper::generateFibCache()
 {
-    fib_cache.at(0) = 1;
-    fib_cache.at(1) = 1;
-    for(int i = 2 ; i<max_fib_iter; i++) {
-        fib_cache.at(i) = fib_cache.at(i-1) + fib_cache.at(i-2);
+    fibCache.at(0) = 1;
+    fibCache.at(1) = 1;
+    for(int i = 2 ; i < maxFibIter; i++) {
+        fibCache.at(i) = fibCache.at(i - 1) + fibCache.at(i - 2);
     }
 }
 
 bool FibHelper::checkFibPairs(unsigned int num1, unsigned int num2)
 {
     unsigned int value = num1 + num2;
-    for(unsigned int fib_num : fib_cache) {
+    for(unsigned int fibNum : fibCache) {
 
         // If the values match then return true
-        if (value == fib_num) {
+        if (value == fibNum) {
             return true;
         }
 
         // Exit if the fibonacci numbers are greater
         //  than the value since the array is sorted from smallest to largest
-        if(fib_num > value) {
+        if(fibNum > value) {
             return false;
         }
     }

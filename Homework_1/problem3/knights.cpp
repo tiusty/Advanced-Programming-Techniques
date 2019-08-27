@@ -17,61 +17,61 @@ Description:
  * first
  */
 bool sortKnights (const Knight& i,const Knight& j) {
-    if(j.num_valid_knights == 0 || i.num_valid_knights == 0) {
+    if(j.numValidKnights == 0 || i.numValidKnights == 0) {
         return false;
     } else {
-        return (i.num_valid_knights<j.num_valid_knights);
+        return (i.numValidKnights < j.numValidKnights);
     }
 }
 
-Knights::Knights(const std::shared_ptr<FibHelper>& fib_helper)
+Knights::Knights(const std::shared_ptr<FibHelper>& fibHelper)
 {
     unsigned int counter{1};
 
     // Give each knight access to the fib_helper and set their seat number
     for(auto &knight : knights) {
-        knight.fib_helper = fib_helper;
-        knight.seat_num = counter;
+        knight.fibHelper = fibHelper;
+        knight.seatNum = counter;
         counter++;
     }
 }
 
-void Knights::initializeKnights(unsigned int knights_num)
+void Knights::initializeKnights(unsigned int numberKnights)
 {
-    if(knights_num > Knight::max_number_of_knights)
+    if(numberKnights > Knight::maxNumberOfKnights)
     {
         std::cout << "Error: Tried to set more knights then max, please increase max number to run" << std::endl;
         exit(1);
     }
 
     // Stores the desired number of knights
-    num_knights = knights_num;
+    numKnights = numberKnights;
 
     // Determine all the valid neighbors (fib numbers) for each knight
     for(Knight &knight : knights) {
-        knight.setValidFibPairs(num_knights);
+        knight.setValidFibPairs(numKnights);
     }
 
     // Sort Knights from least valid number of neighbors to most
-    std::sort(knights.begin(), knights.begin() + num_knights, sortKnights);
+    std::sort(knights.begin(), knights.begin() + numKnights, sortKnights);
 }
 
-bool Knights::determineValidSeating(const Knight& already_seated, const Knight& potential_neighbor)
+bool Knights::determineValidSeating(const Knight& alreadySeated, const Knight& potentialNeighbor)
 {
     bool valid = false;
 
     // If the potential neighbor is already found then they cannot be a valid neighbor
     //  so return false
-    if(potential_neighbor.found)
+    if(potentialNeighbor.found)
     {
         return false;
     }
 
     // For any un-found knights search for a knight that has the already_seated knights num
     //  as a valid neighbor
-    for(int i=0; i<potential_neighbor.num_valid_knights; i++)
+    for(int i=0; i < potentialNeighbor.numValidKnights; i++)
     {
-        if(potential_neighbor.valid_knights.at(i) == already_seated.seat_num)
+        if(potentialNeighbor.validKnights.at(i) == alreadySeated.seatNum)
         {
             valid = true;
             break;
@@ -81,33 +81,34 @@ bool Knights::determineValidSeating(const Knight& already_seated, const Knight& 
     return valid;
 }
 
-bool Knights::findNeighbor(Knight &seated_knight)
+bool Knights::findNeighbor(Knight &seatedKnight)
 {
     // Since the knight is seated, mark it as found and increment the seating_index
-    bool found_neighbor{false};
-    seated_knight.found = true;
-    seating_order.at(seating_index) = seated_knight.seat_num;
-    seating_index++;
+    bool foundNeighbor{false};
+
+    seatedKnight.found = true;
+    seatingOrder.at(seatingIndex) = seatedKnight.seatNum;
+    seatingIndex++;
 
     // End condition if all the knights are found
-    if(seating_index == num_knights)
+    if(seatingIndex == numKnights)
     {
         return true;
     }
 
     // Searches for a valid neighbor
-    for(unsigned int i=0; i<num_knights;i++)
+    for(unsigned int i=0; i < numKnights; i++)
     {
         // If a valid neighbor is found, then recursively call find neighbor for the
         //  new knight. If it can't find any valid neighbors then keep searching for
         //  a new knight
-        if(determineValidSeating(seated_knight, knights.at(i)))
+        if(determineValidSeating(seatedKnight, knights.at(i)))
         {
-            found_neighbor = findNeighbor(knights.at(i));
+            foundNeighbor = findNeighbor(knights.at(i));
         }
 
         // If the neighbor was found (i.e end condition, then break)
-        if(found_neighbor)
+        if(foundNeighbor)
         {
             break;
         }
@@ -115,22 +116,22 @@ bool Knights::findNeighbor(Knight &seated_knight)
 
     // If the knight couldn't find a neighbor then subtract the seating_index since the
     //  neighbor was not found
-    if(not found_neighbor) {
-        seating_index--;
-        seated_knight.found = false;
+    if(not foundNeighbor) {
+        seatingIndex--;
+        seatedKnight.found = false;
     }
 
-    return found_neighbor;
+    return foundNeighbor;
 }
 
-void Knights::determineSeatingOrder(unsigned int knights_num)
+void Knights::determineSeatingOrder(unsigned int knightsNum)
 {
     // Initialize the knights for the number that wants to be seated
-    initializeKnights(knights_num);
+    initializeKnights(knightsNum);
 
     // Start brute force method of seating
     bool result{false};
-    for(unsigned int i=0; i < knights_num; i++)
+    for(unsigned int i=0; i < knightsNum; i++)
     {
         result = findNeighbor(knights.at(i));
         if(result)
@@ -145,13 +146,13 @@ void Knights::determineSeatingOrder(unsigned int knights_num)
         std::cout << "Solution found" << std::endl;
 
         // Create the string to output the seating order and then print it
-        char output_str[max_seating_char_length];
-        sprintf(output_str, "K");
-        for(unsigned int i=0; i < knights_num; i++)
+        char outputStr[maxSeatingCharLength];
+        sprintf(outputStr, "K");
+        for(unsigned int i=0; i < knightsNum; i++)
         {
-            sprintf(output_str, "%s,%d", output_str, seating_order.at(i));
+            sprintf(outputStr, "%s,%d", outputStr, seatingOrder.at(i));
         }
-        std::cout << output_str << std::endl;
+        std::cout << outputStr << std::endl;
     }
     else
     {

@@ -22,31 +22,31 @@ public: // Methods
 
     /**
      * Sets all the valid neighbors for the given knight
-     * @param num_knights The number of knights trying to be seated
+     * @param numKnights The number of knights trying to be seated
      */
-    void setValidFibPairs(unsigned int num_knights);
+    void setValidFibPairs(unsigned int numKnights);
 
 public: // Members
     /**
      * Stores the maximum number of knights that can be tried to be
      * seated
      */
-    static constexpr int max_number_of_knights{30};
+    static constexpr int maxNumberOfKnights{30};
 
     /**
      * An array of the possible valid knights that can be neighbors
      */
-    std::array<unsigned int, Knight::max_number_of_knights> valid_knights{{0}};
+    std::array<unsigned int, Knight::maxNumberOfKnights> validKnights{{0}};
 
     /**
      * The number of valid knights that there are
      */
-    unsigned int num_valid_knights{0};
+    unsigned int numValidKnights{0};
 
     /**
      * The seat number associated with the knight
      */
-    unsigned int seat_num{0};
+    unsigned int seatNum{0};
 
     /**
      * Determines if the knights seating position has been found
@@ -56,7 +56,7 @@ public: // Members
     /**
      * The fib helper which provides some helper methods/data
      */
-    std::shared_ptr<FibHelper> fib_helper;
+    std::shared_ptr<FibHelper> fibHelper;
 };
 
 

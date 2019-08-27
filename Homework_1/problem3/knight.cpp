@@ -8,18 +8,18 @@ Description:
 
 #include "knight.hpp"
 
-void Knight::setValidFibPairs(unsigned int num_knights)
+void Knight::setValidFibPairs(unsigned int numKnights)
 {
-    for(unsigned int i=1; i<=num_knights; i++)
+    for(unsigned int i=1; i <= numKnights; i++)
     {
-        if (i == seat_num)
+        if (i == seatNum)
         {
             continue;
         }
-        else if(fib_helper->checkFibPairs(i, seat_num))
+        else if(fibHelper->checkFibPairs(i, seatNum))
         {
-            valid_knights.at(num_valid_knights) = i;
-            num_valid_knights++;
+            validKnights.at(numValidKnights) = i;
+            numValidKnights++;
         }
     }
 }

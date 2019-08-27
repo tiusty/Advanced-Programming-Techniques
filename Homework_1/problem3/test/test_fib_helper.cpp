@@ -19,11 +19,11 @@ TEST(FibHelper, TestCheckFibPairs)
 
     // Manually set values to avoid relaying on another
     //  member function
-    fib_helper.fib_cache.at(0) = 1;
-    fib_helper.fib_cache.at(1) = 1;
-    fib_helper.fib_cache.at(2) = 2;
-    fib_helper.fib_cache.at(3) = 3;
-    fib_helper.fib_cache.at(4) = 5;
+    fib_helper.fibCache.at(0) = 1;
+    fib_helper.fibCache.at(1) = 1;
+    fib_helper.fibCache.at(2) = 2;
+    fib_helper.fibCache.at(3) = 3;
+    fib_helper.fibCache.at(4) = 5;
 
     // Act / Assert
     // Test true condtions
