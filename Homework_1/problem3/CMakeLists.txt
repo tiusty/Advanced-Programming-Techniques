@@ -41,8 +41,8 @@ if(UNITTESTS)
     add_subdirectory(test)
 endif()
 
-install(CODE "
-    EXECUTE_PROCESS(COMMAND ln -s ${PROJECT_NAME}
-       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-       )
-    ")
+# Custom command to copy the targets to the build directory
+#   For easy of running
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_BINARY_DIR}
+        )

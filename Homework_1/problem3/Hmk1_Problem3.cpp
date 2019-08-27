@@ -46,7 +46,6 @@ int main()
 
     // Initialize the number of knights and set the corresponding data
     table.determineSeatingOrder(numberKnights);
-    
 
     return 0;
 }
