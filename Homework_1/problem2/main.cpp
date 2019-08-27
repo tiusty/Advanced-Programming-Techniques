@@ -16,19 +16,20 @@ Description:
 int main()
 {
     // Declare variables
-    double upper_limit = 0;
-    int num_subdivisions = 0;
-    double index_spacing = 0;
-    double final_value = 0;
+    double upperLimit = 0;
+    int numSubdivisions = 0;
+    double indexSpacing = 0;
+    double finalValue = 0;
 
     // Retrieve data from user
     std::cout << "Please enter the upper limit" << std::endl;
-    std::cin >> upper_limit;
+    std::cin >> upperLimit;
     std::cout << "Please enter the number of subdivisions to use" << std::endl;
-    std::cin >> num_subdivisions;
+    std::cin >> numSubdivisions;
 
     // Error check inputs
-    if (num_subdivisions < 1) {
+    if (numSubdivisions < 1)
+    {
         std::cout << "Number of subdivisions should be greater than 0" << std::endl;
         exit(1);
     }
@@ -39,13 +40,13 @@ int main()
     };
 
     // Perform integration
-    index_spacing = upper_limit/num_subdivisions;
-    for(int i = 1; i < num_subdivisions; i++) {
-        final_value += func(index_spacing * i) * index_spacing;
+    indexSpacing = upperLimit / numSubdivisions;
+    for(int i = 1; i < numSubdivisions; i++) {
+        finalValue += func(indexSpacing * i) * indexSpacing;
     }
 
     // Print final value
-    std::cout << "Final value: " << final_value << std::endl;
+    std::cout << "Final value: " << finalValue << std::endl;
 
     return 0;
 }

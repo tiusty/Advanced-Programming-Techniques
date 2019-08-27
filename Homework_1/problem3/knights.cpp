@@ -116,7 +116,8 @@ bool Knights::findNeighbor(Knight &seatedKnight)
 
     // If the knight couldn't find a neighbor then subtract the seating_index since the
     //  neighbor was not found
-    if(not foundNeighbor) {
+    if(not foundNeighbor)
+    {
         seatingIndex--;
         seatedKnight.found = false;
     }

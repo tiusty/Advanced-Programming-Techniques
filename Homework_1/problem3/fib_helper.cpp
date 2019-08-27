@@ -26,13 +26,15 @@ bool FibHelper::checkFibPairs(unsigned int num1, unsigned int num2)
     for(unsigned int fibNum : fibCache) {
 
         // If the values match then return true
-        if (value == fibNum) {
+        if (value == fibNum)
+        {
             return true;
         }
 
         // Exit if the fibonacci numbers are greater
         //  than the value since the array is sorted from smallest to largest
-        if(fibNum > value) {
+        if(fibNum > value)
+        {
             return false;
         }
     }

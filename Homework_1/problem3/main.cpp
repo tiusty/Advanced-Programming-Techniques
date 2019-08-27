@@ -34,11 +34,13 @@ int main()
     std::cin >> numberKnights;
 
     //Error check
-    if (numberKnights < 1) {
+    if (numberKnights < 1)
+    {
         std::cout << "You need to seat at least one knight" << std::endl;
         exit(1);
     }
-    if (numberKnights > Knight::maxNumberOfKnights) {
+    if (numberKnights > Knight::maxNumberOfKnights)
+    {
         std::cout << "Too many knights, either lower amount or raise max_number_of_knights value" << std::endl;
     }
 

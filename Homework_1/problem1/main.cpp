@@ -16,15 +16,15 @@ Description:
 int main()
 {
     // Declare variables
-    int input_num = 0;
-    unsigned int num_increments = 0;
+    int inputNum = 0;
+    unsigned int numIncrements = 0;
 
     // Prompt then read in a number
     std::cout << "Please enter a number positive number" << std::endl;
-    std::cin >> input_num;
+    std::cin >> inputNum;
 
     // Error condition for negative numbers
-    if (input_num < 0) {
+    if (inputNum < 0) {
         std::cout << "Error: Please enter in a positive number" << std::endl;
         // Return error status if a negative number is entered
         exit(1);
@@ -33,20 +33,25 @@ int main()
     bool active = true;
     while(active) {
         // Condition for ending
-        if(input_num <= 1) {
+        if(inputNum <= 1)
+        {
             active = false;
         // Checks if their is a remainder, if not then divide the number by 7
-        } else if (input_num % 7 == 0) {
-            input_num /= 7;
+        }
+        else if (inputNum % 7 == 0)
+        {
+            inputNum /= 7;
+        }
         // If there is a reminder then add one until there isn't a remainder
-        } else {
-            input_num++;
-            num_increments++;
+        else
+        {
+            inputNum++;
+            numIncrements++;
         }
     }
 
     // Print Results
-    std::cout << "Number of increments: " << num_increments << std::endl;
+    std::cout << "Number of increments: " << numIncrements << std::endl;
     return 0;
 }
 
