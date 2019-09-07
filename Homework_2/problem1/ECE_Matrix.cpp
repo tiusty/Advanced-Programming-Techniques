@@ -145,6 +145,21 @@ ECE_Matrix operator-(const ECE_Matrix &m1, const double &constant)
     return result;
 }
 
+ECE_Matrix ECE_Matrix::transpose()
+{
+    ECE_Matrix result{num_columns, num_rows, 0};
+
+    for(unsigned int i=0; i<num_rows; i++)
+    {
+        for(unsigned int j=0; j<num_columns; j++)
+        {
+            result.data.at(j).at(i) = data.at(i).at(j);
+        }
+    }
+
+    return result;
+}
+
 double ECE_Matrix::getElement(unsigned int row, unsigned int column) const
 {
     if(row >= num_rows || column >= num_columns)

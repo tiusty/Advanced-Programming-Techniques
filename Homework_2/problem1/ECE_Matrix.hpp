@@ -30,6 +30,8 @@ public: // Methods
 
     double getElement(unsigned int row, unsigned int column) const;
 
+    ECE_Matrix transpose();
+
 public: // Members
     unsigned int num_rows;
     unsigned int num_columns;

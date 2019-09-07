@@ -12,8 +12,7 @@ int main()
     ECE_Matrix matrix = ECE_Matrix("data_Problem1.txt");
     ECE_Matrix matrix1{6, 10};
     std::cout << matrix << std::endl;
-    ECE_Matrix result = 2 + matrix - 2;
-    std::cout << result << std::endl;
+    std::cout << matrix.transpose() << std::endl;
 
     return 0;
 }
