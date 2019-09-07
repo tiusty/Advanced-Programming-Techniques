@@ -19,6 +19,9 @@ public: // Methods
     ECE_Matrix(unsigned int row_num, unsigned int column_num, double value);
     ECE_Matrix(char filename[]);
 
+    friend ECE_Matrix operator/(const ECE_Matrix &m1, const double &constant);
+    friend ECE_Matrix operator*(const ECE_Matrix &m1, const double &constant);
+    friend ECE_Matrix operator*(const double &constant, const ECE_Matrix &m1);
     friend ECE_Matrix operator+(const ECE_Matrix &m1, const ECE_Matrix &m2);
     friend ECE_Matrix operator+(const ECE_Matrix &m1, const double &constant);
     friend ECE_Matrix operator+(const double &constant, const ECE_Matrix &m1);
@@ -28,9 +31,11 @@ public: // Methods
 
     friend std::ostream & operator << (std::ostream &out, const ECE_Matrix &c);
 
+    ECE_Matrix &operator+=(const ECE_Matrix &m1);
+    ECE_Matrix &operator-=(const ECE_Matrix &m1);
     double getElement(unsigned int row, unsigned int column) const;
 
-    ECE_Matrix transpose();
+    ECE_Matrix transpose() const;
 
 public: // Members
     unsigned int num_rows;

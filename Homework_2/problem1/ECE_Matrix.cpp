@@ -145,7 +145,62 @@ ECE_Matrix operator-(const ECE_Matrix &m1, const double &constant)
     return result;
 }
 
-ECE_Matrix ECE_Matrix::transpose()
+ECE_Matrix operator*(const double &constant, const ECE_Matrix &m1)
+{
+    return std::move(m1 * constant);
+}
+
+ECE_Matrix operator*(const ECE_Matrix &m1, const double &constant)
+{
+    ECE_Matrix result{m1.num_rows,
+                      m1.num_columns,
+                      0};
+    for(unsigned int i=0; i < result.num_rows; i++)
+    {
+        for(unsigned int j=0; j < result.num_columns; j++)
+        {
+            result.data.at(i).at(j) = m1.getElement(i,j) * constant;
+        }
+    }
+
+    return result;
+}
+
+
+ECE_Matrix operator/(const ECE_Matrix &m1, const double &constant)
+{
+    ECE_Matrix result{m1.num_rows,
+                      m1.num_columns,
+                      0};
+    if (constant == 0)
+    {
+        return result;
+    }
+
+    for(unsigned int i=0; i < result.num_rows; i++)
+    {
+        for(unsigned int j=0; j < result.num_columns; j++)
+        {
+            result.data.at(i).at(j) = m1.getElement(i,j) / constant;
+        }
+    }
+
+    return result;
+}
+
+ECE_Matrix& ECE_Matrix::operator-=(const ECE_Matrix &m1)
+{
+    *this = *this - m1;
+    return *this;
+}
+
+ECE_Matrix& ECE_Matrix::operator+=(const ECE_Matrix &m1)
+{
+    *this = *this + m1;
+    return *this;
+}
+
+ECE_Matrix ECE_Matrix::transpose() const
 {
     ECE_Matrix result{num_columns, num_rows, 0};
 

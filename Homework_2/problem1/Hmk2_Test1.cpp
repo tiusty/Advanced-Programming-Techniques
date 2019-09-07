@@ -3,12 +3,12 @@
 #include "ECE_Matrix.hpp"
 
 
-int main2()
+int main()
 {
 
     const ECE_Matrix M1(3, 5.0);  // Construct 3 x 3 array set all elements to 5.0
     const ECE_Matrix M2(5, 5, 200.0); // Construct 5 x 5 array, setting all element to 200.0
-    const ECE_Matrix M3("data_matrix.txt"); // Construct matrix from file
+    const ECE_Matrix M3("data_Problem1.txt"); // Construct matrix from file
 
     std::cout << "M3: " << std::endl << M3 << std::endl;
 
@@ -37,7 +37,7 @@ int main2()
     std::cout << "M4: (M1 - 5.0 + M2): " << std::endl << M4 << std::endl;
     std::cout << "M5: (M3 - M2 + 8.0) " << std::endl << M5 << std::endl;
     std::cout << "M6: (10.0 * M1 + M2) " << std::endl << M6 << std::endl;
-    std::cout << "M7: M3 Transposed " << std::endl << M6 << std::endl;
+    std::cout << "M7: M3 Transposed " << std::endl << M7 << std::endl;
     std::cout << "M9: (M1 * 8.0) " << std::endl << M9 << std::endl;
     std::cout << "M10: (M1 / 8.0) " << std::endl << M10 << std::endl;
     std::cout << "M13: (M1 + 8.0) " << std::endl << M13 << std::endl;
