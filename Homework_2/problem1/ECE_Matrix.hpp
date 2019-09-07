@@ -20,7 +20,12 @@ public: // Methods
     ECE_Matrix(char filename[]);
 
     friend ECE_Matrix operator+(const ECE_Matrix &m1, const ECE_Matrix &m2);
+    friend ECE_Matrix operator+(const ECE_Matrix &m1, const double &constant);
+    friend ECE_Matrix operator+(const double &constant, const ECE_Matrix &m1);
     friend ECE_Matrix operator-(const ECE_Matrix &m1, const ECE_Matrix &m2);
+    friend ECE_Matrix operator-(const ECE_Matrix &m1, const double &constant);
+    friend ECE_Matrix operator-(const double &constant, const ECE_Matrix &m1);
+
     friend std::ostream & operator << (std::ostream &out, const ECE_Matrix &c);
 
     double getElement(unsigned int row, unsigned int column) const;

@@ -73,11 +73,33 @@ ECE_Matrix operator+(const ECE_Matrix &m1, const ECE_Matrix &m2)
                       std::max(m1.num_columns, m2.num_columns),
                       0};
 
-    for(int i=0; i < std::max(m1.num_rows, m2.num_rows); i++)
+    for(unsigned int i=0; i < result.num_rows; i++)
     {
-        for(int j=0; j < std::max(m1.num_columns, m2.num_columns); j++)
+        for(unsigned int j=0; j < result.num_columns; j++)
         {
             result.data.at(i).at(j) = m1.getElement(i,j) + m2.getElement(i,j);
+        }
+    }
+
+    return result;
+}
+
+ECE_Matrix operator+(const double &constant, const ECE_Matrix &m1)
+{
+    return std::move(m1 + constant);
+}
+
+ECE_Matrix operator+(const ECE_Matrix &m1, const double &constant)
+{
+    ECE_Matrix result{m1.num_rows,
+                      m1.num_columns,
+                      0};
+
+    for(unsigned int i=0; i < result.num_rows; i++)
+    {
+        for(unsigned int j=0; j < result.num_columns; j++)
+        {
+            result.data.at(i).at(j) = m1.getElement(i,j) + constant;
         }
     }
 
@@ -90,11 +112,33 @@ ECE_Matrix operator-(const ECE_Matrix &m1, const ECE_Matrix &m2)
                       std::max(m1.num_columns, m2.num_columns),
                       0};
 
-    for(int i=0; i < std::max(m1.num_rows, m2.num_rows); i++)
+    for(unsigned int i=0; i < result.num_rows; i++)
     {
-        for(int j=0; j < std::max(m1.num_columns, m2.num_columns); j++)
+        for(unsigned int j=0; j < result.num_columns; j++)
         {
             result.data.at(i).at(j) = m1.getElement(i,j) - m2.getElement(i,j);
+        }
+    }
+
+    return result;
+}
+
+ECE_Matrix operator-(const double &constant, const ECE_Matrix &m1)
+{
+    return std::move(m1 - constant);
+}
+
+ECE_Matrix operator-(const ECE_Matrix &m1, const double &constant)
+{
+    ECE_Matrix result{m1.num_rows,
+                      m1.num_columns,
+                      0};
+
+    for(unsigned int i=0; i < result.num_rows; i++)
+    {
+        for(unsigned int j=0; j < result.num_columns; j++)
+        {
+            result.data.at(i).at(j) = m1.getElement(i,j) - constant;
         }
     }
 
