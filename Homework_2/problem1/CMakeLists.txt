@@ -5,7 +5,7 @@ set(MATRIX_LIB matrix_lib)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        Hmk2_Test1.cpp
+#        Hmk2_Test1.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}

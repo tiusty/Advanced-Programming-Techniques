@@ -11,6 +11,7 @@ Description:
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include <iomanip>
 
 ECE_Matrix::ECE_Matrix(int square_size, double value)
 : data(square_size, std::vector<double>(square_size, value))
@@ -47,7 +48,19 @@ ECE_Matrix::ECE_Matrix(char filename[])
         for(int j=0; j < num_columns; j++)
         {
             file >> data.at(i).at(j);
-            std::cout << data.at(i).at(j) << std::endl;
         }
     }
+}
+
+std::ostream & operator << (std::ostream &out, const ECE_Matrix &m)
+{
+    for(const auto & i : m.data)
+    {
+        for(double j : i)
+        {
+            out << std::scientific << std::setw(12) << std::setprecision(3) << j;
+        }
+        out << std::endl;
+    }
+    return out;
 }

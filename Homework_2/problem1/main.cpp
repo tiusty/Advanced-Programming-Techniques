@@ -9,6 +9,8 @@ Description:
 
 int main()
 {
-    ECE_Matrix("data_Problem1.txt");
+    ECE_Matrix matrix = ECE_Matrix("data_Problem1.txt");
+    std::cout << matrix << std::endl;
+
     return 0;
 }

@@ -10,12 +10,14 @@ Description:
 #define HOMEWORK_2_ECE_MATRIX_HPP
 
 #include <vector>
+#include <iostream>
 
 class ECE_Matrix {
 public: // Methods
     ECE_Matrix(int square_size, double value);
     ECE_Matrix(int num_rows, int num_columns, double value);
     ECE_Matrix(char filename[]);
+    friend std::ostream & operator << (std::ostream &out, const ECE_Matrix &c);
 
 public: // Members
 
