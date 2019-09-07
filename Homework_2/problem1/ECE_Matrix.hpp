@@ -8,8 +8,10 @@ Description:
 #ifndef HOMEWORK_2_ECE_MATRIX_HPP
 #define HOMEWORK_2_ECE_MATRIX_HPP
 
+#include <vector>
 
 class ECE_Matrix {
+
 
 };
 

@@ -10,6 +10,6 @@ if(UNITTESTS)
 endif()
 
 # Add the directories for the different problems
-#add_subdirectory(problem1)
+add_subdirectory(problem1)
 #add_subdirectory(problem2)
 #add_subdirectory(problem3)
