@@ -14,13 +14,20 @@ Description:
 
 class ECE_Matrix {
 public: // Methods
-    ECE_Matrix(int square_size, double value);
-    ECE_Matrix(int num_rows, int num_columns, double value);
+    ECE_Matrix();
+    ECE_Matrix(unsigned int square_size, double value);
+    ECE_Matrix(unsigned int row_num, unsigned int column_num, double value);
     ECE_Matrix(char filename[]);
+
+    friend ECE_Matrix operator+(const ECE_Matrix &m1, const ECE_Matrix &m2);
+    friend ECE_Matrix operator-(const ECE_Matrix &m1, const ECE_Matrix &m2);
     friend std::ostream & operator << (std::ostream &out, const ECE_Matrix &c);
 
-public: // Members
+    double getElement(unsigned int row, unsigned int column) const;
 
+public: // Members
+    unsigned int num_rows;
+    unsigned int num_columns;
     std::vector<std::vector<double>> data;
     static constexpr unsigned kBuffSize{1024};
 };

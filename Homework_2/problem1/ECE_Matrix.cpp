@@ -13,19 +13,21 @@ Description:
 #include <cstdlib>
 #include <iomanip>
 
-ECE_Matrix::ECE_Matrix(int square_size, double value)
-: data(square_size, std::vector<double>(square_size, value))
+ECE_Matrix::ECE_Matrix()
+: ECE_Matrix(0,0)
 {}
 
-ECE_Matrix::ECE_Matrix(int num_rows, int num_columns, double value)
-: data(num_rows, std::vector<double>(num_columns, value))
+ECE_Matrix::ECE_Matrix(unsigned int square_size, double value)
+: ECE_Matrix(square_size, square_size, value)
+{}
+
+ECE_Matrix::ECE_Matrix(unsigned int row_num, unsigned int column_num, double value)
+: num_rows(row_num), num_columns(column_num), data(num_rows, std::vector<double>(num_columns, value))
 {}
 
 ECE_Matrix::ECE_Matrix(char filename[])
 {
     char buff[ECE_Matrix::kBuffSize]{0};
-    int num_rows{};
-    int num_columns{};
     std::ifstream file(filename);
 
     if(!file)
@@ -42,10 +44,10 @@ ECE_Matrix::ECE_Matrix(char filename[])
     // Reserve the vector size for the number of rows
     data.reserve(num_rows);
 
-    for(int i=0; i < num_rows; i++)
+    for(unsigned int i=0; i < num_rows; i++)
     {
         data.emplace_back(num_columns, 0);
-        for(int j=0; j < num_columns; j++)
+        for(unsigned int j=0; j < num_columns; j++)
         {
             file >> data.at(i).at(j);
         }
@@ -64,3 +66,48 @@ std::ostream & operator << (std::ostream &out, const ECE_Matrix &m)
     }
     return out;
 }
+
+ECE_Matrix operator+(const ECE_Matrix &m1, const ECE_Matrix &m2)
+{
+    ECE_Matrix result{std::max(m1.num_rows, m2.num_rows),
+                      std::max(m1.num_columns, m2.num_columns),
+                      0};
+
+    for(int i=0; i < std::max(m1.num_rows, m2.num_rows); i++)
+    {
+        for(int j=0; j < std::max(m1.num_columns, m2.num_columns); j++)
+        {
+            result.data.at(i).at(j) = m1.getElement(i,j) + m2.getElement(i,j);
+        }
+    }
+
+    return result;
+}
+
+ECE_Matrix operator-(const ECE_Matrix &m1, const ECE_Matrix &m2)
+{
+    ECE_Matrix result{std::max(m1.num_rows, m2.num_rows),
+                      std::max(m1.num_columns, m2.num_columns),
+                      0};
+
+    for(int i=0; i < std::max(m1.num_rows, m2.num_rows); i++)
+    {
+        for(int j=0; j < std::max(m1.num_columns, m2.num_columns); j++)
+        {
+            result.data.at(i).at(j) = m1.getElement(i,j) - m2.getElement(i,j);
+        }
+    }
+
+    return result;
+}
+
+double ECE_Matrix::getElement(unsigned int row, unsigned int column) const
+{
+    if(row >= num_rows || column >= num_columns)
+    {
+        return 0;
+    }
+    return data[row][column];
+}
+
+
