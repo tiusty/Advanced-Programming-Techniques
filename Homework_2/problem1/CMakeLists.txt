@@ -4,7 +4,6 @@ project(Hmk2_Problem1)
 set(MATRIX_LIB matrix_lib)
 
 add_executable(${PROJECT_NAME}
-#        main.cpp
         Hmk2_Test1.cpp
         )
 
@@ -25,4 +24,8 @@ target_include_directories(${MATRIX_LIB}
 #   For easy of running
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_BINARY_DIR}
+        )
+
+add_custom_command(TARGET ${MATRIX_LIB} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${MATRIX_LIB}> ${CMAKE_BINARY_DIR}
         )

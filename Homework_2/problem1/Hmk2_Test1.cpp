@@ -1,6 +1,6 @@
 #include <iostream>
 #include <limits>
-#include "ECE_Matrix.hpp"
+#include "ECE_Matrix.h"
 
 
 int main()
@@ -40,6 +40,8 @@ int main()
     std::cout << "M7: M3 Transposed " << std::endl << M7 << std::endl;
     std::cout << "M9: (M1 * 8.0) " << std::endl << M9 << std::endl;
     std::cout << "M10: (M1 / 8.0) " << std::endl << M10 << std::endl;
+    std::cout << "M11: (M11 += M1) " << std::endl << M11 << std::endl;
+    std::cout << "M12: (M11 -= M1) " << std::endl << M12 << std::endl;
     std::cout << "M13: (M1 + 8.0) " << std::endl << M13 << std::endl;
     std::cout << "M14: (M1 - 8.0) " << std::endl << M14 << std::endl;
     std::cout << "M15: (8.0 * M1) " << std::endl << M15 << std::endl;
