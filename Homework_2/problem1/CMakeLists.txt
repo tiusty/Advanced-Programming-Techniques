@@ -3,7 +3,10 @@ project(Hmk2_Problem1)
 
 set(MATRIX_LIB matrix_lib)
 
-add_executable(${PROJECT_NAME} Hmk2_Test1.cpp)
+add_executable(${PROJECT_NAME}
+        main.cpp
+        Hmk2_Test1.cpp
+        )
 
 target_link_libraries(${PROJECT_NAME}
         ${MATRIX_LIB}

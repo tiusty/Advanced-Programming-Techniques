@@ -1,9 +1,9 @@
 #include <iostream>
 #include <limits>
-#include "ECE_Matrix.h"
+#include "ECE_Matrix.hpp"
 
 
-int main() 
+int main2()
 {
 
     const ECE_Matrix M1(3, 5.0);  // Construct 3 x 3 array set all elements to 5.0
