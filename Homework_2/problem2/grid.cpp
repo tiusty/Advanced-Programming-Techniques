@@ -62,11 +62,22 @@ void Grid::findMaxProductNeighbors()
     //  If current max > new maxPossible then all done
 }
 
-int Grid::largestProductsAlongLine(int xVec, int yVec, gridElement elementToCheck)
+void Grid::largestProductAlongLine(int xVecNorm, int yVecNorm, gridElement elementToCheck)
 {
     // Setup variables
-    int largestProduct = 1;
-    gridIndex initialIndex = elementToCheck.first;
+    gridIndex initIndex = elementToCheck.first;
+    for(int i=0; i<numAdjNumbers; i++)
+    {
+        gridIndex startIndex = std::make_pair(initIndex.first - i*xVecNorm, initIndex.second - i*yVecNorm);
+        gridIndex endIndex = std::make_pair(initIndex.first + (xVecNorm*numAdjNumbers - 1) - i*xVecNorm, initIndex.second + (yVecNorm*numAdjNumbers -1) - i*yVecNorm);
+        int product = productBetweenIndices(startIndex, endIndex);
+        if( product > currentLargestProduct)
+        {
+            currentLargestProduct = product;
+            indexMaxProduct.at(0) = startIndex;
+            indexMaxProduct.at(1) = endIndex;
+        }
+    }
 }
 
 int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)

@@ -10,6 +10,7 @@ Description:
 #define HOMEWORK_2_GRID_HPP
 
 #include <vector>
+#include <array>
 #include <queue>          // std::priority_queue
 
 // <row, column>
@@ -33,14 +34,16 @@ public: // Methods
     explicit Grid(const char* filename);
     void updateMaxPossibleProduct(int value, std::priority_queue<int, std::vector<int>, std::greater<> > &productNums);
     void findMaxProductNeighbors();
-    int largestProductsAlongLine(int xVec, int yVec, gridElement elementToCheck);
+    void largestProductAlongLine(int xVec, int yVec, gridElement elementToCheck);
     int productBetweenIndices(gridIndex startIndex, gridIndex endIndex);
 
 public: // Members
     std::vector<std::vector<int>> matrix;
     std::priority_queue<gridElement, std::vector<gridElement>, GridComparison> element_queue;
     static constexpr unsigned int numAdjNumbers{4};
+    int currentLargestProduct{0};
     int maxPossibleProduct{1};
+    std::array<gridIndex, Grid::numAdjNumbers> indexMaxProduct;
 
 private: // Methods
 
