@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
 project(Hmk2_Problem2)
 
+# CMake 3.1 or older needs this method of setting compiler standards
+add_compile_options(-std=c++14)
+
+# If unittests are defined then clone down gtest repo for gtest sources files
+if(UNITTESTS)
+    include(cmake/gtest.cmake)
+endif()
+
 set(GRID_LIB grid)
 
 add_executable(${PROJECT_NAME}
