@@ -16,6 +16,7 @@ Description:
 int main()
 {
     Grid grid = Grid("data_Problem2.txt");
+    grid.findMaxProductNeighbors();
     return 0;
 }
 

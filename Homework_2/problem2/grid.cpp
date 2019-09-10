@@ -41,25 +41,60 @@ Grid::Grid(const char* filename)
         for(unsigned int j=0; j < numColumns; j++)
         {
             file >> matrix.at(i).at(j);
-            element_queue.push(std::make_pair(std::make_pair(i,j), matrix.at(i).at(j)));
-            updateMaxPossibleProduct(matrix.at(i).at(j), productNums);
+            restOfElements.push(std::make_pair(std::make_pair(i, j), matrix.at(i).at(j)));
         }
+    }
+
+    // The the first numAdjNumbers to the topAdjElements
+    for(int i=0; i<numAdjNumbers; i++)
+    {
+        topAdjElements.push(restOfElements.top());
+        restOfElements.pop();
     }
 }
 
 void Grid::findMaxProductNeighbors()
 {
-    // Pull off largest element
-    gridElement elementToCheck = element_queue.top();
+    while(!restOfElements.empty())
+    {
+        // Pull off largest element
+        gridElement elementToCheck = topAdjElements.top();
 
-    // Check 4 directions
+        // Check 4 directions. The negative and postive of each vector is checked to
+        //  fully check all "8" directions
+        largestProductAlongLine(1,-1, elementToCheck);
+        largestProductAlongLine(1,0, elementToCheck);
+        largestProductAlongLine(0,1,elementToCheck);
+        largestProductAlongLine(1,1, elementToCheck);
 
-    // Within each direction check all combinations i.e all 4
+        // At end, pop the largest element and find new maxPossible
+        //  If current max > new maxPossible then all done
+        if(currentLargestProduct > maxPossibleProduct)
+        {
+            break;
+        }
+        else
+        {
+            maxPossibleProduct /= topAdjElements.top().second;
+            topAdjElements.pop();
+            maxPossibleProduct *= restOfElements.top().second;
+            if(!restOfElements.empty())
+            {
+                topAdjElements.push(restOfElements.top());
+                restOfElements.pop();
+            }
+            else
+            {
+                std::cerr << "RestOfElements queue is empty exiting" << std::endl;
+                exit(1);
+            }
+        }
+    }
 
-    // Save the current max and indicies
+    std::cout << "Solution starts at: "
+                 " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
+              ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
 
-    // At end, pop the largest element and find new maxPossible
-    //  If current max > new maxPossible then all done
 }
 
 void Grid::largestProductAlongLine(int xVecNorm, int yVecNorm, gridElement elementToCheck)
@@ -109,7 +144,13 @@ int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
     {
         // Goes through and multiples the elements along the line between the start index and
         //  the end index
-        product*=matrix.at(startIndex.first + xVectorNorm*i).at(startIndex.second + yVectorNorm*i);
+        int xIndex = startIndex.first + xVectorNorm * i;
+        int yIndex = startIndex.second + yVectorNorm * i;
+        if(xIndex < 0 or yIndex < 0)
+        {
+            continue;
+        }
+        product*=matrix.at(xIndex).at(yIndex);
     }
 
     return  product;

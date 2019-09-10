@@ -39,7 +39,8 @@ public: // Methods
 
 public: // Members
     std::vector<std::vector<int>> matrix;
-    std::priority_queue<gridElement, std::vector<gridElement>, GridComparison> element_queue;
+    std::priority_queue<gridElement, std::vector<gridElement>, GridComparison> restOfElements;
+    std::priority_queue<gridElement, std::vector<gridElement>, GridComparison> topAdjElements;
     static constexpr unsigned int numAdjNumbers{4};
     int currentLargestProduct{0};
     int maxPossibleProduct{1};
