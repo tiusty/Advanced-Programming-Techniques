@@ -42,8 +42,56 @@ Grid::Grid(const char* filename)
         {
             file >> matrix.at(i).at(j);
             element_queue.push(std::make_pair(std::make_pair(i,j), matrix.at(i).at(j)));
+            updateMaxPossibleProduct(matrix.at(i).at(j), productNums);
         }
     }
+}
+
+void Grid::findMaxProductNeighbors()
+{
+    // Pull off largest element
+    gridElement elementToCheck = element_queue.top();
+
+    // Check 4 directions
+
+    // Within each direction check all combinations i.e all 4
+
+    // Save the current max and indicies
+
+    // At end, pop the largest element and find new maxPossible
+    //  If current max > new maxPossible then all done
+}
+
+int Grid::largestProductsAlongLine(int xVec, int yVec, gridElement elementToCheck)
+{
+    // Setup variables
+    int largestProduct = 1;
+    gridIndex initialIndex = elementToCheck.first;
+}
+
+int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
+{
+    int product = 1;
+    int xVector = endIndex.first - startIndex.first;
+    int yVector = endIndex.second - startIndex.first;
+
+    // Since it must be up/down, left/right or diagonal, we can test to make sure that is the case
+    if (abs(xVector/yVector) != 1)
+    {
+        std::cerr << " Attempted to find product between matrices not on a line"
+                     " Start index: (" << startIndex.first << "," << startIndex.second <<
+                     ") End index: ("<< endIndex.first << "," << endIndex.second << ")." << std::endl;
+        exit(1);
+    }
+
+    for(int i=0; i<=std::max(abs(xVector), abs(yVector)); i++)
+    {
+        // Goes through and multiples the elements along the line between the start index and
+        //  the end index
+        product*=matrix.at(startIndex.first + xVector*i).at(startIndex.second + yVector*i);
+    }
+
+    return  product;
 }
 
 void Grid::updateMaxPossibleProduct(int value, std::priority_queue<int, std::vector<int>, std::greater<> > &productNums)

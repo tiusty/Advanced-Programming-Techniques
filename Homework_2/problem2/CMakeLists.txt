@@ -5,7 +5,7 @@ set(GRID_LIB grid)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        test/test_grid_class.cpp)
+        )
 
 target_link_libraries(${PROJECT_NAME}
         ${GRID_LIB}
