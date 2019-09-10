@@ -44,7 +44,7 @@ ECE_Matrix::ECE_Matrix(const char* filename)
     // Reserve the vector size for the number of rows
     data.reserve(numRows);
 
-    // Read in every element to a new spot in the data
+    // Read in every gridElement to a new spot in the data
     for(unsigned int i=0; i < numRows; i++)
     {
         data.emplace_back(numColumns, 0);
@@ -57,7 +57,7 @@ ECE_Matrix::ECE_Matrix(const char* filename)
 
 std::ostream & operator << (std::ostream &out, const ECE_Matrix &m)
 {
-    // Print out every element and only add a new line at the end of a row
+    // Print out every gridElement and only add a new line at the end of a row
     for(const auto & i : m.data)
     {
         for(double j : i)
@@ -99,7 +99,7 @@ ECE_Matrix operator+(const ECE_Matrix &m1, const double &constant)
                       m1.numColumns,
                       0};
 
-    // Just add the constant to every element
+    // Just add the constant to every gridElement
     for(unsigned int i=0; i < result.numRows; i++)
     {
         for(unsigned int j=0; j < result.numColumns; j++)
@@ -177,7 +177,7 @@ ECE_Matrix operator*(const ECE_Matrix &m1, const double &constant)
                       m1.numColumns,
                       0};
 
-    // Just multiple each element by the constant
+    // Just multiple each gridElement by the constant
     for(unsigned int i=0; i < result.numRows; i++)
     {
         for(unsigned int j=0; j < result.numColumns; j++)
@@ -201,7 +201,7 @@ ECE_Matrix operator/(const ECE_Matrix &m1, const double &constant)
         return result;
     }
 
-    // Divide every element in the marix by the constant
+    // Divide every gridElement in the marix by the constant
     for(unsigned int i=0; i < result.numRows; i++)
     {
         for(unsigned int j=0; j < result.numColumns; j++)

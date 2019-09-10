@@ -15,12 +15,12 @@ Description:
 // <row, column>
 using gridIndex = std::pair<int, int>;
 // <coordinate, value>
-using element = std::pair<gridIndex,int>;
+using gridElement = std::pair<gridIndex,int>;
 
 class GridComparison
 {
 public:
-    bool operator() (const element& lhs, element& rhs) const
+    bool operator() (const gridElement& lhs, gridElement& rhs) const
     {
         return (lhs.second<rhs.second);
     }
@@ -30,15 +30,20 @@ public:
 class Grid {
 public: // Methods
     Grid() = default;
-    Grid(const char* filename);
+    explicit Grid(const char* filename);
+    void updateMaxPossibleProduct(int value, std::priority_queue<int, std::vector<int>, std::greater<> > &productNums);
 
 public: // Members
     std::vector<std::vector<int>> matrix;
-    std::priority_queue<element, std::vector<element >, GridComparison> element_queue;
+    std::priority_queue<gridElement, std::vector<gridElement>, GridComparison> element_queue;
+    static constexpr unsigned int numAdjNumbers{4};
+    int maxPossibleProduct{0};
+
+private: // Methods
 
 private: // Members
-    unsigned int numRows;
-    unsigned int numColumns;
+    unsigned int numRows{0};
+    unsigned int numColumns{0};
 };
 
 

@@ -10,12 +10,15 @@ Description:
 
 #include <fstream>
 #include <iostream>
+#include <array>
+
+// Define constexpr terms
+constexpr unsigned int Grid::numAdjNumbers;
 
 Grid::Grid(const char* filename)
-: numColumns(0), numRows(0)
 {
-
     std::ifstream file(filename);
+    std::priority_queue<int, std::vector<int>, std::greater<> > productNums;
 
     if(!file)
     {
@@ -31,7 +34,7 @@ Grid::Grid(const char* filename)
     // Reserve the vector size for the number of rows
     matrix.reserve(numRows);
 
-    // Read in every element to a new spot in the data
+    // Read in every gridElement to a new spot in the data
     for(unsigned int i=0; i < numRows; i++)
     {
         matrix.emplace_back(numColumns, 0);
@@ -39,6 +42,28 @@ Grid::Grid(const char* filename)
         {
             file >> matrix.at(i).at(j);
             element_queue.push(std::make_pair(std::make_pair(i,j), matrix.at(i).at(j)));
+        }
+    }
+}
+
+void Grid::updateMaxPossibleProduct(int value, std::priority_queue<int, std::vector<int>, std::greater<> > &productNums)
+{
+    if(productNums.size() < numAdjNumbers)
+    {
+        productNums.push(value);
+    }
+    else
+    {
+        if (value > productNums.top())
+        {
+            // Remove the old element and remove it from the maxPossibleProduct
+            int removedElement = productNums.top();
+            productNums.pop();
+            maxPossibleProduct /= removedElement;
+
+            // Add in the new element and add it to the product
+            productNums.push(value);
+            maxPossibleProduct *= value;
         }
     }
 }

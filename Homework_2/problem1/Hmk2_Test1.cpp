@@ -7,7 +7,7 @@ int main()
 {
 
     const ECE_Matrix M1(3, 5.0);  // Construct 3 x 3 array set all elements to 5.0
-    const ECE_Matrix M2(5, 5, 200.0); // Construct 5 x 5 array, setting all element to 200.0
+    const ECE_Matrix M2(5, 5, 200.0); // Construct 5 x 5 array, setting all gridElement to 200.0
     const ECE_Matrix M3("data_Problem1.txt"); // Construct matrix from file
 
     std::cout << "M3: " << std::endl << M3 << std::endl;

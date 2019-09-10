@@ -5,7 +5,7 @@ set(GRID_LIB grid)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        )
+        test/test_grid_class.cpp)
 
 target_link_libraries(${PROJECT_NAME}
         ${GRID_LIB}
@@ -18,6 +18,11 @@ target_include_directories(${GRID_LIB}
         PUBLIC
             ${CMAKE_CURRENT_LIST_DIR}
         )
+
+# If unittests are defined then add the unittests
+if(UNITTESTS)
+    add_subdirectory(test)
+endif()
 
 # Custom command to copy the targets to the build directory
 #   For easy of running
