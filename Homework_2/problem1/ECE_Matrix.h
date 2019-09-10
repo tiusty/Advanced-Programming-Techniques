@@ -25,18 +25,18 @@ public: // Methods
 
     /**
      * Ctor that creates a square matrix with the default value passed in
-     * @param square_size The size of the square matrix
+     * @param squareSize The size of the square matrix
      * @param value The value to initialize the elements to
      */
-    ECE_Matrix(unsigned int square_size, double value);
+    ECE_Matrix(unsigned int squareSize, double value);
 
     /**
      * Ctor that creates a rectangular matrix with the default value passed in
-     * @param row_num The number of rows
-     * @param column_num The number of columns
+     * @param rowNum The number of rows
+     * @param columnNum The number of columns
      * @param value The default value for all the elements
      */
-    ECE_Matrix(unsigned int row_num, unsigned int column_num, double value);
+    ECE_Matrix(unsigned int rowNum, unsigned int columnNum, double value);
 
     /**
      * Ctor that is passed in a file and reads in the matrix from the file
@@ -166,12 +166,12 @@ public: // Members
     /**
      * Stores the number of rows associated with the data
      */
-    unsigned int num_rows;
+    unsigned int numRows;
 
     /**
      * Stores the number of columns associated with the vector
      */
-    unsigned int num_columns;
+    unsigned int numColumns;
 
     /**
      * Actually stores the data associated with the 2D vector
