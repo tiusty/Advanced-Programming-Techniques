@@ -69,7 +69,7 @@ void Grid::largestProductAlongLine(int xVecNorm, int yVecNorm, gridElement eleme
     for(int i=0; i<numAdjNumbers; i++)
     {
         gridIndex startIndex = std::make_pair(initIndex.first - i*xVecNorm, initIndex.second - i*yVecNorm);
-        gridIndex endIndex = std::make_pair(initIndex.first + (xVecNorm*numAdjNumbers - 1) - i*xVecNorm, initIndex.second + (yVecNorm*numAdjNumbers -1) - i*yVecNorm);
+        gridIndex endIndex = std::make_pair(initIndex.first + xVecNorm*(numAdjNumbers - 1) - i*xVecNorm, initIndex.second + yVecNorm*(numAdjNumbers -1) - i*yVecNorm);
         int product = productBetweenIndices(startIndex, endIndex);
         if( product > currentLargestProduct)
         {
@@ -89,7 +89,7 @@ int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
     {
         xVectorNorm = xVector/abs(xVector);
     }
-    int yVector = endIndex.second - startIndex.first;
+    int yVector = endIndex.second - startIndex.second;
     int yVectorNorm{0};
     if(yVector !=0)
     {
