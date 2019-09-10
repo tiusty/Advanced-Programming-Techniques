@@ -48,6 +48,7 @@ Grid::Grid(const char* filename)
     // The the first numAdjNumbers to the topAdjElements
     for(int i=0; i<numAdjNumbers; i++)
     {
+        maxPossibleProduct *= restOfElements.top().second;
         topAdjElements.push(restOfElements.top());
         restOfElements.pop();
     }
@@ -55,20 +56,28 @@ Grid::Grid(const char* filename)
 
 void Grid::findMaxProductNeighbors()
 {
+    // Loop until the restOfElements queue is empty, aka there are no more elements to check
+    // Hopefully it will quit before hand via the break
     while(!restOfElements.empty())
     {
         // Pull off largest element
         gridElement elementToCheck = topAdjElements.top();
 
-        // Check 4 directions. The negative and postive of each vector is checked to
-        //  fully check all "8" directions
+        // Check 4 directions. The negative and positive of each vector is checked to
+        //  fully check all "8" directions. For me x axis is up and down and y axis is left
+        //  to right
+
+        // Check right down to left up diagonal
         largestProductAlongLine(1,-1, elementToCheck);
+        // Check Up/Down line
         largestProductAlongLine(1,0, elementToCheck);
+        // Check left/right line
         largestProductAlongLine(0,1,elementToCheck);
+        // Check right up to left down diagonal
         largestProductAlongLine(1,1, elementToCheck);
 
-        // At end, pop the largest element and find new maxPossible
-        //  If current max > new maxPossible then all done
+        // The current max is the largest product found so far while searching
+        // The maxPossibleProduct is the product of the elements in the
         if(currentLargestProduct > maxPossibleProduct)
         {
             break;
@@ -146,7 +155,7 @@ int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
         //  the end index
         int xIndex = startIndex.first + xVectorNorm * i;
         int yIndex = startIndex.second + yVectorNorm * i;
-        if(xIndex < 0 or yIndex < 0)
+        if(xIndex < 0 or yIndex < 0 or xIndex >= numRows or yIndex >= numColumns)
         {
             continue;
         }

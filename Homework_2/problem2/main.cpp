@@ -11,7 +11,7 @@ Description:
 /**
  * @\class
  * Main function that executes the program
- * @return Exit statues
+ * @return Exit status
  */
 int main()
 {
