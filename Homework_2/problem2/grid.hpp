@@ -13,6 +13,7 @@ Description:
 
 class Grid {
 public: // Methods
+    Grid() = default;
     Grid(const char* filename);
 
 public: // Members

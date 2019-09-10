@@ -6,6 +6,8 @@ Description:
  Main file for problem 2 homework 2. Executes the program
 */
 
+#include "grid.hpp"
+
 /**
  * @\class
  * Main function that executes the program
@@ -13,6 +15,7 @@ Description:
  */
 int main()
 {
+    Grid grid = Grid("data_Problem2.txt");
     return 0;
 }
 

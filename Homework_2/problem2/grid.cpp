@@ -12,6 +12,7 @@ Description:
 #include <iostream>
 
 Grid::Grid(const char* filename)
+: numColumns(0), numRows(0)
 {
 
     std::ifstream file(filename);
