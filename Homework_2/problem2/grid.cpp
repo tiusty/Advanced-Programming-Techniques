@@ -38,6 +38,7 @@ Grid::Grid(const char* filename)
         for(unsigned int j=0; j < numColumns; j++)
         {
             file >> matrix.at(i).at(j);
+            element_queue.push(std::make_pair(std::make_pair(i,j), matrix.at(i).at(j)));
         }
     }
 }

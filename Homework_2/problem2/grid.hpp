@@ -10,6 +10,22 @@ Description:
 #define HOMEWORK_2_GRID_HPP
 
 #include <vector>
+#include <queue>          // std::priority_queue
+
+// <row, column>
+using gridIndex = std::pair<int, int>;
+// <coordinate, value>
+using element = std::pair<gridIndex,int>;
+
+class GridComparison
+{
+public:
+    bool operator() (const element& lhs, element& rhs) const
+    {
+        return (lhs.second<rhs.second);
+    }
+};
+
 
 class Grid {
 public: // Methods
@@ -18,6 +34,7 @@ public: // Methods
 
 public: // Members
     std::vector<std::vector<int>> matrix;
+    std::priority_queue<element, std::vector<element >, GridComparison> element_queue;
 
 private: // Members
     unsigned int numRows;
