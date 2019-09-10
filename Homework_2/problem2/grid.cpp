@@ -73,10 +73,20 @@ int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
 {
     int product = 1;
     int xVector = endIndex.first - startIndex.first;
+    int xVectorNorm{0};
+    if(xVector !=0)
+    {
+        xVectorNorm = xVector/abs(xVector);
+    }
     int yVector = endIndex.second - startIndex.first;
+    int yVectorNorm{0};
+    if(yVector !=0)
+    {
+        yVectorNorm = yVector/abs(yVector);
+    }
 
     // Since it must be up/down, left/right or diagonal, we can test to make sure that is the case
-    if (abs(xVector/yVector) != 1)
+    if ((xVectorNorm == 0 and yVectorNorm ==0) or (abs(xVectorNorm) > 1 or abs(yVectorNorm) > 1))
     {
         std::cerr << " Attempted to find product between matrices not on a line"
                      " Start index: (" << startIndex.first << "," << startIndex.second <<
@@ -88,7 +98,7 @@ int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
     {
         // Goes through and multiples the elements along the line between the start index and
         //  the end index
-        product*=matrix.at(startIndex.first + xVector*i).at(startIndex.second + yVector*i);
+        product*=matrix.at(startIndex.first + xVectorNorm*i).at(startIndex.second + yVectorNorm*i);
     }
 
     return  product;
