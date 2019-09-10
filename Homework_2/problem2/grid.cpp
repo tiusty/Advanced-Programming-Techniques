@@ -51,6 +51,10 @@ void Grid::updateMaxPossibleProduct(int value, std::priority_queue<int, std::vec
     if(productNums.size() < numAdjNumbers)
     {
         productNums.push(value);
+        if(value != 0)
+        {
+            maxPossibleProduct *= value;
+        }
     }
     else
     {
@@ -59,11 +63,17 @@ void Grid::updateMaxPossibleProduct(int value, std::priority_queue<int, std::vec
             // Remove the old element and remove it from the maxPossibleProduct
             int removedElement = productNums.top();
             productNums.pop();
-            maxPossibleProduct /= removedElement;
+            if(removedElement != 0)
+            {
+                maxPossibleProduct /= removedElement;
+            }
 
             // Add in the new element and add it to the product
             productNums.push(value);
-            maxPossibleProduct *= value;
+            if(value !=0)
+            {
+                maxPossibleProduct *= value;
+            }
         }
     }
 }
