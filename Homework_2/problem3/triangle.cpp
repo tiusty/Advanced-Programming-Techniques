@@ -10,6 +10,7 @@ Description:
 
 #include <fstream>
 #include <iostream>
+#include <exception>
 
 Triangle::Triangle(const char* filename)
 {
@@ -37,4 +38,35 @@ Triangle::Triangle(const char* filename)
             file >> value;
             triangle.emplace_back(value);
     }
+}
+
+const Node& Triangle::getNode(unsigned int row, unsigned column)
+{
+    unsigned int nodeIndex{0};
+    if (row < 1)
+    {
+        std::cerr << "Error: Attempted to get row less than 1: " << row << std::endl;
+        throw std::out_of_range("Row out of range in getNode");
+    }
+    if (column > row || column < 1)
+    {
+        std::cerr << "Error: Attempted to get column :" << column << std::endl;
+        std::cerr << "That is not valid, must be greater than 0 and less than or equal to the row number" << std::endl;
+        throw std::out_of_range("Column out of range in getNode");
+    }
+
+    // Get number of elements before the desired row
+    nodeIndex = ((row-1)*((row-1) + 1))/2;
+    // Add the column index to get the desired node
+    nodeIndex += column;
+
+    // Since indices for row 1, column 1 should start at 0, not 1
+    nodeIndex-=1;
+
+    return triangle.at(nodeIndex);
+}
+
+void Triangle::findParentNodes(const Node &nodeToCheck)
+{
+
 }

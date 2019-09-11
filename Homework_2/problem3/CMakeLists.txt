@@ -31,7 +31,7 @@ target_include_directories(${NODE_LIB}
 
 # If unittests are defined then add the unittests
 if(UNITTESTS)
-#    add_subdirectory(test)
+    add_subdirectory(test)
 endif()
 
 # Custom command to copy the targets to the build directory

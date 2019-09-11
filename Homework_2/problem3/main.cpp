@@ -11,6 +11,7 @@ Description:
 int main()
 {
     Triangle tri("data_triangle.txt");
+    tri.getNode(1,2);
     return 0;
 }
 

@@ -16,6 +16,8 @@ class Triangle {
 public: // Methods
     Triangle() = default;
     explicit Triangle(const char* filename);
+    void findParentNodes(const Node &nodeToCheck);
+    const Node& getNode(unsigned int row, unsigned column);
 public: // Members
     std::vector<Node> triangle;
     unsigned int numLevels{0};
