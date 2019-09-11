@@ -10,13 +10,15 @@ Description:
 
 #include <vector>
 
+#include "node.hpp"
+
 class Triangle {
 public: // Methods
     Triangle() = default;
     explicit Triangle(const char* filename);
 public: // Members
-    std::vector<int> triangle;
-    unsigned int numLevels;
+    std::vector<Node> triangle;
+    unsigned int numLevels{0};
 
 };
 

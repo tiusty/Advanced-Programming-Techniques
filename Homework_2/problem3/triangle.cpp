@@ -2,7 +2,8 @@
 Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 9/11/2019
-Description: 
+Description:
+ Class stores all the elements of the triangle and operations between the nodes
 */
 
 #include "triangle.hpp"
@@ -34,6 +35,6 @@ Triangle::Triangle(const char* filename)
             // Store the element in the matrix
             int value;
             file >> value;
-            triangle.push_back(value);
+            triangle.emplace_back(value);
     }
 }

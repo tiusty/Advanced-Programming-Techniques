@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(Hmk2_Problem3)
 
 set(TRI_LIB tri)
+set(NODE_LIB node)
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -9,6 +10,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
         ${TRI_LIB}
+        ${NODE_LIB}
         )
 
 add_library(${TRI_LIB}
@@ -17,6 +19,14 @@ add_library(${TRI_LIB}
 target_include_directories(${TRI_LIB}
         PUBLIC
             ${CMAKE_CURRENT_LIST_DIR}
+        )
+
+add_library(${NODE_LIB}
+        triangle.cpp)
+
+target_include_directories(${NODE_LIB}
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}
         )
 
 # If unittests are defined then add the unittests
