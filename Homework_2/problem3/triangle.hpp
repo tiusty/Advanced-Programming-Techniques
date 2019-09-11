@@ -1,0 +1,17 @@
+/*
+Author: Alex Agudelo
+Class: ECE 6122
+Last date modified: 9/11/2019
+Description: 
+*/
+
+#ifndef HOMEWORK_2_TRIANGLE_HPP
+#define HOMEWORK_2_TRIANGLE_HPP
+
+
+class Triangle {
+
+};
+
+
+#endif //HOMEWORK_2_TRIANGLE_HPP
