@@ -8,8 +8,15 @@ Description:
 #ifndef HOMEWORK_2_TRIANGLE_HPP
 #define HOMEWORK_2_TRIANGLE_HPP
 
+#include <vector>
 
 class Triangle {
+public: // Methods
+    Triangle() = default;
+    explicit Triangle(const char* filename);
+public: // Members
+    std::vector<int> triangle;
+    unsigned int numLevels;
 
 };
 
