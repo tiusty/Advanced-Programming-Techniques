@@ -13,7 +13,8 @@ Description:
 #include <array>
 
 // Define constexpr terms
-constexpr unsigned int Grid::numAdjNumbers;
+constexpr unsigned int Grid::numAdjNeighbors;
+constexpr const char* Grid::outputFileName;
 
 Grid::Grid(const char* filename)
 {
@@ -45,8 +46,8 @@ Grid::Grid(const char* filename)
         }
     }
 
-    // The the first numAdjNumbers to the topAdjElements
-    for(int i=0; i<numAdjNumbers; i++)
+    // The the first numAdjNeighbors to the topAdjElements
+    for(int i=0; i < numAdjNeighbors; i++)
     {
         maxPossibleProduct *= restOfElements.top().second;
         topAdjElements.push(restOfElements.top());
@@ -104,7 +105,7 @@ void Grid::findMaxProductNeighbors()
     std::cout << "Solution starts at: "
                  " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
               ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
-
+    generateOutput();
 }
 
 void Grid::largestProductAlongLine(int xVecNorm, int yVecNorm, gridElement elementToCheck)
@@ -113,14 +114,14 @@ void Grid::largestProductAlongLine(int xVecNorm, int yVecNorm, gridElement eleme
     // and fine the largest product on that line. Since we are checking with respect to an element
     //  that element must be in the product
     gridIndex initIndex = elementToCheck.first;
-    for(int i=0; i<numAdjNumbers; i++)
+    for(int i=0; i < numAdjNeighbors; i++)
     {
         // Get the start index and end index of the line being checked
         // Starts at the far end of the line and then shifts down one element at a time checking the product
         //  each time. This will shift from the start_index being the element to check until the element to check
         //  is the last element
         gridIndex startIndex = std::make_pair(initIndex.first - i*xVecNorm, initIndex.second - i*yVecNorm);
-        gridIndex endIndex = std::make_pair(initIndex.first + xVecNorm*(numAdjNumbers - 1) - i*xVecNorm, initIndex.second + yVecNorm*(numAdjNumbers -1) - i*yVecNorm);
+        gridIndex endIndex = std::make_pair(initIndex.first + xVecNorm*(numAdjNeighbors - 1) - i * xVecNorm, initIndex.second + yVecNorm * (numAdjNeighbors - 1) - i * yVecNorm);
         // Determines the product between the two indices
         int product = productBetweenIndices(startIndex, endIndex);
         // If the product is largest then the current max then save it, and save the start and end indices
@@ -171,12 +172,25 @@ int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
     {
         int xIndex = startIndex.first + xUnitVec * i;
         int yIndex = startIndex.second + yUnitVec * i;
+        // If any of the indices become invalid then make the product 0 since it is not a valid
+        //  solution and return
         if(xIndex < 0 or yIndex < 0 or xIndex >= numRows or yIndex >= numColumns)
         {
+            product = 0;
             continue;
         }
         product*=matrix.at(xIndex).at(yIndex);
     }
 
-    return  product;
+    return product;
+}
+
+void Grid::generateOutput()
+{
+    std::ofstream file(outputFileName);
+    if(file.is_open())
+    {
+        file << currentLargestProduct;
+        file.close();
+    }
 }
