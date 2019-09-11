@@ -3,8 +3,8 @@ project(Hmk2_Problem2_Tests)
 
 add_executable(${PROJECT_NAME}
         test_main.cpp
-        test_grid_update_max_possible_product.cpp
-        test_grid_product_between_indices.cpp test_grid_largest_product_along_line.cpp)
+        test_grid_product_between_indices.cpp
+        test_grid_largest_product_along_line.cpp)
 
 target_link_libraries(${PROJECT_NAME}
         gtest_main
