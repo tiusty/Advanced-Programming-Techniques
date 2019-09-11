@@ -22,7 +22,7 @@ target_include_directories(${TRI_LIB}
         )
 
 add_library(${NODE_LIB}
-        triangle.cpp)
+        node.cpp)
 
 target_include_directories(${NODE_LIB}
         PUBLIC
