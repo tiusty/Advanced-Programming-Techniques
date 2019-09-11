@@ -105,9 +105,10 @@ void Grid::findMaxProductNeighbors()
         }
     }
 
-    std::cout << "Solution starts at: "
-                 " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
-              ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
+    // Print start and end index to the console
+//    std::cout << "Solution starts at: "
+//                 " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
+//              ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
     generateOutput();
 }
 
