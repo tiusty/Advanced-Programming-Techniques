@@ -56,11 +56,11 @@ public: // Methods
     /**
      * Determines the largest product on a given line that contains the elementToCheck and
      *  up to numAdjNeighbors away.
-     * @param xVec The xUnitVector that determines the line to check along
-     * @param yVec The yUnitVector that determines the line to check along
+     * @param xNormVec The xUnitVector that determines the line to check along
+     * @param yNormVec The yUnitVector that determines the line to check along
      * @param elementToCheck The point that is being checked. Must be contained within the line
      */
-    void largestProductAlongLine(int xVec, int yVec, gridElement elementToCheck);
+    void largestProductAlongLine(int xNormVec, int yNormVec, gridElement elementToCheck);
     /**
      * Determines the product between two indices. The indices must lie along a line,
      * i.e up/down, right/left, on diagonal
