@@ -36,7 +36,11 @@ INSTANTIATE_TEST_SUITE_P(
         TriangleGetNodeTestFixture,
         ::testing::Values(
                 TriangleGetNodeTuple(1,1,3, true),
-                TriangleGetNodeTuple(1,2,3, false)
+                TriangleGetNodeTuple(1,2,3, false),
+                TriangleGetNodeTuple(2,-1,4, false),
+                TriangleGetNodeTuple(3,1,2, true),
+                TriangleGetNodeTuple(4,5,4, false),
+                TriangleGetNodeTuple(4,3,9, true)
 )
 );
 
