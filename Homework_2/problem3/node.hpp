@@ -11,12 +11,15 @@ Description:
 
 #include <memory>
 
+using nodeIndex = std::pair<int, int>;
+
 class Node {
 public: // Methods
     Node() = default;
-    explicit Node(int value);
+    explicit Node(int value, nodeIndex index);
 
 public: // Members
+    nodeIndex index;
     int value{0};
     int sumWithNode{0};
     std::shared_ptr<Node> pathToParent;

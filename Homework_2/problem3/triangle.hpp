@@ -16,8 +16,11 @@ class Triangle {
 public: // Methods
     Triangle() = default;
     explicit Triangle(const char* filename);
-    void findParentNodes(const Node &nodeToCheck);
+    bool determineValidIndex(nodeIndex index);
+    std::pair<const Node&, const Node&> getParentNodes(const Node &nodeToCheck);
+    const Node& getLargestParent(const Node &nodeToCheck);
     const Node& getNode(unsigned int row, unsigned column);
+    void getLargestSum();
 public: // Members
     std::vector<Node> triangle;
     unsigned int numLevels{0};

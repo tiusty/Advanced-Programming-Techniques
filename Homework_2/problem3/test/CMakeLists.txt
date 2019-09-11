@@ -4,6 +4,7 @@ project(Hmk2_Problem3_Tests)
 add_executable(${PROJECT_NAME}
         test_main.cpp
         test_triangle_get_node.cpp
+        test_triangle_determine_valid_index.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}

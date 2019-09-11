@@ -7,6 +7,8 @@ Description:
 
 #include "node.hpp"
 
-Node::Node(int value)
-: value(value)
+#include <utility>
+
+Node::Node(int value, nodeIndex index)
+: value(value), index(std::move(index))
 {}

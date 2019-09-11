@@ -31,12 +31,23 @@ Triangle::Triangle(const char* filename)
     triangle.reserve(numNodes);
 
     // Read in every gridElement to a new spot in the data
+    unsigned int currRow{1};
+    unsigned int currColumn{1};
     for(unsigned int i=0; i < numNodes; i++)
     {
             // Store the element in the matrix
             int value;
             file >> value;
-            triangle.emplace_back(value);
+            triangle.emplace_back(value, std::make_pair(currRow, currColumn));
+            if(currColumn >= currRow)
+            {
+                currRow++;
+                currColumn = 1;
+            }
+            else
+            {
+                currColumn++;
+            }
     }
 }
 
@@ -66,7 +77,39 @@ const Node& Triangle::getNode(unsigned int row, unsigned column)
     return triangle.at(nodeIndex);
 }
 
-void Triangle::findParentNodes(const Node &nodeToCheck)
+bool Triangle::determineValidIndex(nodeIndex index)
 {
+    bool result{true};
+    if(index.first < 1 || index.second < 1)
+    {
+        result = false;
+    }
+    if(index.second > index.first)
+    {
+        result = false;
+    }
+    return result;
+}
+
+std::pair<const Node&, const Node&> Triangle::getParentNodes(const Node &nodeToCheck)
+{
+    nodeIndex parentLeft = std::make_pair(nodeToCheck.index.first - 1, nodeToCheck.index.second - 1);
+    nodeIndex parentRight = std::make_pair(nodeToCheck.index.first -1, nodeToCheck.index.second);
+}
+
+const Node& Triangle::getLargestParent(const Node &nodeToCheck)
+{
+
+}
+
+void Triangle::getLargestSum()
+{
+    // Iterate through all nodes
+    for(auto &n : triangle)
+    {
+//        getLargestParent(n);
+    }
+
+    // Find largest parent sum and save sum and path to last node
 
 }
