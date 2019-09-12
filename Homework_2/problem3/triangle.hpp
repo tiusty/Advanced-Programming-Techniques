@@ -14,7 +14,7 @@ Description:
 #include "node.hpp"
 
 /**
- * Stores values as triangles and helps determine the largest sum
+ * Stores values for triangles and helps determine the largest sum
  */
 class Triangle {
 public: // Methods
@@ -65,6 +65,9 @@ public: // Members
      * Determines the number of levels that the triangle has
      */
     unsigned int numLevels{0};
+    /**
+     * Constexpr for the output file name
+     */
     static constexpr const char* outputFileName{"output3.txt"};
 };
 

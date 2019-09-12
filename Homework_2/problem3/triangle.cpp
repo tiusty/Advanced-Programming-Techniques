@@ -116,7 +116,7 @@ void Triangle::determineLargestParent(Node &nodeToCheck)
         {
             largestParent = parentRightNode;
         }
-        // If the right parent has a largest sum than left, then switch the largest parent
+        // If the right parent has a larger sum than left, then switch the largest parent
         else if(largestParent->sumWithNode < parentRightNode->sumWithNode)
         {
             largestParent = parentRightNode;
@@ -156,6 +156,7 @@ void Triangle::getLargestSum()
 void Triangle::generateOutput(int largestSum)
 {
     std::ofstream file(outputFileName);
+    // Open file and write result to the file
     if(file.is_open())
     {
         file << largestSum;

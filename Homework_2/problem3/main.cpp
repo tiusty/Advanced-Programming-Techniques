@@ -8,10 +8,17 @@ Description:
 
 #include "triangle.hpp"
 
+/**
+ * Function executes main functionality by creating necessary components
+ * @return Exit status of the program
+ */
 int main()
 {
+    // Create the triangle
     Triangle tri("data_triangle.txt");
+    // Get the largest sum
     tri.getLargestSum();
+    // Exit status
     return 0;
 }
 
