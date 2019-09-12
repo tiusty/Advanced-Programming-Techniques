@@ -3,7 +3,7 @@ Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 9/11/2019
 Description:
- Class stores all the elements of the triangle and operations between the nodes
+ Implements triangle funtionality
 */
 
 #include "triangle.hpp"
