@@ -18,7 +18,6 @@ public: // Methods
     explicit Triangle(const char* filename);
     bool determineValidIndex(nodeIndex index);
     void determineLargestParent(Node &nodeToCheck);
-    const Node& getLargestParent(const Node &nodeToCheck);
     const Node& getNode(unsigned int row, unsigned column);
     void getLargestSum();
 public: // Members

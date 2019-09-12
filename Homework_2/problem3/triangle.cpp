@@ -121,21 +121,26 @@ void Triangle::determineLargestParent(Node &nodeToCheck)
         nodeToCheck.sumWithNode = nodeToCheck.value + largestParent->sumWithNode;
         nodeToCheck.pathToParent = largestParent;
     }
-}
-
-const Node& Triangle::getLargestParent(const Node &nodeToCheck)
-{
-
+    else
+    // Should only happen with first node since it has no parents
+    {
+        nodeToCheck.sumWithNode = nodeToCheck.value;
+    }
 }
 
 void Triangle::getLargestSum()
 {
     // Iterate through all nodes
+    int largestSum{0};
     for(auto &n : triangle)
     {
-//        getLargestParent(n);
+        determineLargestParent(n);
+        if(n.sumWithNode > largestSum)
+        {
+            largestSum = n.sumWithNode;
+        }
     }
 
     // Find largest parent sum and save sum and path to last node
-
+    std::cout << "hi" << std::endl;
 }

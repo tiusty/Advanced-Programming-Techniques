@@ -11,6 +11,7 @@ Description:
 int main()
 {
     Triangle tri("data_triangle.txt");
+    tri.getLargestSum();
     return 0;
 }
 
