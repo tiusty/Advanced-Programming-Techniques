@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(Hmk2_Problem3)
 
+add_compile_options(-std=c++14)
+
 set(TRI_LIB tri)
 set(NODE_LIB node)
 
