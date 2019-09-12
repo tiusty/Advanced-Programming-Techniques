@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(Hmk2_Problem2)
 
+add_compile_options(-std=c++14)
+
 set(GRID_LIB grid)
 
 add_executable(${PROJECT_NAME}

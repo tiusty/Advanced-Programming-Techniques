@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(Hmk2_Problem1)
 
+add_compile_options(-std=c++14)
+
 set(MATRIX_LIB matrix_lib)
 
 add_executable(${PROJECT_NAME}
         Hmk2_Test1.cpp
-        ../problem3/main.cpp)
+        )
 
 target_link_libraries(${PROJECT_NAME}
         ${MATRIX_LIB}
