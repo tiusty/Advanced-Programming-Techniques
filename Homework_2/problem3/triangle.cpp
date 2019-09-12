@@ -13,6 +13,9 @@ Description:
 #include <iostream>
 #include <exception>
 
+// Define constexpr terms
+constexpr const char* Triangle::outputFileName;
+
 Triangle::Triangle(const char* filename)
 {
     std::ifstream file(filename);
@@ -31,7 +34,7 @@ Triangle::Triangle(const char* filename)
     unsigned int numNodes = (numLevels*(numLevels + 1))/2;
     triangle.reserve(numNodes);
 
-    // Read in every gridElement to a new spot in the data
+    // Read in every node into the triangle
     unsigned int currRow{1};
     unsigned int currColumn{1};
     for(unsigned int i=0; i < numNodes; i++)
@@ -55,16 +58,11 @@ Triangle::Triangle(const char* filename)
 const Node& Triangle::getNode(unsigned int row, unsigned column)
 {
     unsigned int nodeIndex{0};
-    if (row < 1)
+    // Make sure the index is values are valid
+    // Throw is mostly used for checking in the unittests
+    if(not determineValidIndex(std::make_pair(row, column)))
     {
-        std::cerr << "Error: Attempted to get row less than 1: " << row << std::endl;
-        throw std::out_of_range("Row out of range in getNode");
-    }
-    if (column > row || column < 1)
-    {
-        std::cerr << "Error: Attempted to get column :" << column << std::endl;
-        std::cerr << "That is not valid, must be greater than 0 and less than or equal to the row number" << std::endl;
-        throw std::out_of_range("Column out of range in getNode");
+        throw std::out_of_range("Indices are not valid");
     }
 
     // Get number of elements before the desired row
@@ -81,10 +79,12 @@ const Node& Triangle::getNode(unsigned int row, unsigned column)
 bool Triangle::determineValidIndex(nodeIndex index)
 {
     bool result{true};
+    // We are assuming the first element is at (1,1)
     if(index.first < 1 || index.second < 1)
     {
         result = false;
     }
+    // The column needs to be equal to or less than the row to be valid
     if(index.second > index.first)
     {
         result = false;
@@ -94,28 +94,36 @@ bool Triangle::determineValidIndex(nodeIndex index)
 
 void Triangle::determineLargestParent(Node &nodeToCheck)
 {
+    // Stores a pointer to the largest parent
     std::shared_ptr<Node> largestParent = nullptr;
 
+    // Get the indices for the two possible parent nodes
     nodeIndex parentLeft = std::make_pair(nodeToCheck.index.first - 1, nodeToCheck.index.second - 1);
     nodeIndex parentRight = std::make_pair(nodeToCheck.index.first -1, nodeToCheck.index.second);
 
+    // If the left index is valid then save that parent as the largest
     if(determineValidIndex(parentLeft))
     {
         largestParent = std::make_shared<Node>(getNode(parentLeft.first, parentLeft.second));
     }
+
+    // If the right index is valid, and is larger than the left index(if it exists) then make it the largest parent
     if(determineValidIndex(parentRight))
     {
         std::shared_ptr<Node> parentRightNode = std::make_shared<Node>(getNode(parentRight.first, parentRight.second));
+        // If the left parent wasn't valid then make right parent the largest parent
         if(largestParent == nullptr)
         {
             largestParent = parentRightNode;
         }
+        // If the right parent has a largest sum than left, then switch the largest parent
         else if(largestParent->sumWithNode < parentRightNode->sumWithNode)
         {
             largestParent = parentRightNode;
         }
     }
 
+    // Make sure that there exists a larger parent
     if(largestParent != nullptr)
     {
         nodeToCheck.sumWithNode = nodeToCheck.value + largestParent->sumWithNode;
@@ -141,6 +149,16 @@ void Triangle::getLargestSum()
         }
     }
 
-    // Find largest parent sum and save sum and path to last node
-    std::cout << "hi" << std::endl;
+    // Output result to file
+    generateOutput(largestSum);
+}
+
+void Triangle::generateOutput(int largestSum)
+{
+    std::ofstream file(outputFileName);
+    if(file.is_open())
+    {
+        file << largestSum;
+        file.close();
+    }
 }

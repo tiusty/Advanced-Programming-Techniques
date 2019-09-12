@@ -52,6 +52,10 @@ public: // Methods
      * Main run function which executes the functionality for finding the largest sum
      */
     void getLargestSum();
+    /**
+     * Print the output sum to a file
+     */
+    void generateOutput(int largestSum);
 public: // Members
     /**
      * Stores the data for all the nodes
@@ -61,6 +65,7 @@ public: // Members
      * Determines the number of levels that the triangle has
      */
     unsigned int numLevels{0};
+    static constexpr const char* outputFileName{"output3.txt"};
 };
 
 
