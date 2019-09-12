@@ -15,7 +15,7 @@ using TriangleGetNodeTuple = std::tuple<int, int, int, bool>;
 class TriangleGetNodeTestFixture:public ::testing::TestWithParam<TriangleGetNodeTuple > {
 };
 
-TEST_P(TriangleGetNodeTestFixture, TestNominalAtFourFour)
+TEST_P(TriangleGetNodeTestFixture, TestNominal)
 {
     // Arrange
     Triangle tri("data_triangle.txt");

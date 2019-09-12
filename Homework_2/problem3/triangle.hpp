@@ -17,7 +17,7 @@ public: // Methods
     Triangle() = default;
     explicit Triangle(const char* filename);
     bool determineValidIndex(nodeIndex index);
-    std::pair<const Node&, const Node&> getParentNodes(const Node &nodeToCheck);
+    void determineLargestParent(Node &nodeToCheck);
     const Node& getLargestParent(const Node &nodeToCheck);
     const Node& getNode(unsigned int row, unsigned column);
     void getLargestSum();

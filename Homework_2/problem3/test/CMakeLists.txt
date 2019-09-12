@@ -5,6 +5,7 @@ add_executable(${PROJECT_NAME}
         test_main.cpp
         test_triangle_get_node.cpp
         test_triangle_determine_valid_index.cpp
+        test_triangle_determine_largest_parent.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}

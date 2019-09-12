@@ -14,7 +14,7 @@ using TriangleDetermineValidIndexTuple = std::tuple<int, int, bool>;
 class TriangleDetermineValidIndexTestFixture:public ::testing::TestWithParam<TriangleDetermineValidIndexTuple > {
 };
 
-TEST_P(TriangleDetermineValidIndexTestFixture, TestNominalAtFourFour)
+TEST_P(TriangleDetermineValidIndexTestFixture, TestNominal)
 {
     // Arrange
     Triangle tri;

@@ -9,6 +9,7 @@ Description:
 #include "triangle.hpp"
 
 #include <fstream>
+#include <memory>
 #include <iostream>
 #include <exception>
 
@@ -91,10 +92,35 @@ bool Triangle::determineValidIndex(nodeIndex index)
     return result;
 }
 
-std::pair<const Node&, const Node&> Triangle::getParentNodes(const Node &nodeToCheck)
+void Triangle::determineLargestParent(Node &nodeToCheck)
 {
+    std::shared_ptr<Node> largestParent = nullptr;
+
     nodeIndex parentLeft = std::make_pair(nodeToCheck.index.first - 1, nodeToCheck.index.second - 1);
     nodeIndex parentRight = std::make_pair(nodeToCheck.index.first -1, nodeToCheck.index.second);
+
+    if(determineValidIndex(parentLeft))
+    {
+        largestParent = std::make_shared<Node>(getNode(parentLeft.first, parentLeft.second));
+    }
+    if(determineValidIndex(parentRight))
+    {
+        std::shared_ptr<Node> parentRightNode = std::make_shared<Node>(getNode(parentRight.first, parentRight.second));
+        if(largestParent == nullptr)
+        {
+            largestParent = parentRightNode;
+        }
+        else if(largestParent->sumWithNode < parentRightNode->sumWithNode)
+        {
+            largestParent = parentRightNode;
+        }
+    }
+
+    if(largestParent != nullptr)
+    {
+        nodeToCheck.sumWithNode = nodeToCheck.value + largestParent->sumWithNode;
+        nodeToCheck.pathToParent = largestParent;
+    }
 }
 
 const Node& Triangle::getLargestParent(const Node &nodeToCheck)
