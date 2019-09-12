@@ -7,7 +7,6 @@ add_compile_options(-std=c++14)
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # If unittests are defined then clone down gtest repo for gtest sources files
 if(UNITTESTS)
