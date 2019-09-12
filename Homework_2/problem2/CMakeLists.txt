@@ -3,6 +3,11 @@ project(Hmk2_Problem2)
 
 add_compile_options(-std=c++14)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(GRID_LIB grid)
 
 add_executable(${PROJECT_NAME}
