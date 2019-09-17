@@ -129,7 +129,7 @@ void Grid::largestProductAlongLine(int xNormVec, int yNormVec, gridElement eleme
         gridIndex endIndex = std::make_pair(initIndex.first + xNormVec * (numAdjNeighbors - 1) - i * xNormVec,
                                             initIndex.second + yNormVec * (numAdjNeighbors - 1) - i * yNormVec);
         // Determines the product between the two indices
-        int product = productBetweenIndices(startIndex, endIndex);
+        long long unsigned int product = productBetweenIndices(startIndex, endIndex);
         // If the product is larger than the current max then save it, and save the start and end indices
         if( product > currentLargestProduct)
         {
@@ -140,10 +140,10 @@ void Grid::largestProductAlongLine(int xNormVec, int yNormVec, gridElement eleme
     }
 }
 
-int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
+long long unsigned int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)
 {
     // Set up variables and determine normalized vectors
-    int product = 1;
+    long long unsigned int product = 1;
     int xVector = endIndex.first - startIndex.first;
     // xNormVec determines the direction that x iterates
     // xNormVec stands for normalized vector

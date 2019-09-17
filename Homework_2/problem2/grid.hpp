@@ -68,7 +68,7 @@ public: // Methods
      * @param endIndex  The end index to check
      * @return The product of the indices
      */
-    int productBetweenIndices(gridIndex startIndex, gridIndex endIndex);
+    long long unsigned int productBetweenIndices(gridIndex startIndex, gridIndex endIndex);
     /**
      * Generates the output-file for the solution
      */
@@ -99,14 +99,14 @@ public: // Members
     /**
      * Stores the current largest product by any numAdjNeighbor elements
      */
-    int currentLargestProduct{0};
+    long long unsigned int currentLargestProduct{0};
     /**
      * Stores the possible largest product left. As the largest elements get checked the largest remaining
      *  possible product will slowly decrease. This is used as the exit condition to confirm that
      *  we found the best possible solution. This value is determined by multiplying the remaining
      *  largest elements.
      */
-    int maxPossibleProduct{1};
+    long long unsigned int maxPossibleProduct{1};
     /**
      * Stores the start index and end index of the largest product
      */
