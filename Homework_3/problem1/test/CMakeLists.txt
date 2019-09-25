@@ -3,7 +3,8 @@ project(Hmk3_Problem1_Tests)
 
 add_executable(${PROJECT_NAME}
         test_main.cpp
-        tests_lattice_num_nodes.cpp
+        test_lattice_num_nodes.cpp
+        test_lattice_get_node.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}

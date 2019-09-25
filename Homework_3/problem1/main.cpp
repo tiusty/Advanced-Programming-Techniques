@@ -6,7 +6,10 @@ Description:
  Main function for the program
 */
 
+#include "lattice.h"
+
 int main()
 {
+    Lattice lat;
     return 1;
 }

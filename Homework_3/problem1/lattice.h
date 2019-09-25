@@ -16,6 +16,7 @@ public: // Methods
     Lattice() = default;
     Lattice(unsigned int height, unsigned width);
     unsigned int numLatNodes();
+    unsigned int getNode(unsigned int row, unsigned int col);
 public: // Members
 private: // Methods
 private: // Members
