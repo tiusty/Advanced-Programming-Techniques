@@ -20,8 +20,8 @@ public: // Methods
     unsigned int getNode(unsigned int row, unsigned int col);
     unsigned long long int getParentSum(unsigned int row, unsigned int col);
 public: // Members
-    static constexpr unsigned int maxLatElem{250000};
-    std::array<long long int, maxLatElem> latNodes{-1};
+    static constexpr unsigned int maxLatElem{40000};
+    std::array<long long int, maxLatElem> latNodes{0};
 private: // Methods
 private: // Members
     unsigned int latHeight{0};

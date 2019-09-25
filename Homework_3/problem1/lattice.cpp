@@ -12,12 +12,24 @@ Description:
 Lattice::Lattice(unsigned int height, unsigned int width)
 : latHeight(height), latWidth(width)
 {
+
+    // Support tall matrices by transposing it since we only work on the top half
+    if (height > width)
+    {
+        latHeight = width;
+        latWidth = height;
+    }
+
+    // Store number of nodes
     latHeightNodes = latHeight + 1;
     latWidthNodes = latWidth + 1;
+
+    // Protect against too many elements
     if(numLatNodes() > maxLatElem)
     {
         throw std::out_of_range("Max Lat Element is less than # of elements. Please increase constexpr to run");
     }
+
 }
 
 unsigned int Lattice::numLatNodes()
@@ -28,7 +40,9 @@ unsigned int Lattice::numLatNodes()
 
 unsigned int Lattice::getNode(unsigned int row, unsigned int col)
 {
+    // Need a signed row
     int rowSigned = row;
+
     // Row and col are base 1
     if(row < 1 or col < 1)
     {
@@ -58,6 +72,7 @@ unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
     unsigned long long int sumLeft{0};
     unsigned long long int sumUp{0};
 
+    // Case to support the first element
     if(row == 1 and col == 1)
     {
         return 1;
@@ -87,7 +102,6 @@ unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
 
 void Lattice::findNumberOfPaths()
 {
-    latNodes.at(0) = 1;
     for(unsigned int i = 1; i < latHeightNodes + 1; i++)
     {
         for(unsigned int j = i; j < latWidthNodes + 1; j++)

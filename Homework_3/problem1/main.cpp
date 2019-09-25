@@ -12,7 +12,7 @@ Description:
 
 int main()
 {
-    Lattice lat(100,100);
+    Lattice lat(4,10);
     lat.findNumberOfPaths();
     return 1;
 }
