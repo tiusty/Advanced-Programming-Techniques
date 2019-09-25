@@ -13,7 +13,7 @@ Lattice::Lattice(unsigned int height, unsigned int width)
 : latHeight(height), latWidth(width)
 {
 
-    // Support tall matrices by transposing it since we only work on the top half
+    // Support tall matrices by transposing it since we only work on the upper triangle
     if (height > width)
     {
         latHeight = width;
