@@ -6,11 +6,14 @@ Description:
     Implements functionality for lattice class
  */
 
+#include <iostream>
 #include "lattice.h"
 
 Lattice::Lattice(unsigned int height, unsigned int width)
 : latHeight(height), latWidth(width)
 {
+    latHeightNodes = latHeight + 1;
+    latWidthNodes = latWidth + 1;
     if(numLatNodes() > maxLatElem)
     {
         throw std::out_of_range("Max Lat Element is less than # of elements. Please increase constexpr to run");
@@ -19,7 +22,7 @@ Lattice::Lattice(unsigned int height, unsigned int width)
 
 unsigned int Lattice::numLatNodes()
 {
-    return (latHeight + 1)*(latWidth+1);
+    return latHeightNodes * latWidthNodes;
 }
 
 
@@ -35,7 +38,7 @@ unsigned int Lattice::getNode(unsigned int row, unsigned int col)
     {
         throw std::out_of_range("This index does not exist since we are only storing top half of matrix");
     }
-    if(row > latHeight || col > latWidth)
+    if(row > latHeightNodes || col > latWidthNodes)
     {
         throw std::out_of_range("The desired index is out of range for current lattice");
     }
@@ -45,15 +48,20 @@ unsigned int Lattice::getNode(unsigned int row, unsigned int col)
 
     // Given that we are only storing the top half of the wide matrix (or square) we need to easily retrieve
     //  the node corresponding to the index we want.
-    return ((rowSigned - 1) * latWidth -   // Add nodes from rows above
+    return ((rowSigned - 1) * latWidthNodes -   // Add nodes from rows above
             ((rowSigned - 2) * (rowSigned - 2) +  (rowSigned - 2)) / 2) + // Due to symmetry get rid of extra nodes that don't exist
            (col - 1 - (row - 1)); // Adjust due to column but also since first node is the diagonal element, shift more
 }
 
-unsigned int Lattice::getParentSum(unsigned int row, unsigned int col)
+unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
 {
-    unsigned int sumLeft{0};
-    unsigned int sumUp{0};
+    unsigned long long int sumLeft{0};
+    unsigned long long int sumUp{0};
+
+    if(row == 1 and col == 1)
+    {
+        return 1;
+    }
 
     // Get the sum from the right element
     if (row != col || col > row)
@@ -75,6 +83,19 @@ unsigned int Lattice::getParentSum(unsigned int row, unsigned int col)
 
     // Return the sum of the parents
     return sumLeft + sumUp;
+}
+
+void Lattice::findNumberOfPaths()
+{
+    latNodes.at(0) = 1;
+    for(unsigned int i = 1; i < latHeightNodes + 1; i++)
+    {
+        for(unsigned int j = i; j < latWidthNodes + 1; j++)
+        {
+            latNodes.at(getNode(i,j)) = getParentSum(i,j);
+        }
+    }
+    std::cout << "Number of paths to end is: " << latNodes.at(getNode(latHeightNodes, latWidthNodes));
 }
 
 

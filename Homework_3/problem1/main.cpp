@@ -8,8 +8,11 @@ Description:
 
 #include "lattice.h"
 
+#include <iostream>
+
 int main()
 {
-    Lattice lat;
+    Lattice lat(100,100);
+    lat.findNumberOfPaths();
     return 1;
 }
