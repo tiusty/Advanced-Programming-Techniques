@@ -5,6 +5,7 @@ add_executable(${PROJECT_NAME}
         test_main.cpp
         test_lattice_num_nodes.cpp
         test_lattice_get_node.cpp
+        test_lattice_get_parent_sum.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}

@@ -17,13 +17,14 @@ public: // Methods
     Lattice(unsigned int height, unsigned width);
     unsigned int numLatNodes();
     unsigned int getNode(unsigned int row, unsigned int col);
+    unsigned int getParentSum(unsigned int row, unsigned int col);
 public: // Members
+    static constexpr unsigned int maxLatElem{250000};
+    std::array<int, maxLatElem> latNodes{-1};
 private: // Methods
 private: // Members
-    static constexpr unsigned int maxLatElem{250000};
     unsigned int latHeight{0};
     unsigned int latWidth{0};
-    std::array<int, maxLatElem> latNodes{-1};
 };
 
 

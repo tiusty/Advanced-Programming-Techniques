@@ -50,3 +50,32 @@ unsigned int Lattice::getNode(unsigned int row, unsigned int col)
            (col - 1 - (row - 1)); // Adjust due to column but also since first node is the diagonal element, shift more
 }
 
+unsigned int Lattice::getParentSum(unsigned int row, unsigned int col)
+{
+    unsigned int sumLeft{0};
+    unsigned int sumUp{0};
+
+    // Get the sum from the right element
+    if (row != col || col > row)
+    {
+        sumLeft = latNodes.at(getNode(row, col - 1));
+    }
+
+    // Get the sum from the up element
+    if(row > 1)
+    {
+        sumUp = latNodes.at(getNode(row - 1, col));
+        // In the case that the element is on the diagonal,
+        //  then the sum is twice the up element
+        if(row == col)
+        {
+            sumUp *= 2;
+        }
+    }
+
+    // Return the sum of the parents
+    return sumLeft + sumUp;
+}
+
+
+
