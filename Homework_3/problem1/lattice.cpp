@@ -13,7 +13,7 @@ Lattice::Lattice(unsigned int height, unsigned int width)
 : latHeight(height), latWidth(width)
 {
 
-    // Support tall matrices by transposing it since we only work on the upper triangle
+    // Support tall matrices by transposing it since we only work on the upper triangle of the lattice
     if (height > width)
     {
         latHeight = width;
@@ -78,7 +78,7 @@ unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
         return 1;
     }
 
-    // Get the sum from the right element
+    // Get the sum from the left element
     if (row != col || col > row)
     {
         sumLeft = latNodes.at(getNode(row, col - 1));
@@ -102,6 +102,7 @@ unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
 
 void Lattice::findNumberOfPaths()
 {
+    // Sum the upper triangle of the lattice
     for(unsigned int i = 1; i < latHeightNodes + 1; i++)
     {
         for(unsigned int j = i; j < latWidthNodes + 1; j++)
@@ -109,6 +110,8 @@ void Lattice::findNumberOfPaths()
             latNodes.at(getNode(i,j)) = getParentSum(i,j);
         }
     }
+
+    // Print result
     std::cout << "Number of paths to end is: " << latNodes.at(getNode(latHeightNodes, latWidthNodes));
 }
 
