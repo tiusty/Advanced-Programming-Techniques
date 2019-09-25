@@ -26,6 +26,11 @@ target_include_directories(${LATTICE_LIB}
             ${CMAKE_CURRENT_LIST_DIR}
         )
 
+# If unittests are defined then add the unittests
+if(UNITTESTS)
+    add_subdirectory(test)
+endif()
+
 # Custom command to copy the targets to the build directory
 #   For easy of running
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
