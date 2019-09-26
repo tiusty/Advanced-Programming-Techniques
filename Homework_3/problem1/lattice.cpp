@@ -8,6 +8,9 @@ Description:
 
 #include <iostream>
 #include "lattice.h"
+#include <omp.h>
+#include <sstream>
+#include <fstream>
 
 Lattice::Lattice(unsigned int height, unsigned int width)
 : latHeight(height), latWidth(width)
@@ -87,6 +90,14 @@ unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
     // Get the sum from the up element
     if(row > 1)
     {
+        // If statement which determines if multi-threading is used. If it is, then this busy loop is necessary
+        if (openMPSupport)
+        {
+            // Busy loop waiting for the element above to get populated by a different thread
+            while(latNodes.at(getNode(row -1, col)) == 0);
+        }
+
+        // Actually retrieve the value
         sumUp = latNodes.at(getNode(row - 1, col));
         // In the case that the element is on the diagonal,
         //  then the sum is twice the up element
@@ -102,17 +113,48 @@ unsigned long long int Lattice::getParentSum(unsigned int row, unsigned int col)
 
 void Lattice::findNumberOfPaths()
 {
-    // Sum the upper triangle of the lattice
-    for(unsigned int i = 1; i < latHeightNodes + 1; i++)
+    if(openMPSupport)
     {
-        for(unsigned int j = i; j < latWidthNodes + 1; j++)
-        {
-            latNodes.at(getNode(i,j)) = getParentSum(i,j);
+        findNumberOfPathsOpenMp();
+    } else {
+        findNumberOfPathsSingleThread();
+    }
+    outputResults();
+}
+
+void Lattice::findNumberOfPathsSingleThread()
+{
+    for (unsigned int i = 1; i < latHeightNodes + 1; i++) {
+        for (unsigned int j = i; j < latWidthNodes + 1; j++) {
+            latNodes.at(getNode(i, j)) = getParentSum(i, j);
         }
     }
+}
 
-    // Print result
-    std::cout << "Number of paths to end is: " << latNodes.at(getNode(latHeightNodes, latWidthNodes));
+void Lattice::findNumberOfPathsOpenMp()
+{
+    // Sum the upper triangle of the lattice
+#pragma omp parallel shared(latNodes)
+    {
+#pragma omp for schedule(dynamic)
+        for (unsigned int i = 1; i < latHeightNodes + 1; i++) {
+            for (unsigned int j = i; j < latWidthNodes + 1; j++) {
+                latNodes.at(getNode(i, j)) = getParentSum(i, j);
+            }
+        }
+    }
+}
+
+void Lattice::outputResults()
+{
+    std::cout << "Number of Routes: " << latNodes.at(getNode(latHeightNodes, latWidthNodes));
+    std::ofstream file(outputFileName);
+    // Open file and write result to the file
+    if(file.is_open())
+    {
+        file << latNodes.at(getNode(latHeightNodes, latWidthNodes));
+        file.close();
+    }
 }
 
 

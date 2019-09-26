@@ -28,12 +28,10 @@ int main(int argc, char *argv[])
             case 'h':
                 printf("height: %s\n", optarg);
                 height = std::stoi(optarg);
-                printf("option needs a value\n");
                 break;
             case 'w':
                 printf("width: %s\n", optarg);
                 width = std::stoi(optarg);
-                printf("option needs a value\n");
                 break;
             case '?':
                 printf("unknown option: %c\n", optopt);
