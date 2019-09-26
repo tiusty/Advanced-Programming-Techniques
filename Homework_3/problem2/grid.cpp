@@ -11,6 +11,7 @@ Description:
 #include <fstream>
 #include <iostream>
 #include <array>
+#include <omp.h>
 
 // Define constexpr terms
 constexpr unsigned int Grid::numAdjNeighbors;
@@ -65,20 +66,30 @@ void Grid::findMaxProductNeighbors()
     while(!restOfElements.empty())
     {
         // Pull off largest element
-        gridElement elementToCheck = topAdjElements.top();
 
         // Check 4 directions. The negative and positive of each vector is checked to
         //  fully check all "8" directions. For me x axis is up and down and y axis is left
         //  to right
 
-        // Check right down to left up diagonal
-        largestProductAlongLine(1,-1, elementToCheck);
-        // Check Up/Down line
-        largestProductAlongLine(1,0, elementToCheck);
-        // Check left/right line
-        largestProductAlongLine(0,1,elementToCheck);
-        // Check right up to left down diagonal
-        largestProductAlongLine(1,1, elementToCheck);
+#pragma omp parallel default(none) shared(currentLargestProduct, indexMaxProduct)
+        {
+            gridElement elementToCheck = topAdjElements.top();
+#pragma omp sections
+            {
+                // Check right down to left up diagonal
+#pragma omp section
+                largestProductAlongLine(1, -1, elementToCheck);
+                // Check Up/Down line
+#pragma omp section
+                largestProductAlongLine(1, 0, elementToCheck);
+                // Check left/right line
+#pragma omp section
+                largestProductAlongLine(0, 1, elementToCheck);
+                // Check right up to left down diagonal
+#pragma omp section
+                largestProductAlongLine(1, 1, elementToCheck);
+            }
+        }
 
         // The current max is the largest product found so far while searching
         // The maxPossibleProduct is the product of the elements in the topAdjElements,
@@ -106,9 +117,9 @@ void Grid::findMaxProductNeighbors()
     }
 
     // Print start and end index to the console
-//    std::cout << "Solution starts at: "
-//                 " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
-//              ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
+    std::cout << "Solution starts at: "
+                 " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
+              ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
     generateOutput();
 }
 
@@ -131,11 +142,13 @@ void Grid::largestProductAlongLine(int xNormVec, int yNormVec, gridElement eleme
         // Determines the product between the two indices
         long long unsigned int product = productBetweenIndices(startIndex, endIndex);
         // If the product is larger than the current max then save it, and save the start and end indices
-        if( product > currentLargestProduct)
+#pragma omp critical
         {
-            currentLargestProduct = product;
-            indexMaxProduct.at(0) = startIndex;
-            indexMaxProduct.at(1) = endIndex;
+            if (product > currentLargestProduct) {
+                currentLargestProduct = product;
+                indexMaxProduct.at(0) = startIndex;
+                indexMaxProduct.at(1) = endIndex;
+            }
         }
     }
 }
