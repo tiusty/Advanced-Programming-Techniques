@@ -12,6 +12,7 @@ Description:
 #include <memory>
 #include <iostream>
 #include <exception>
+#include <omp.h>
 
 // Define constexpr terms
 constexpr const char* Triangle::outputFileName;
@@ -105,12 +106,15 @@ void Triangle::determineLargestParent(Node &nodeToCheck)
     if(determineValidIndex(parentLeft))
     {
         largestParent = std::make_shared<Node>(getNode(parentLeft.first, parentLeft.second));
+        while(largestParent->sumWithNode == 0);
     }
 
     // If the right index is valid, and is larger than the left index(if it exists) then make it the largest parent
     if(determineValidIndex(parentRight))
     {
         std::shared_ptr<Node> parentRightNode = std::make_shared<Node>(getNode(parentRight.first, parentRight.second));
+        while(parentRightNode->sumWithNode==0);
+
         // If the left parent wasn't valid then make right parent the largest parent
         if(largestParent == nullptr)
         {
@@ -140,14 +144,16 @@ void Triangle::getLargestSum()
 {
     // Iterate through all nodes
     int largestSum{0};
-    for(auto &n : triangle)
-    {
-        determineLargestParent(n);
-        if(n.sumWithNode > largestSum)
+    omp_set_num_threads(2);
+#pragma omp parallel for schedule(static) default(none) shared(largestSum)
+        for(unsigned int i=0; i<triangle.size(); i++)
         {
-            largestSum = n.sumWithNode;
+            determineLargestParent(triangle.at(i));
+            if (triangle.at(i).sumWithNode > largestSum)
+            {
+                largestSum = triangle.at(i).sumWithNode;
+            }
         }
-    }
 
     // Output result to file
     generateOutput(largestSum);
@@ -155,6 +161,7 @@ void Triangle::getLargestSum()
 
 void Triangle::generateOutput(int largestSum)
 {
+    std::cout << largestSum << std::endl;
     std::ofstream file(outputFileName);
     // Open file and write result to the file
     if(file.is_open())

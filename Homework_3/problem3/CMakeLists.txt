@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
-project(Hmk2_Problem3)
+project(Hmk3_Problem3)
+find_package(OpenMP)
 
-add_compile_options(-std=c++14)
+add_compile_options(-std=c++14 -fopenmp)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -34,6 +35,10 @@ target_include_directories(${NODE_LIB}
         PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
         )
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${NODE_LIB} PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # If unittests are defined then add the unittests
 if(UNITTESTS)

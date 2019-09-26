@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(Hmk2_Problem2)
+project(Hmk3_Problem2)
 find_package(OpenMP)
 
 add_compile_options(-std=c++14)
