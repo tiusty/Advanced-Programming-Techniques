@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 9/11/2019
+Last date modified: 9/26/2019
 Description:
  Implements triangle funtionality
 */
@@ -145,6 +145,7 @@ void Triangle::getLargestSum()
     // Iterate through all nodes
     int largestSum{0};
     omp_set_num_threads(2);
+    // Compute the sum of paths via multi-threads
 #pragma omp parallel for schedule(static) default(none) shared(largestSum)
         for(unsigned int i=0; i<triangle.size(); i++)
         {

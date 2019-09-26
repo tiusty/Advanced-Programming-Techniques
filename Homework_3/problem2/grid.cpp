@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 9/10/2019
+Last date modified: 9/26/2019
 Description:
  Implements the Grid functionality
 */
