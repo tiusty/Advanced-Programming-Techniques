@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(Hmk2_Problem2)
+find_package(OpenMP)
 
 add_compile_options(-std=c++14)
 
@@ -24,6 +25,11 @@ target_include_directories(${GRID_LIB}
         PUBLIC
             ${CMAKE_CURRENT_LIST_DIR}
         )
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${GRID_LIB} PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 
 # If unittests are defined then add the unittests
 if(UNITTESTS)
