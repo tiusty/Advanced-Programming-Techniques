@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(Hmk3_Problem1)
 
-add_compile_options(-std=c++14)
+add_compile_options(-std=c++14 -fopenmp)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
