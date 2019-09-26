@@ -11,6 +11,9 @@ Description:
 #include <iostream>
 #include <unistd.h>
 
+/**
+ * Executes the main program
+ */
 int main(int argc, char *argv[])
 {
     int opt;
@@ -18,9 +21,7 @@ int main(int argc, char *argv[])
     int width{0};
     bool badArgs{false};
 
-    // put ':' in the starting of the
-    // string so that program can
-    //distinguish between '?' and ':'
+    // Gets arguments
     while((opt = getopt(argc, argv, "w:h:")) != -1)
     {
         switch(opt)
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Only run the lattice program if the arguments were valid
     if (not badArgs)
     {
         Lattice lat(height,width);
