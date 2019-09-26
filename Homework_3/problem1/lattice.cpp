@@ -134,15 +134,13 @@ void Lattice::findNumberOfPathsSingleThread()
 void Lattice::findNumberOfPathsOpenMp()
 {
     // Sum the upper triangle of the lattice
-#pragma omp parallel shared(latNodes)
-    {
-#pragma omp for schedule(dynamic)
+    omp_set_num_threads(2);
+#pragma omp parallel for schedule(dynamic)
         for (unsigned int i = 1; i < latHeightNodes + 1; i++) {
             for (unsigned int j = i; j < latWidthNodes + 1; j++) {
                 latNodes.at(getNode(i, j)) = getParentSum(i, j);
             }
         }
-    }
 }
 
 void Lattice::outputResults()
