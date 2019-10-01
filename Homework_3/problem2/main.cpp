@@ -13,9 +13,14 @@ Description:
  * Main function that executes the program
  * @return Exit status
  */
-int main()
+int main(int argc, char *argv[])
 {
-    Grid grid = Grid("data_Problem2.txt");
+    char filename[50];
+
+    sprintf(filename, "%s", argv[1]);
+
+    Grid grid = Grid(filename);
+
     grid.findMaxProductNeighbors();
     return 0;
 }
