@@ -12,11 +12,13 @@ Description:
  * Function executes main functionality by creating necessary components
  * @return Exit status of the program
  */
-int main()
+int main(int argc, char *argv[])
 {
+    char filename[50];
+
+    sprintf(filename, "%s", argv[1]);
     // Create the triangle
-    Triangle tri("data_triangle.txt");
-    // Get the largest sum
+    Triangle tri(filename);    // Get the largest sum
     tri.getLargestSum();
     // Exit status
     return 0;
