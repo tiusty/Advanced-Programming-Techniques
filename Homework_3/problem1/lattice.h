@@ -13,6 +13,9 @@ Description:
 
 /**
  * Stores a lattice and helps fine the number of paths to bottom right
+ * Note: Only the upper triangle is stored of the lattice matrix due to symmetry. There is no reason to
+ * duplicate the matrix for the bottom half. We can still find the number of paths to bottom right using
+ * the upper triangle information.
  */
 class Lattice {
 
