@@ -71,23 +71,57 @@ void Grid::findMaxProductNeighbors()
         //  fully check all "8" directions. For me x axis is up and down and y axis is left
         //  to right
 
-#pragma omp parallel default(none) shared(currentLargestProduct, indexMaxProduct)
+        long long unsigned int* pCurrentLargestProduct = &currentLargestProduct;
+#pragma omp parallel default(none) shared(pCurrentLargestProduct)
         {
+            long long unsigned int tempProduct;
             gridElement elementToCheck = topAdjElements.top();
 #pragma omp sections
             {
                 // Check right down to left up diagonal
 #pragma omp section
-                largestProductAlongLine(1, -1, elementToCheck);
+                {
+                    tempProduct = largestProductAlongLine(1, -1, elementToCheck);
+#pragma omp critical
+                    {
+                        if (tempProduct > *pCurrentLargestProduct) {
+                            *pCurrentLargestProduct = tempProduct;
+                        }
+                    }
+                }
                 // Check Up/Down line
 #pragma omp section
-                largestProductAlongLine(1, 0, elementToCheck);
+                {
+                    tempProduct = largestProductAlongLine(1, 0, elementToCheck);
+#pragma omp critical
+                    {
+                        if (tempProduct > *pCurrentLargestProduct) {
+                            *pCurrentLargestProduct = tempProduct;
+                        }
+                    }
+                }
                 // Check left/right line
 #pragma omp section
-                largestProductAlongLine(0, 1, elementToCheck);
+                {
+                    tempProduct = largestProductAlongLine(0, 1, elementToCheck);
+#pragma omp critical
+                    {
+                        if (tempProduct > *pCurrentLargestProduct) {
+                            *pCurrentLargestProduct = tempProduct;
+                        }
+                    }
+                }
                 // Check right up to left down diagonal
 #pragma omp section
-                largestProductAlongLine(1, 1, elementToCheck);
+                {
+                    tempProduct = largestProductAlongLine(1, 1, elementToCheck);
+#pragma omp critical
+                    {
+                        if (tempProduct > *pCurrentLargestProduct) {
+                            *pCurrentLargestProduct = tempProduct;
+                        }
+                    }
+                }
             }
         }
 
@@ -116,19 +150,16 @@ void Grid::findMaxProductNeighbors()
         }
     }
 
-    // Print start and end index to the console
-//    std::cout << "Solution starts at: "
-//                 " Start index: (" << indexMaxProduct.at(0).first << "," << indexMaxProduct.at(0).second <<
-//              ") End index: ("<< indexMaxProduct.at(1).first << "," << indexMaxProduct.at(1).second << ")." << std::endl;
     generateOutput();
 }
 
-void Grid::largestProductAlongLine(int xNormVec, int yNormVec, gridElement elementToCheck)
+long long unsigned int Grid::largestProductAlongLine(int xNormVec, int yNormVec, gridElement elementToCheck)
 {
     // Given a vector of a line to check, check every possible combination along that line
     // and fine the largest product on that line. Since we are checking with respect to an element
     //  that element must be in contained within the indices
     gridIndex initIndex = elementToCheck.first;
+    long long unsigned int largestProduct{0};
 
     // Starts at the far end of the line and then shifts down one element at a time checking the product
     //  each time. This will shift from the start_index being the elementToCheck until the element to check
@@ -142,15 +173,12 @@ void Grid::largestProductAlongLine(int xNormVec, int yNormVec, gridElement eleme
         // Determines the product between the two indices
         long long unsigned int product = productBetweenIndices(startIndex, endIndex);
         // If the product is larger than the current max then save it, and save the start and end indices
-#pragma omp critical
-        {
-            if (product > currentLargestProduct) {
-                currentLargestProduct = product;
-                indexMaxProduct.at(0) = startIndex;
-                indexMaxProduct.at(1) = endIndex;
-            }
+        if (product > largestProduct) {
+            largestProduct = product;
         }
     }
+
+    return largestProduct;
 }
 
 long long unsigned int Grid::productBetweenIndices(gridIndex startIndex, gridIndex endIndex)

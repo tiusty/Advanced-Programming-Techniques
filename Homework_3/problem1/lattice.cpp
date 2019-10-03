@@ -145,7 +145,7 @@ void Lattice::findNumberOfPathsOpenMp()
 
 void Lattice::outputResults()
 {
-    std::cout << "Number of Routes: " << latNodes.at(getNode(latHeightNodes, latWidthNodes));
+    std::cout << "Number of Routes: " << latNodes.at(getNode(latHeightNodes, latWidthNodes)) << std::endl;
     std::ofstream file(outputFileName);
     // Open file and write result to the file
     if(file.is_open())

@@ -60,7 +60,7 @@ public: // Methods
      * @param yNormVec The yUnitVector that determines the line to check along
      * @param elementToCheck The point that is being checked. Must be contained within the line
      */
-    void largestProductAlongLine(int xNormVec, int yNormVec, gridElement elementToCheck);
+    long long unsigned int largestProductAlongLine(int xNormVec, int yNormVec, gridElement elementToCheck);
     /**
      * Determines the product between two indices. The indices must lie along a line,
      * i.e up/down, right/left, on diagonal
@@ -107,10 +107,6 @@ public: // Members
      *  largest elements.
      */
     long long unsigned int maxPossibleProduct{1};
-    /**
-     * Stores the start index and end index of the largest product
-     */
-    std::array<gridIndex, 2> indexMaxProduct;
 
 private: // Members
     /**

@@ -74,7 +74,7 @@ public: // Members
     /**
      * Stores all the elements in the lattice.
      */
-    std::array<unsigned long long int, maxLatElem> latNodes{0};
+    std::array<unsigned long long int, maxLatElem> latNodes{{0}};
 private: // Members
     /**
      * Determines if openMP support is being used
