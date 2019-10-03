@@ -6,7 +6,7 @@ Description:
  Implements the Grid functionality
 */
 
-#include "grid.hpp"
+#include "grid.h"
 
 #include <fstream>
 #include <iostream>

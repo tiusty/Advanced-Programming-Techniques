@@ -8,7 +8,7 @@ Description:
 
 #include <gtest/gtest.h>
 
-#include "triangle.hpp"
+#include "triangle.h"
 #include <exception>
 
 using TriangleGetNodeTuple = std::tuple<int, int, int, bool>;

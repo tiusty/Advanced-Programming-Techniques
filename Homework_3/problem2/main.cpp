@@ -6,7 +6,7 @@ Description:
  Main file for problem 2 homework 2. Executes the program
 */
 
-#include "grid.hpp"
+#include "grid.h"
 #include <iostream>
 
 /**

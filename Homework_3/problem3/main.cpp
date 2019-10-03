@@ -6,7 +6,7 @@ Description:
  Main function for finding maximum path sum
 */
 
-#include "triangle.hpp"
+#include "triangle.h"
 #include <iostream>
 
 /**

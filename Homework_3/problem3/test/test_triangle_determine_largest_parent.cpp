@@ -8,7 +8,7 @@ Description:
 
 #include <gtest/gtest.h>
 
-#include "triangle.hpp"
+#include "triangle.h"
 
 using TriangleDetermineLargestParentTuple = std::tuple<int, int, int, int>;
 class TriangleDetermineLargestParentTestFixture:public ::testing::TestWithParam<TriangleDetermineLargestParentTuple > {

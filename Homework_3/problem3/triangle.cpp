@@ -6,7 +6,7 @@ Description:
  Implements triangle funtionality
 */
 
-#include "triangle.hpp"
+#include "triangle.h"
 
 #include <fstream>
 #include <memory>

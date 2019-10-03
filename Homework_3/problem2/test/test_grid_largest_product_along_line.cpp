@@ -7,7 +7,7 @@ Description:
 */
 
 #include <gtest/gtest.h>
-#include "grid.hpp"
+#include "grid.h"
 
 using GridLargestProductAlongLineTuple = std::tuple<int, int, int>;
 class GridLargestProductAlongLineTestFixture:public ::testing::TestWithParam<GridLargestProductAlongLineTuple > {

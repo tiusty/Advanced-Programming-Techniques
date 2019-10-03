@@ -11,7 +11,7 @@ Description:
 
 #include <vector>
 
-#include "node.hpp"
+#include "node.h"
 
 /**
  * Stores values for triangles and helps determine the largest sum

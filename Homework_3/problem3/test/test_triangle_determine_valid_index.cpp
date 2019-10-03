@@ -8,7 +8,7 @@ Description:
 
 #include <gtest/gtest.h>
 
-#include "triangle.hpp"
+#include "triangle.h"
 
 using TriangleDetermineValidIndexTuple = std::tuple<int, int, bool>;
 class TriangleDetermineValidIndexTestFixture:public ::testing::TestWithParam<TriangleDetermineValidIndexTuple > {

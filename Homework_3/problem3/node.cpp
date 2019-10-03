@@ -6,7 +6,7 @@ Description:
  Implements node functionality
 */
 
-#include "node.hpp"
+#include "node.h"
 
 Node::Node(int value, nodeIndex index)
 : value(value), index(std::move(index))

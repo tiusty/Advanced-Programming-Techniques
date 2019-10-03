@@ -7,7 +7,7 @@ Description:
 */
 
 #include <gtest/gtest.h>
-#include "grid.hpp"
+#include "grid.h"
 
 using GridProductBetweenMatriciesTuple = std::tuple<gridIndex, gridIndex, int>;
 class GridProductBetweenMatricesTestFixture:public ::testing::TestWithParam<GridProductBetweenMatriciesTuple > {
