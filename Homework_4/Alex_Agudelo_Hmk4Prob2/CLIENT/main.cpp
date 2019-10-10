@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
 
     ClientUDP udp_client;
     udp_client.startClient(portno, argv[1]);
+    udp_client.promptForCommand();
     udp_client.sendAndReceiveMessage();
 }
 

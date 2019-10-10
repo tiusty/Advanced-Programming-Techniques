@@ -9,7 +9,9 @@ Description:
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <limits>
 #include <iostream>
+#include <stdio.h>
 
 #include "clientUDP.hpp"
 
@@ -30,6 +32,9 @@ Description:
 #include <unistd.h> /* Needed for close() */
 
 #endif
+
+// Define constexpr
+constexpr unsigned int ClientUDP::kMessageLength;
 
 int ClientUDP::sockInit(void)
 {
@@ -99,7 +104,7 @@ void ClientUDP::sendAndReceiveMessage()
         memset(&buffer, 0, sizeof(buffer));
         fgets(message, 1023, stdin);
         strcpy(buffer.chMsg, message);
-        
+
         buffer.nVersion =1;
         buffer.lSeqNum = 2;
 
@@ -167,4 +172,91 @@ void ClientUDP::startClient(int portno, const char *server_address)
 //       error("ERROR connecting");
 
     initialized = true;
+}
+
+void ClientUDP::promptForCommand()
+{
+    int commandNum;
+    char command[kMessageLength];
+
+    // Keep prompting for a command until the sever is being shutdown
+    while(!shutDown)
+    {
+        std::cin.clear();
+
+        // Prompt the user for a command
+        std::cout << "Please enter a command: " << std::endl;
+        fgets(command, 1023, stdin);
+
+        bool result = parseCommand(command);
+
+        if(result)
+        {
+            std::cout << "valid command" << std::endl;
+        }
+        else
+        {
+            std::cout << "Not valid command" << std::endl;
+        }
+    }
+}
+
+bool ClientUDP::parseCommand(const char command[kMessageLength])
+{
+    enum CommandType { setVersion, sendMessage, Quit, None};
+    CommandType commandType{CommandType::None};
+
+    // Returns first token
+    char commandToParse[kMessageLength]{0};
+    strcpy(commandToParse, command);
+    char *token = strtok(commandToParse, " ");
+
+    // Keep printing tokens while one of the
+    // delimiters present in str[].
+    while (token != NULL)
+    {
+        printf("%s\n", token);
+
+        if(commandType == CommandType::None)
+        {
+            if(strlen(token) != 1)
+            {
+                return false;
+            }
+
+            switch(token[0])
+            {
+                case 'v':
+                    std::cout << "V pressed" << std::endl;
+                    commandType = CommandType::setVersion;
+                    break;
+                case 't':
+                    std::cout << "t pressed" << std::endl;
+                    commandType = CommandType::sendMessage;
+                    break;
+                case 'q':
+                    std::cout << "q pressed" << std::endl;
+                    break;
+                default:
+                    std::cout << "Not a valid arguments" << std::endl;
+                    return false;
+            }
+        }
+        else if(commandType == CommandType::setVersion)
+        {
+            char *pEnd;
+            int tempVersionNum = strtol(token, &pEnd, 10);
+            if(tempVersionNum <= 0)
+            {
+                std::cout << "Error: Version must be greater than or equal to 0" << std::endl;
+                return false;
+            }
+            versionNum = tempVersionNum;
+        }
+
+
+        token = strtok(nullptr, "-");
+    }
+
+    return true;
 }

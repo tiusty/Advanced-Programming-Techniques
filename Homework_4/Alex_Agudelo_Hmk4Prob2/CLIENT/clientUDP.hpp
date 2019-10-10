@@ -25,17 +25,21 @@ struct udpMessage
 
 class ClientUDP {
 public: // Methods
+    static constexpr unsigned int kMessageLength = 1024;
     void startClient(int portno, const char* server_address);
+    void promptForCommand();
+    bool parseCommand(const char command[kMessageLength]);
     void sendAndReceiveMessage();
 private: // Methods
     int sockInit();
     int sockQuit();
     int sockClose(SOCKET sock);
 private: // Members
+    unsigned int versionNum{0};
     bool initialized{false};
     int sockfd;
     struct sockaddr_in serv_addr;
-
+    bool shutDown{false};
 };
 
 
