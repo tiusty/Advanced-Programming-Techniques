@@ -10,7 +10,7 @@ Description:
 #include <string.h>
 #include <sys/types.h>
 #include <iostream>
-
+#include <limits>       // std::numeric_limits
 #include "serverUDP.hpp"
 
 #ifdef _WIN32
@@ -142,4 +142,53 @@ void ServerUDP::startServer(int portno)
     }
     initialized = true;
     printf("Waiting on messages...\n");
+}
+
+void ServerUDP::promptForCommand()
+{
+    int command;
+
+    // Keep prompting for a command until the sever is being shutdown
+    while(!shutDown)
+    {
+        std::cin.clear();
+
+        // Prompt the user for a command
+        std::cout << "Please enter a command: " << std::endl;
+        std::cin >> command;
+
+        // Validate std::cin
+        // If the input is valid then parse the command
+        if(std::cin.good())
+        {
+            parseCommand(command);
+        }
+        // If the input is not valid then ignore everything else in the cin buffer
+        //  and clear the cin error state
+        else
+        {
+            std::cout << "Invalid input. Input should be a number" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        }
+    }
+}
+
+void ServerUDP::parseCommand(int command)
+{
+    switch(command)
+    {
+        case 0:
+            std::cout << "DO zero!" << std::endl;
+            break;
+        case 1:
+            std::cout << "DO One!" << std::endl;
+            break;
+        case 2:
+            std::cout << "DO Two!" << std::endl;
+            break;
+        default:
+            std::cout << "Command invalid" << std::endl;
+            break;
+    }
 }

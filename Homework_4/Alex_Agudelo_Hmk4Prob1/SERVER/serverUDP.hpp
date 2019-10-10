@@ -16,12 +16,15 @@ class ServerUDP {
 public: // Methods
     void startServer(int portno);
     void receiveMessages();
+    void promptForCommand();
 private: // Methods
+    void parseCommand(int command);
     int sockClose(SOCKET sock);
     int sockQuit();
     int sockInit();
     void error(const char *msg);
 private: // Members
+    bool shutDown{false};
     bool initialized{false};
     int sockfd;
 };

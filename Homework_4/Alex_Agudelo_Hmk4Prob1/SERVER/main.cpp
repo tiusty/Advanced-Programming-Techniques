@@ -23,5 +23,6 @@ int main(int argc, char *argv[])
 
     ServerUDP udp_server;
     udp_server.startServer(portno);
-    udp_server.receiveMessages();
+//    udp_server.receiveMessages();
+    udp_server.promptForCommand();
 }
