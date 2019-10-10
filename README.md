@@ -11,7 +11,7 @@ Homework 2:
 - optimzation problems, evauluated on excuation speed
 
 Homework 3:
-- Multi-threading
+- Multi-threading, openMP
 
 Homework 4:
 - Sockets, UDP
