@@ -2,18 +2,25 @@
 Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 10/10/19
-Description: 
+Description:
+ Class that supports UDP server. Code is written for linux but there are only a few
+    changes that are necessary to make it compatible with windows
 */
 
 #ifndef HOMEWORK_4_SERVERUDP_HPP
 #define HOMEWORK_4_SERVERUDP_HPP
 
+typedef int SOCKET;
 
 class ServerUDP {
 public: // Methods
     void startServer(int portno);
     void receiveMessages();
-
+private: // Methods
+    int sockClose(SOCKET sock);
+    int sockQuit();
+    int sockInit();
+    void error(const char *msg);
 private: // Members
     bool initialized{false};
     int sockfd;

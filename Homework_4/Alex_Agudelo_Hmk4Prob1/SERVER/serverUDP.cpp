@@ -33,7 +33,7 @@ typedef int SOCKET;
 #endif
 /////////////////////////////////////////////////
 // Cross-platform socket initialize
-int sockInit(void)
+int ServerUDP::sockInit()
 {
 #ifdef _WIN32
     WSADATA wsa_data;
@@ -44,7 +44,7 @@ int sockInit(void)
 }
 /////////////////////////////////////////////////
 // Cross-platform socket quit
-int sockQuit(void)
+int ServerUDP::sockQuit()
 {
 #ifdef _WIN32
     return WSACleanup();
@@ -54,7 +54,7 @@ int sockQuit(void)
 }
 /////////////////////////////////////////////////
 // Cross-platform socket close
-int sockClose(SOCKET sock)
+int ServerUDP::sockClose(SOCKET sock)
 {
 
     int status = 0;
@@ -78,7 +78,7 @@ int sockClose(SOCKET sock)
 }
 /////////////////////////////////////////////////
 // Output error message and exit
-void error(const char *msg)
+void ServerUDP::error(const char *msg)
 {
     perror(msg);
     // Make sure any open sockets are closed before calling exit
