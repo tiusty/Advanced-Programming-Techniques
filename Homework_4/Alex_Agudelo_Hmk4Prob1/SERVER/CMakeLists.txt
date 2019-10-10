@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(Homework_4_Server)
 
 add_executable(${PROJECT_NAME}
+        main.cpp
         serverUDP.cpp
         )
 

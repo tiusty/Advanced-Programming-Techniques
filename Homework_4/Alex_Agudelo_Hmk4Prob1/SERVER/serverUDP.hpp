@@ -10,7 +10,13 @@ Description:
 
 
 class ServerUDP {
+public: // Methods
+    void startServer(int portno);
+    void receiveMessages();
 
+private: // Members
+    bool initialized{false};
+    int sockfd;
 };
 
 

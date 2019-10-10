@@ -85,43 +85,14 @@ void error(const char *msg)
     exit(1);
 }
 /////////////////////////////////////////////////
-// Main
-int main(int argc, char *argv[])
+
+void ServerUDP::receiveMessages()
 {
-    int sockfd, newsockfd, portno;
-    socklen_t fromlen;
     char buffer[1024];
-    struct sockaddr_in serv_addr, from;
+    struct sockaddr_in from;
+    socklen_t fromlen;
+    int newsockfd;
     int n;
-
-    if (argc < 2)
-    {
-        fprintf(stderr, "ERROR, no port provided\n");
-        exit(1);
-    }
-    sockInit();
-    // Create the socket
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    // Make sure the socket was created
-    if (sockfd < 0)
-        error("ERROR opening socket");
-    // Zero out the variable serv_addr
-    memset((char *)&serv_addr, 0, sizeof(serv_addr));
-    // Convert the port number string to an int
-    portno = atoi(argv[1]);
-
-    // Initialize the serv_addr
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
-    // Convert port number from host to network
-    serv_addr.sin_port = htons(portno);
-    // Bind the socket to the port number
-    if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-    {
-        error("ERROR on binding");
-    }
-    printf("Waiting on messages...\n");
-
     fromlen = sizeof(struct sockaddr_in);
     while (true)
     {
@@ -143,5 +114,32 @@ int main(int argc, char *argv[])
 #ifdef _WIN32
     std::cin.get();
 #endif
-    return 0;
+}
+
+void ServerUDP::startServer(int portno)
+{
+    struct sockaddr_in serv_addr;
+
+    sockInit();
+    // Create the socket
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    // Make sure the socket was created
+    if (sockfd < 0)
+        error("ERROR opening socket");
+    // Zero out the variable serv_addr
+    memset((char *)&serv_addr, 0, sizeof(serv_addr));
+    // Convert the port number string to an int
+
+    // Initialize the serv_addr
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    // Convert port number from host to network
+    serv_addr.sin_port = htons(portno);
+    // Bind the socket to the port number
+    if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+    {
+        error("ERROR on binding");
+    }
+    initialized = true;
+    printf("Waiting on messages...\n");
 }
