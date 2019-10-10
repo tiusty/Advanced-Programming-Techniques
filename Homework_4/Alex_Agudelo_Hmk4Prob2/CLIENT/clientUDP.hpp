@@ -12,6 +12,17 @@ Description:
 
 typedef int SOCKET;
 
+// Copied in the server and client to make it easier to submit the assignment
+struct udpMessage
+{
+    unsigned char nVersion;
+    unsigned char nType;
+    unsigned short nMsgLen;
+    unsigned long lSeqNum;
+    char chMsg[1000];
+};
+
+
 class ClientUDP {
 public: // Methods
     void startClient(int portno, const char* server_address);
