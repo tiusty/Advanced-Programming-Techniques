@@ -146,9 +146,9 @@ int main(int argc, char *argv[])
         fromlen = sizeof(serv_addr);
         n = recvfrom(sockfd, buffer, 1024, 0, (sockaddr *)&from, &fromlen);
 
-        if (n == SOCKET_ERROR)
+        if (n == -1)
         {
-            wprintf(L"recvfrom failed with error %d\n", WSAGetLastError());
+            wprintf(L"recvfrom failed with error %d\n", errno);
         }
 
         if (n < 0)

@@ -9,7 +9,7 @@ Description:
 #define HOMEWORK_4_CLIENTUDP_HPP
 
 
-class clientUDP {
+class ClientUDP {
 
 };
 

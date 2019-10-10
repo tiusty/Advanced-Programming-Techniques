@@ -9,7 +9,7 @@ Description:
 #define HOMEWORK_4_SERVERUDP_HPP
 
 
-class serverUDP {
+class ServerUDP {
 
 };
 
