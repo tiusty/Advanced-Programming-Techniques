@@ -88,27 +88,31 @@ void ClientUDP::sendAndReceiveMessage()
     socklen_t fromlen = 0;
     struct sockaddr from;
     memset((char *)&from, 0, sizeof(sockaddr));
-
-
-    char buffer[1024];
+    char message[1024];
+    char response[1024];
+    udpMessage buffer{};
 
     while (true)
     {
         printf("Please enter the message: ");
 
-        memset(buffer, 0, 1024);
-        fgets(buffer, 1023, stdin);
+        memset(&buffer, 0, sizeof(buffer));
+        fgets(message, 1023, stdin);
+        strcpy(buffer.chMsg, message);
+        
+        buffer.nVersion =1;
+        buffer.lSeqNum = 2;
 
-        n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+        n = sendto(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
         if (n < 0)
             error("ERROR writing to socket");
 
-        memset(buffer, 0, 1024);
+        memset(&buffer, 0, sizeof(buffer));
 
         //       n = recv(sockfd, buffer, 1023, 0);
         fromlen = sizeof(serv_addr);
-        n = recvfrom(sockfd, buffer, 1024, 0, (sockaddr *)&from, &fromlen);
+        n = recvfrom(sockfd, response, 1023, 0, (sockaddr *)&from, &fromlen);
 
         if (n == -1)
         {
@@ -118,9 +122,9 @@ void ClientUDP::sendAndReceiveMessage()
         if (n < 0)
             error("ERROR reading from socket");
         else
-            buffer[n] = 0;
+            message[n] = 0;
 
-        printf("%s\n", buffer);
+        printf("%s\n", message);
     }
 
     sockClose(sockfd);

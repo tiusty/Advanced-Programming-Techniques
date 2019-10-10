@@ -88,19 +88,21 @@ void ServerUDP::error(const char *msg)
 
 void ServerUDP::receiveMessages()
 {
-    char buffer[1024];
     struct sockaddr_in from;
     socklen_t fromlen;
     int newsockfd;
     int n;
+
+    udpMessage buffer{};
+
     fromlen = sizeof(struct sockaddr_in);
     while (true)
     {
-        n = recvfrom(sockfd, buffer, 1023, 0, (struct sockaddr *)&from, &fromlen);
+        n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&from, &fromlen);
         if (n < 0)
             error("recvfrom");
-        buffer[n] = 0;  // Null terminate
-        printf("Received a datagram: %s", buffer);
+
+        printf("Received a datagram: %s", buffer.chMsg);
         n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
         if (n < 0)
             error("sendto");
