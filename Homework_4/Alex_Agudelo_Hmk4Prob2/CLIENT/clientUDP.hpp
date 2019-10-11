@@ -29,7 +29,8 @@ public: // Methods
     void startClient(int portno, const char* server_address);
     void promptForCommand();
     bool parseCommand(const char command[kMessageLength]);
-    void sendAndReceiveMessage();
+    void sendAndReceiveMessage(udpMessage buffer);
+    void sendMessage(udpMessage buffer);
 private: // Methods
     int sockInit();
     int sockQuit();

@@ -87,27 +87,16 @@ void error(const char *msg)
     exit(0);
 }
 
-void ClientUDP::sendAndReceiveMessage()
+void ClientUDP::sendAndReceiveMessage(udpMessage buffer)
 {
     int n;
     socklen_t fromlen = 0;
     struct sockaddr from;
     memset((char *)&from, 0, sizeof(sockaddr));
-    char message[1024];
     char response[1024];
-    udpMessage buffer{};
 
     while (true)
     {
-        printf("Please enter the message: ");
-
-        memset(&buffer, 0, sizeof(buffer));
-        fgets(message, 1023, stdin);
-        strcpy(buffer.chMsg, message);
-
-        buffer.nVersion =1;
-        buffer.lSeqNum = 2;
-
         n = sendto(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
         if (n < 0)
@@ -127,9 +116,9 @@ void ClientUDP::sendAndReceiveMessage()
         if (n < 0)
             error("ERROR reading from socket");
         else
-            message[n] = 0;
+            response[n] = 0;
 
-        printf("%s\n", message);
+        printf("%s\n", response);
     }
 
     sockClose(sockfd);
@@ -138,6 +127,17 @@ void ClientUDP::sendAndReceiveMessage()
 #ifdef _WIN32
     std::cin.get();
 #endif
+}
+
+void ClientUDP::sendMessage(udpMessage buffer)
+{
+    int n;
+    buffer.nVersion = versionNum;
+    n = sendto(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    if (n < 0)
+    {
+        error("ERROR writing to socket");
+    }
 }
 
 void ClientUDP::startClient(int portno, const char *server_address)
@@ -285,6 +285,8 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
             strcpy(message.chMsg,token);
             commandType = CommandType::setMessage;
             std::cout << "Message is: " << message.chMsg << std::endl;
+            sendMessage(message);
+//            sendAndReceiveMessage(message);
             return true;
         }
 

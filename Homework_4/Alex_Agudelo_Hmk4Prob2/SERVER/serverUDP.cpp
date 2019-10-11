@@ -100,10 +100,11 @@ void ServerUDP::receiveMessages()
     {
         n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&from, &fromlen);
         if (n < 0)
+        {
             error("recvfrom");
-
-        printf("Received a datagram: %s", buffer.chMsg);
-        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
+        }
+        printf("Received a datagram: %s, seq: %d, version: %d, type: %d\n", buffer.chMsg, buffer.lSeqNum, buffer.nVersion, buffer.nType);
+//        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
         if (n < 0)
             error("sendto");
     }
