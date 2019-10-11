@@ -29,16 +29,18 @@ public: // Methods
     void startClient(int portno, const char* server_address);
     void promptForCommand();
     bool parseCommand(const char command[kMessageLength]);
-    void sendAndReceiveMessage(udpMessage buffer);
     void sendMessage(udpMessage buffer);
     void receiveMessage();
+    void closeSockets();
+    void spawnWorkers();
 private: // Methods
     int sockInit();
     int sockQuit();
     int sockClose(SOCKET sock);
 private: // Members
+    static constexpr unsigned int kRecvTimout{500000};
     unsigned int versionNum{0};
-    bool initialized{false};
+    bool ready{false};
     int sockfd;
     struct sockaddr_in serv_addr;
     bool shutDown{false};

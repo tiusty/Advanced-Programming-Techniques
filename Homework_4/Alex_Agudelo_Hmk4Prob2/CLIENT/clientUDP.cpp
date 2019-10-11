@@ -30,11 +30,13 @@ Description:
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h> /* Needed for close() */
+#include <thread>
 
 #endif
 
 // Define constexpr
 constexpr unsigned int ClientUDP::kMessageLength;
+constexpr unsigned int ClientUDP::kRecvTimout;
 
 int ClientUDP::sockInit(void)
 {
@@ -87,44 +89,6 @@ void error(const char *msg)
     exit(0);
 }
 
-void ClientUDP::sendAndReceiveMessage(udpMessage buffer)
-{
-    int n;
-
-    while (true)
-    {
-        n = sendto(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
-
-        if (n < 0)
-            error("ERROR writing to socket");
-
-        memset(&buffer, 0, sizeof(buffer));
-
-        //       n = recv(sockfd, buffer, 1023, 0);
-        fromlen = sizeof(serv_addr);
-        n = recvfrom(sockfd, response, 1023, 0, (sockaddr *)&from, &fromlen);
-
-        if (n == -1)
-        {
-            wprintf(L"recvfrom failed with error %d\n", errno);
-        }
-
-        if (n < 0)
-            error("ERROR reading from socket");
-        else
-            response[n] = 0;
-
-        printf("%s\n", response);
-    }
-
-    sockClose(sockfd);
-    sockQuit();
-
-#ifdef _WIN32
-    std::cin.get();
-#endif
-}
-
 void ClientUDP::sendMessage(udpMessage buffer)
 {
     int n;
@@ -139,30 +103,48 @@ void ClientUDP::sendMessage(udpMessage buffer)
 
 void ClientUDP::receiveMessage()
 {
-    int n;
-    socklen_t fromlen = 0;
-    struct sockaddr from;
-    memset((char *)&from, 0, sizeof(sockaddr));
-    udpMessage response;
 
-    fromlen = sizeof(serv_addr);
-    n = recvfrom(sockfd, &response, sizeof(response), 0, (sockaddr *)&from, &fromlen);
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = kRecvTimout;
+    int result = setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
 
-    if (n == -1)
+    while(!shutDown)
     {
-        wprintf(L"recvfrom failed with error %d\n", errno);
-    }
+        int n;
+        socklen_t fromlen = 0;
+        struct sockaddr from;
+        memset((char *)&from, 0, sizeof(sockaddr));
+        udpMessage response;
 
-    if (n < 0)
-    {
-        error("ERROR reading from socket");
-    }
-    else
-    {
-        std::cout << "Received Msg Type: " << response.nType << ", Seq: "
-            << response.lSeqNum << ", Msg: " << response.chMsg << std::endl;
-    }
+        fromlen = sizeof(serv_addr);
+        n = recvfrom(sockfd, &response, sizeof(response), 0, (sockaddr *)&from, &fromlen);
 
+        if(errno == EAGAIN)
+        {
+            continue;
+        }
+        else if (shutDown)
+        {
+            break;
+        }
+
+        if (n == -1)
+        {
+            printf("recvfrom failed with error %d\n", errno);
+        }
+
+        if (n < 0)
+        {
+            error("ERROR reading from socket");
+        }
+        else
+        {
+            std::cout << "Received Msg Type: " << response.nType << ", Seq: "
+                      << response.lSeqNum << ", Msg: " << response.chMsg << std::endl;
+        }
+
+    }
 }
 
 void ClientUDP::startClient(int portno, const char *server_address)
@@ -196,7 +178,7 @@ void ClientUDP::startClient(int portno, const char *server_address)
 //    if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
 //       error("ERROR connecting");
 
-    initialized = true;
+    ready = true;
 }
 
 void ClientUDP::promptForCommand()
@@ -327,5 +309,27 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
         }
     }
 
+    std::cout << "Command not valid" << std::endl;
     return false;
+}
+
+void ClientUDP::spawnWorkers()
+{
+    std::thread receiveMessagesThread(&ClientUDP::receiveMessage, this);
+    std::thread promptUser(&ClientUDP::promptForCommand, this);
+
+    receiveMessagesThread.join();
+    promptUser.join();
+
+    closeSockets();
+}
+
+void ClientUDP::closeSockets()
+{
+    sockClose(sockfd);
+    sockQuit();
+
+#ifdef _WIN32
+    std::cin.get();
+#endif
 }
