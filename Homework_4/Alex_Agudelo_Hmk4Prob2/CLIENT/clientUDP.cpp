@@ -90,10 +90,6 @@ void error(const char *msg)
 void ClientUDP::sendAndReceiveMessage(udpMessage buffer)
 {
     int n;
-    socklen_t fromlen = 0;
-    struct sockaddr from;
-    memset((char *)&from, 0, sizeof(sockaddr));
-    char response[1024];
 
     while (true)
     {
@@ -138,6 +134,35 @@ void ClientUDP::sendMessage(udpMessage buffer)
     {
         error("ERROR writing to socket");
     }
+}
+
+
+void ClientUDP::receiveMessage()
+{
+    int n;
+    socklen_t fromlen = 0;
+    struct sockaddr from;
+    memset((char *)&from, 0, sizeof(sockaddr));
+    udpMessage response;
+
+    fromlen = sizeof(serv_addr);
+    n = recvfrom(sockfd, &response, sizeof(response), 0, (sockaddr *)&from, &fromlen);
+
+    if (n == -1)
+    {
+        wprintf(L"recvfrom failed with error %d\n", errno);
+    }
+
+    if (n < 0)
+    {
+        error("ERROR reading from socket");
+    }
+    else
+    {
+        std::cout << "Received Msg Type: " << response.nType << ", Seq: "
+            << response.lSeqNum << ", Msg: " << response.chMsg << std::endl;
+    }
+
 }
 
 void ClientUDP::startClient(int portno, const char *server_address)

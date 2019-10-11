@@ -31,6 +31,7 @@ public: // Methods
     bool parseCommand(const char command[kMessageLength]);
     void sendAndReceiveMessage(udpMessage buffer);
     void sendMessage(udpMessage buffer);
+    void receiveMessage();
 private: // Methods
     int sockInit();
     int sockQuit();
