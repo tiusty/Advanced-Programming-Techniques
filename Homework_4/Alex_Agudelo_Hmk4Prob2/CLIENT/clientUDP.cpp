@@ -186,24 +186,21 @@ void ClientUDP::promptForCommand()
 
         // Prompt the user for a command
         std::cout << "Please enter a command: " << std::endl;
+
+        // Retrieve input from user
         fgets(command, 1023, stdin);
 
-        bool result = parseCommand(command);
+        // Strip the new line
+        command[strcspn(command, "\n")] = 0;
 
-        if(result)
-        {
-            std::cout << "valid command" << std::endl;
-        }
-        else
-        {
-            std::cout << "Not valid command" << std::endl;
-        }
+        // Parse the passed in command
+        parseCommand(command);
     }
 }
 
 bool ClientUDP::parseCommand(const char command[kMessageLength])
 {
-    enum CommandType { setVersion, sendMessage, Quit, None};
+    enum CommandType { setVersion, setType, setSequence, setMessage, Quit, None};
     CommandType commandType{CommandType::None};
 
     // Returns first token
@@ -211,52 +208,97 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
     strcpy(commandToParse, command);
     char *token = strtok(commandToParse, " ");
 
-    // Keep printing tokens while one of the
-    // delimiters present in str[].
-    while (token != NULL)
-    {
-        printf("%s\n", token);
+    // Variables regarding sending a message
+    udpMessage message{};
 
+    // Keep printing tokens while one of the
+    // delimiters present in command.
+    while (token != nullptr)
+    {
+        // When the command type is none, then we don't know which type of command
+        //   we are going to be parsing
         if(commandType == CommandType::None)
         {
             if(strlen(token) != 1)
             {
+                std::cout << "Command must be one chacater" << std::endl;
                 return false;
             }
 
             switch(token[0])
             {
                 case 'v':
-                    std::cout << "V pressed" << std::endl;
                     commandType = CommandType::setVersion;
                     break;
                 case 't':
-                    std::cout << "t pressed" << std::endl;
-                    commandType = CommandType::sendMessage;
+                    commandType = CommandType::setType;
                     break;
                 case 'q':
-                    std::cout << "q pressed" << std::endl;
-                    break;
+                    shutDown = true;
+                    return true;
                 default:
                     std::cout << "Not a valid arguments" << std::endl;
                     return false;
             }
         }
+        // If we are parsing a version then parse the version and set it
         else if(commandType == CommandType::setVersion)
         {
             char *pEnd;
             int tempVersionNum = strtol(token, &pEnd, 10);
-            if(tempVersionNum <= 0)
+            if(tempVersionNum < 0)
             {
                 std::cout << "Error: Version must be greater than or equal to 0" << std::endl;
                 return false;
             }
             versionNum = tempVersionNum;
+            std::cout << "Version now: " << versionNum << std::endl;
+            return true;
+        }
+        else if (commandType == CommandType::setType)
+        {
+            char *pEnd;
+            int tempMType = strtol(token, &pEnd, 10);
+            if(tempMType < 0)
+            {
+                std::cout << "Error: Version must be greater than or equal to 0" << std::endl;
+                return false;
+            }
+            message.nType = tempMType;
+            commandType = CommandType::setSequence;
+        }
+        else if (commandType == CommandType::setSequence)
+        {
+            char *pEnd;
+            int tempMSeq = strtol(token, &pEnd, 10);
+            if(tempMSeq < 0)
+            {
+                std::cout << "Error: Version must be greater than or equal to 0" << std::endl;
+                return false;
+            }
+            message.lSeqNum = tempMSeq;
+            commandType = CommandType::setMessage;
+        }
+        else if (commandType == CommandType::setMessage)
+        {
+            message.nMsgLen = strlen(token);
+            strcpy(message.chMsg,token);
+            commandType = CommandType::setMessage;
+            std::cout << "Message is: " << message.chMsg << std::endl;
+            return true;
         }
 
-
-        token = strtok(nullptr, "-");
+        // If we are now setting the message, then grab the rest of the char as the message
+        if(commandType == CommandType::setMessage)
+        {
+            token = strtok(nullptr, "\0");
+        }
+        // Otherwise delimit by spaces to grab the different arguments
+        else
+        {
+            token = strtok(nullptr, " ");
+        }
     }
 
-    return true;
+    return false;
 }
