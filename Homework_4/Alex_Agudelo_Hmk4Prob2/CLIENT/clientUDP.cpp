@@ -34,11 +34,11 @@ Description:
 
 #endif
 
-// Define constexpr
+// Define constexpr members
 constexpr unsigned int ClientUDP::kMessageLength;
 constexpr unsigned int ClientUDP::kRecvTimout;
 
-int ClientUDP::sockInit(void)
+int ClientUDP::sockInit()
 {
 #ifdef _WIN32
     WSADATA wsa_data;
@@ -48,7 +48,7 @@ int ClientUDP::sockInit(void)
 #endif
 }
 
-int ClientUDP::sockQuit(void)
+int ClientUDP::sockQuit()
 {
 #ifdef _WIN32
     return WSACleanup();
@@ -104,40 +104,40 @@ void ClientUDP::sendMessage(udpMessage buffer)
 void ClientUDP::receiveMessage()
 {
 
+    // Determine the timeout for the recvfrom operation
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = kRecvTimout;
-    int result = setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
 
+    // Set the socket to have a timeout
+    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+
+    // Loop until the system goes into shutdown
     while(!shutDown)
     {
+        // Declare necessary variables
         int n;
         socklen_t fromlen = 0;
-        struct sockaddr from;
+        struct sockaddr from{};
         memset((char *)&from, 0, sizeof(sockaddr));
-        udpMessage response;
+        udpMessage response{};
 
         fromlen = sizeof(serv_addr);
         n = recvfrom(sockfd, &response, sizeof(response), 0, (sockaddr *)&from, &fromlen);
 
+        // If the recvfrom error is from timing out then don't try to parse the result
+        //  just loop again
         if(errno == EAGAIN)
         {
             continue;
         }
-        else if (shutDown)
-        {
-            break;
-        }
 
-        if (n == -1)
-        {
-            printf("recvfrom failed with error %d\n", errno);
-        }
-
+        // If an error occurred, print out the error
         if (n < 0)
         {
             error("ERROR reading from socket");
         }
+        // If the message was received sucessfully then print out the message
         else
         {
             std::cout << "Received Msg Type: " << response.nType << ", Seq: "
@@ -152,13 +152,13 @@ void ClientUDP::startClient(int portno, const char *server_address)
     struct hostent *server;
 
     sockInit();
-    // Convert string to int
 
     // Create socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0)
         error("ERROR opening socket");
 
+    // Get server address
     server = gethostbyname(server_address);
 
     if (server == NULL)
@@ -175,6 +175,7 @@ void ClientUDP::startClient(int portno, const char *server_address)
 
     serv_addr.sin_port = htons(portno);
 
+    // If a connection is desired
 //    if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
 //       error("ERROR connecting");
 
@@ -293,7 +294,6 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
             commandType = CommandType::setMessage;
             std::cout << "Message is: " << message.chMsg << std::endl;
             sendMessage(message);
-//            sendAndReceiveMessage(message);
             return true;
         }
 
@@ -315,12 +315,15 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
 
 void ClientUDP::spawnWorkers()
 {
+    // Spawn necessary worker threads
     std::thread receiveMessagesThread(&ClientUDP::receiveMessage, this);
     std::thread promptUser(&ClientUDP::promptForCommand, this);
 
+    // When the threads quit due to a shutdown then wait for them to finish
     receiveMessagesThread.join();
     promptUser.join();
 
+    // Close the socket
     closeSockets();
 }
 
