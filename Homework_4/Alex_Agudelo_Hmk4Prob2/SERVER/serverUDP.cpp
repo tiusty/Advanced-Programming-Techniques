@@ -12,6 +12,7 @@ Description:
 #include <iostream>
 #include <limits>       // std::numeric_limits
 #include "serverUDP.hpp"
+#include <thread>
 
 #ifdef _WIN32
 /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
@@ -86,7 +87,7 @@ void ServerUDP::error(const char *msg)
 }
 /////////////////////////////////////////////////
 
-void ServerUDP::receiveMessages()
+void ServerUDP::handleMessages()
 {
     struct sockaddr_in from;
     socklen_t fromlen;
@@ -194,4 +195,18 @@ void ServerUDP::parseCommand(int command)
             std::cout << "Command invalid" << std::endl;
             break;
     }
+}
+
+void ServerUDP::spawnWorkers()
+{
+    // Spawn necessary worker threads
+    std::thread receiveMessagesThread(&ServerUDP::handleMessages, this);
+    std::thread promptUser(&ServerUDP::promptForCommand, this);
+
+    // When the threads quit due to a shutdown then wait for them to finish
+    receiveMessagesThread.join();
+    promptUser.join();
+
+    // Close the socket
+    sockQuit();
 }

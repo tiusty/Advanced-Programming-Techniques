@@ -25,7 +25,8 @@ struct udpMessage
 class ServerUDP {
 public: // Methods
     void startServer(int portno);
-    void receiveMessages();
+    void spawnWorkers();
+    void handleMessages();
     void promptForCommand();
 private: // Methods
     void parseCommand(int command);
