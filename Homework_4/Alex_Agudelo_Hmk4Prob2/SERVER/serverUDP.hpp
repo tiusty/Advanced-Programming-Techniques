@@ -10,6 +10,8 @@ Description:
 #ifndef HOMEWORK_4_SERVERUDP_HPP
 #define HOMEWORK_4_SERVERUDP_HPP
 
+#include <map>
+
 typedef int SOCKET;
 
 // Copied in the server and client to make it easier to submit the assignment
@@ -24,10 +26,16 @@ struct udpMessage
 
 class ServerUDP {
 public: // Methods
+    static constexpr unsigned int kCompMessageMaxLength{10};
     void startServer(int portno);
     void spawnWorkers();
     void handleMessages();
     void promptForCommand();
+    void addToComposite(udpMessage message);
+    void createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
+    void sendComposite(udpMessage message);
+//    void clearComposite();
+//    void displayComposite();
 private: // Methods
     void parseCommand(int command);
     int sockClose(SOCKET sock);
@@ -35,9 +43,13 @@ private: // Methods
     int sockInit();
     void error(const char *msg);
 private: // Members
+//    std::list clientAddress;
     bool shutDown{false};
     bool initialized{false};
-    int sockfd;
+    int sockfd{-1};
+    std::map<unsigned int, udpMessage> compositeMessage;
+    unsigned int compMessLen{0};
+    unsigned int compSeqNum{0};
 };
 
 

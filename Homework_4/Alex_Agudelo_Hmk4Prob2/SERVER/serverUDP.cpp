@@ -104,6 +104,7 @@ void ServerUDP::handleMessages()
         {
             error("recvfrom");
         }
+        addToComposite(buffer);
         printf("Received a datagram: %s, seq: %d, version: %d, type: %d\n", buffer.chMsg, buffer.lSeqNum, buffer.nVersion, buffer.nType);
 //        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
         if (n < 0)
@@ -209,4 +210,60 @@ void ServerUDP::spawnWorkers()
 
     // Close the socket
     sockQuit();
+}
+
+void ServerUDP::addToComposite(udpMessage message)
+{
+    compositeMessage.insert({message.lSeqNum, message});
+    compMessLen += message.nMsgLen;
+
+    if(compMessLen > kCompMessageMaxLength)
+    {
+        sendComposite(message);
+    }
+
+}
+
+void ServerUDP::sendComposite(udpMessage message)
+{
+    char chMsg[kCompMessageMaxLength]{0};
+    char chMsgRemaining[kCompMessageMaxLength]{0};
+
+    createCompositeMsg(message, chMsg, chMsgRemaining);
+
+
+//        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
+}
+
+void ServerUDP::createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
+{
+
+    unsigned int msgLen{0};
+    for (const auto& x : compositeMessage)
+    {
+        if(msgLen + x.second.nMsgLen <= kCompMessageMaxLength)
+        {
+            for(int i=0; i<x.second.nMsgLen;i++)
+            {
+                compMsg[i+msgLen] = x.second.chMsg[i];
+            }
+            msgLen += x.second.nMsgLen;
+        }
+        else
+        {
+            unsigned int i = 0;
+            while(i + msgLen < kCompMessageMaxLength)
+            {
+                compMsg[i+msgLen] = x.second.chMsg[i];
+                i++;
+            }
+            unsigned int j = 0;
+            while(i < x.second.nMsgLen)
+            {
+                compMsgRemaining[j] = x.second.chMsg[i];
+                i++;
+                j++;
+            }
+        }
+    }
 }
