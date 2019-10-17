@@ -1,8 +1,8 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 10/10/19
-Description: 
+Last date modified: 10/17/19
+Description: Implements the server UDP functionality
 */
 
 #include <stdio.h>
@@ -101,15 +101,20 @@ void ServerUDP::receiveMessages()
     udpMessage buffer{};
 
     fromlen = sizeof(struct sockaddr_in);
+    // Loop indefinetly receiving messages from clients
     while (true)
     {
+        // Receive a message
         n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&from, &fromlen);
         if (n < 0)
         {
             error("recvfrom");
         }
+        // Store the clients info in the map
+        // Duplicates are overriden
         clientMachines[from.sin_port] = from;
-        printf("Received a datagram: %s, seq: %d, version: %d, type: %d\n", buffer.chMsg, buffer.lSeqNum, buffer.nVersion, buffer.nType);
+
+        // Process the messaged
         handleMessage(buffer);
     }
 
@@ -125,8 +130,10 @@ void ServerUDP::receiveMessages()
 
 void ServerUDP::handleMessage(udpMessage message)
 {
+    // Mutex to protect against data race's with server command prompts
     std::lock_guard<std::mutex> guard(compositeMutex);
 
+    // Convert to host values
     message.lSeqNum = ntohl(message.lSeqNum);
     message.nMsgLen = ntohs(message.nMsgLen);
 
@@ -135,6 +142,7 @@ void ServerUDP::handleMessage(udpMessage message)
         return;
     }
 
+    // Determines functionality based on message type
     switch(message.nType)
     {
         // Just clears composite message and ignores content
@@ -191,8 +199,6 @@ void ServerUDP::startServer(int portno)
     {
         error("ERROR on binding");
     }
-    initialized = true;
-    printf("Waiting on messages...\n");
 }
 
 void ServerUDP::promptForCommand()
@@ -202,6 +208,7 @@ void ServerUDP::promptForCommand()
     // Keep prompting for a command until the sever is being shutdown
     while(!shutDown)
     {
+        // make sure there is nothing on cin
         std::cin.clear();
 
         // Prompt the user for a command
@@ -227,18 +234,23 @@ void ServerUDP::promptForCommand()
 
 void ServerUDP::parseCommand(int command)
 {
+    // Use mutex to protect against data race from receiving messages
     std::lock_guard<std::mutex> guard(compositeMutex);
     switch(command)
     {
+        // Case that sends out the composite message to all clients
         case 0:
             sendComposite();
             break;
+            // case that clears the current composite message
         case 1:
             clearComposite();
             break;
+            // Case that displays the current composite message
         case 2:
             displayComposite();
             break;
+            // Print error for invalid command
         default:
             std::cout << "Command invalid" << std::endl;
             break;
@@ -262,6 +274,8 @@ void ServerUDP::spawnWorkers()
 int ServerUDP::getCompositeMsgSize()
 {
     int size{0};
+
+    // Loop through all client messages and add their message lengths
     for(const auto& msg : compositeMessage)
     {
         size += msg.second.nMsgLen;
@@ -271,8 +285,11 @@ int ServerUDP::getCompositeMsgSize()
 
 void ServerUDP::addToComposite(udpMessage message)
 {
+    // Add the message to the composite message
     compositeMessage[message.lSeqNum] = message;
 
+    // Determine if an overflow occured and if so then send
+    //  out the composite message
     if(getCompositeMsgSize() > kCompMessageMaxLength)
     {
         sendComposite();
@@ -285,9 +302,18 @@ void ServerUDP::sendComposite()
     char chMsg[kCompMessageMaxLength]{0};
     char chMsgRemaining[kCompMessageMaxLength]{0};
 
+    // Retrieve the part that is being sent and also the part of the message
+    //  that will make up the beginnnig of the new composite message
     auto result = createCompositeMsg(chMsg, chMsgRemaining);
+
+    // Now that the strings have been evaluted clear the composite message container
     clearComposite();
+
+    // Send out the composite message t all clients
     sendMessage(chMsg, result.first);
+
+    // If there was any portion of overflow, then add it back to the composite message container
+    //  as seq=0
     if(result.second > 0)
     {
         udpMessage newMessage;
@@ -305,6 +331,7 @@ void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength], int msgLen)
     socklen_t fromlen = 0;
     fromlen = sizeof(struct sockaddr_in);
 
+    // Convert host values to network values and create the message to send to clients
     udpMessage message{0};
     message.lSeqNum = htonl(compSeqNum);
     message.nMsgLen = htons(msgLen);
@@ -319,6 +346,7 @@ void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength], int msgLen)
             error("ERROR writing to socket");
         }
     }
+    // Increment sequence for the next composite message
     compSeqNum++;
 }
 
@@ -327,8 +355,12 @@ std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLe
     unsigned int sizeMsg{0};
     unsigned int sizeRemaining{0};
     unsigned int msgLen{0};
+
+    // Loop through all client message
     for (const auto& x : compositeMessage)
     {
+        // If the message will keep it under the max, then just add
+        //  all the characters
         if(msgLen + x.second.nMsgLen <= kCompMessageMaxLength)
         {
             for(int i=0; i<x.second.nMsgLen;i++)
@@ -338,6 +370,7 @@ std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLe
             msgLen += x.second.nMsgLen;
             sizeMsg = msgLen;
         }
+        // If the new message will cause an overflow then start tracking
         else
         {
             unsigned int i = 0;
@@ -354,7 +387,7 @@ std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLe
                 i++;
                 j++;
             }
-            sizeRemaining = j;
+            sizeRemaining += j;
         }
     }
     return std::make_pair(sizeMsg, sizeRemaining);
@@ -362,6 +395,7 @@ std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLe
 
 void ServerUDP::clearComposite()
 {
+    // Deletes all client messages
     compositeMessage.clear();
 }
 
@@ -370,7 +404,9 @@ void ServerUDP::displayComposite()
 
     char chMsg[kCompMessageMaxLength]{0};
     char chMsgRemaining[kCompMessageMaxLength]{0};
+    // Generate the current composite message
     auto result = createCompositeMsg(chMsg, chMsgRemaining);
 
+    // Displays the current composite message
     printf("Composite message: %.*s\n", result.first, chMsg);
 }
