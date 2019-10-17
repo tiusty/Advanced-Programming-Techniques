@@ -104,6 +104,12 @@ void ServerUDP::handleMessages()
         {
             error("recvfrom");
         }
+        // Ignore message with version that is not equal to 1
+        if (buffer.nVersion != 1)
+        {
+            continue;
+        }
+
         addToComposite(buffer);
         printf("Received a datagram: %s, seq: %d, version: %d, type: %d\n", buffer.chMsg, buffer.lSeqNum, buffer.nVersion, buffer.nType);
 //        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
@@ -184,13 +190,13 @@ void ServerUDP::parseCommand(int command)
     switch(command)
     {
         case 0:
-            std::cout << "DO zero!" << std::endl;
+            sendComposite();
             break;
         case 1:
-            std::cout << "DO One!" << std::endl;
+            clearComposite();
             break;
         case 2:
-            std::cout << "DO Two!" << std::endl;
+            displayComposite();
             break;
         default:
             std::cout << "Command invalid" << std::endl;
@@ -238,7 +244,8 @@ void ServerUDP::sendComposite()
     char chMsg[kCompMessageMaxLength]{0};
     char chMsgRemaining[kCompMessageMaxLength]{0};
 
-    unsigned int sizeRemaining = createCompositeMsg(chMsg, chMsgRemaining);
+    unsigned int sizeRemaining = createCompositeMsg(chMsg, chMsgRemaining).second;
+    clearComposite();
     sendMessage(chMsg);
     if(sizeRemaining > 0)
     {
@@ -262,8 +269,9 @@ void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength])
     }
 }
 
-int ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
+std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
 {
+    unsigned int sizeMsg{0};
     unsigned int sizeRemaining{0};
     unsigned int msgLen{0};
     for (const auto& x : compositeMessage)
@@ -275,6 +283,7 @@ int ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char comp
                 compMsg[i+msgLen] = x.second.chMsg[i];
             }
             msgLen += x.second.nMsgLen;
+            sizeMsg = msgLen;
         }
         else
         {
@@ -284,6 +293,7 @@ int ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char comp
                 compMsg[i+msgLen] = x.second.chMsg[i];
                 i++;
             }
+            sizeMsg = msgLen + i;
             unsigned int j = 0;
             while(i < x.second.nMsgLen)
             {
@@ -294,11 +304,20 @@ int ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char comp
             sizeRemaining = j;
         }
     }
-    clearComposite();
-    return sizeRemaining;
+    return std::make_pair(sizeMsg, sizeRemaining);
 }
 
 void ServerUDP::clearComposite()
 {
     compositeMessage.clear();
+}
+
+void ServerUDP::displayComposite()
+{
+
+    char chMsg[kCompMessageMaxLength]{0};
+    char chMsgRemaining[kCompMessageMaxLength]{0};
+    auto result = createCompositeMsg(chMsg, chMsgRemaining);
+
+    printf("Composite message: %.*s\n", result.first, chMsg);
 }

@@ -32,7 +32,7 @@ public: // Methods
     void handleMessages();
     void promptForCommand();
     void addToComposite(udpMessage message);
-    int createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
+    std::pair<int, int> createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
     void sendComposite();
     void sendMessage(char chMsg[kCompMessageMaxLength]);
     int getCompositeMsgSize();

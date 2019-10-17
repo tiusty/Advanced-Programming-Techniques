@@ -39,7 +39,7 @@ private: // Methods
     int sockClose(SOCKET sock);
 private: // Members
     static constexpr unsigned int kRecvTimout{500000};
-    unsigned int versionNum{0};
+    unsigned int versionNum{1};
     bool ready{false};
     int sockfd;
     struct sockaddr_in serv_addr;
