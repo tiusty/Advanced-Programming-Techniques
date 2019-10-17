@@ -33,12 +33,13 @@ public: // Methods
     void receiveMessage();
     void closeSockets();
     void spawnWorkers();
+    void handleReceivedMessage(udpMessage message);
 private: // Methods
     int sockInit();
     int sockQuit();
     int sockClose(SOCKET sock);
 private: // Members
-    static constexpr unsigned int kRecvTimout{500000};
+    static constexpr unsigned int kRecvTimout{900000};
     unsigned int versionNum{0};
     bool ready{false};
     int sockfd;

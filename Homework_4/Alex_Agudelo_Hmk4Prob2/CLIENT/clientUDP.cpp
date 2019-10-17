@@ -110,7 +110,7 @@ void ClientUDP::receiveMessage()
     tv.tv_usec = kRecvTimout;
 
     // Set the socket to have a timeout
-    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+//    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
 
     // Loop until the system goes into shutdown
     while(!shutDown)
@@ -140,11 +140,18 @@ void ClientUDP::receiveMessage()
         // If the message was received sucessfully then print out the message
         else
         {
-            std::cout << "Received Msg Type: " << response.nType << ", Seq: "
-                      << response.lSeqNum << ", Msg: " << response.chMsg << std::endl;
+            handleReceivedMessage(response);
         }
 
     }
+}
+
+void ClientUDP::handleReceivedMessage(udpMessage message)
+{
+    message.nMsgLen = ntohs(message.nMsgLen);
+    message.lSeqNum = ntohl(message.lSeqNum);
+
+    printf("Received Msg Type: %d, Seq: %ld, Msg: %.*s\n", message.nType, message.lSeqNum, message.nMsgLen, message.chMsg);
 }
 
 void ClientUDP::startClient(int portno, const char *server_address)
