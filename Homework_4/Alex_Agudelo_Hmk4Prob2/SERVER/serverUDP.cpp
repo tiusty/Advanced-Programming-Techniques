@@ -228,17 +228,17 @@ void ServerUDP::addToComposite(udpMessage message)
 
     if(getCompositeMsgSize() > kCompMessageMaxLength)
     {
-        sendComposite(message);
+        sendComposite();
     }
 
 }
 
-void ServerUDP::sendComposite(udpMessage message)
+void ServerUDP::sendComposite()
 {
     char chMsg[kCompMessageMaxLength]{0};
     char chMsgRemaining[kCompMessageMaxLength]{0};
 
-    unsigned int sizeRemaining = createCompositeMsg(message, chMsg, chMsgRemaining);
+    unsigned int sizeRemaining = createCompositeMsg(chMsg, chMsgRemaining);
     sendMessage(chMsg);
     if(sizeRemaining > 0)
     {
@@ -249,9 +249,6 @@ void ServerUDP::sendComposite(udpMessage message)
         strncpy(newMessage.chMsg, chMsgRemaining, sizeRemaining);
         compositeMessage.insert({newMessage.lSeqNum, newMessage});
     }
-    std::cout << "hi" << std::endl;
-
-
 }
 
 void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength])
@@ -265,7 +262,7 @@ void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength])
     }
 }
 
-int ServerUDP::createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
+int ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
 {
     unsigned int sizeRemaining{0};
     unsigned int msgLen{0};
@@ -297,7 +294,11 @@ int ServerUDP::createCompositeMsg(udpMessage message, char compMsg[kCompMessageM
             sizeRemaining = j;
         }
     }
-
-    compositeMessage.clear();
+    clearComposite();
     return sizeRemaining;
+}
+
+void ServerUDP::clearComposite()
+{
+    compositeMessage.clear();
 }

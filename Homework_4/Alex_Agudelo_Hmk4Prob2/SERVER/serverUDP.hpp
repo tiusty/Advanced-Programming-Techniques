@@ -32,12 +32,12 @@ public: // Methods
     void handleMessages();
     void promptForCommand();
     void addToComposite(udpMessage message);
-    int createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
-    void sendComposite(udpMessage message);
+    int createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
+    void sendComposite();
     void sendMessage(char chMsg[kCompMessageMaxLength]);
     int getCompositeMsgSize();
-//    void clearComposite();
-//    void displayComposite();
+    void clearComposite();
+    void displayComposite();
 private: // Methods
     void parseCommand(int command);
     int sockClose(SOCKET sock);
