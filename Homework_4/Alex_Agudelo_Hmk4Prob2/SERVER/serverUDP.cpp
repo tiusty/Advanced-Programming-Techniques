@@ -267,6 +267,9 @@ int ServerUDP::getCompositeMsgSize()
 
 void ServerUDP::addToComposite(udpMessage message)
 {
+//    message.lSeqNum = ntohs(message.lSeqNum);
+//    message.nMsgLen = ntohs(message.nMsgLen);
+//    message.nType = ntohs(message.nType);
     compositeMessage[message.lSeqNum] = message;
 
     if(getCompositeMsgSize() > kCompMessageMaxLength)
@@ -281,24 +284,29 @@ void ServerUDP::sendComposite()
     char chMsg[kCompMessageMaxLength]{0};
     char chMsgRemaining[kCompMessageMaxLength]{0};
 
-    unsigned int sizeRemaining = createCompositeMsg(chMsg, chMsgRemaining).second;
+    auto result = createCompositeMsg(chMsg, chMsgRemaining);
     clearComposite();
-    sendMessage(chMsg);
-    if(sizeRemaining > 0)
+    sendMessage(chMsg, result.first);
+    if(result.second > 0)
     {
         udpMessage newMessage;
         memset(newMessage.chMsg, 0, kCompMessageMaxLength);
         newMessage.lSeqNum = 0;
-        newMessage.nMsgLen = sizeRemaining;
-        strncpy(newMessage.chMsg, chMsgRemaining, sizeRemaining);
+        newMessage.nMsgLen = result.second;
+        strncpy(newMessage.chMsg, chMsgRemaining, result.second);
         compositeMessage.insert({newMessage.lSeqNum, newMessage});
     }
 }
 
-void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength])
+void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength], int msgLen)
 {
     int n;
-
+    udpMessage message;
+//    message.nVersion = htons(1);
+//    message.nType = htons(1);
+//    message.lSeqNum = htons(compSeqNum);
+    message.nMsgLen = msgLen;
+    strncpy(message.chMsg, chMsg, msgLen);
 //    n = sendto(sockfd, chMsg, 17, 0, (struct sockaddr *)&from, fromlen);
     if (n < 0)
     {
