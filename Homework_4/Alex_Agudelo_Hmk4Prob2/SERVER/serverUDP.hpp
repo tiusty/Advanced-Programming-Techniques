@@ -32,8 +32,10 @@ public: // Methods
     void handleMessages();
     void promptForCommand();
     void addToComposite(udpMessage message);
-    void createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
+    int createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
     void sendComposite(udpMessage message);
+    void sendMessage(char chMsg[kCompMessageMaxLength]);
+    int getCompositeMsgSize();
 //    void clearComposite();
 //    void displayComposite();
 private: // Methods
@@ -48,7 +50,6 @@ private: // Members
     bool initialized{false};
     int sockfd{-1};
     std::map<unsigned int, udpMessage> compositeMessage;
-    unsigned int compMessLen{0};
     unsigned int compSeqNum{0};
 };
 

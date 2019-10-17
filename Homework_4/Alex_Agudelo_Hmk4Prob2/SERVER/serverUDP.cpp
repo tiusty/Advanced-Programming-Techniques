@@ -212,12 +212,21 @@ void ServerUDP::spawnWorkers()
     sockQuit();
 }
 
+int ServerUDP::getCompositeMsgSize()
+{
+    int size{0};
+    for(const auto& msg : compositeMessage)
+    {
+        size += msg.second.nMsgLen;
+    }
+    return size;
+}
+
 void ServerUDP::addToComposite(udpMessage message)
 {
-    compositeMessage.insert({message.lSeqNum, message});
-    compMessLen += message.nMsgLen;
+    compositeMessage[message.lSeqNum] = message;
 
-    if(compMessLen > kCompMessageMaxLength)
+    if(getCompositeMsgSize() > kCompMessageMaxLength)
     {
         sendComposite(message);
     }
@@ -229,15 +238,36 @@ void ServerUDP::sendComposite(udpMessage message)
     char chMsg[kCompMessageMaxLength]{0};
     char chMsgRemaining[kCompMessageMaxLength]{0};
 
-    createCompositeMsg(message, chMsg, chMsgRemaining);
+    unsigned int sizeRemaining = createCompositeMsg(message, chMsg, chMsgRemaining);
+    sendMessage(chMsg);
+    if(sizeRemaining > 0)
+    {
+        udpMessage newMessage;
+        memset(newMessage.chMsg, 0, kCompMessageMaxLength);
+        newMessage.lSeqNum = 0;
+        newMessage.nMsgLen = sizeRemaining;
+        strncpy(newMessage.chMsg, chMsgRemaining, sizeRemaining);
+        compositeMessage.insert({newMessage.lSeqNum, newMessage});
+    }
+    std::cout << "hi" << std::endl;
 
 
-//        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
 }
 
-void ServerUDP::createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
+void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength])
 {
+    int n;
 
+//    n = sendto(sockfd, chMsg, 17, 0, (struct sockaddr *)&from, fromlen);
+    if (n < 0)
+    {
+        error("ERROR writing to socket");
+    }
+}
+
+int ServerUDP::createCompositeMsg(udpMessage message, char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
+{
+    unsigned int sizeRemaining{0};
     unsigned int msgLen{0};
     for (const auto& x : compositeMessage)
     {
@@ -264,6 +294,10 @@ void ServerUDP::createCompositeMsg(udpMessage message, char compMsg[kCompMessage
                 i++;
                 j++;
             }
+            sizeRemaining = j;
         }
     }
+
+    compositeMessage.clear();
+    return sizeRemaining;
 }
