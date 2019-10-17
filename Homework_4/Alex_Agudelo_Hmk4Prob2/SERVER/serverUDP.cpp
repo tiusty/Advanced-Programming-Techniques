@@ -13,6 +13,10 @@ Description:
 #include <limits>       // std::numeric_limits
 #include "serverUDP.hpp"
 #include <thread>
+#include <mutex>
+
+// Mutex to protect server commands and receiving messages
+std::mutex compositeMutex;
 
 #ifdef _WIN32
 /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
@@ -121,6 +125,7 @@ void ServerUDP::receiveMessages()
 
 void ServerUDP::handleMessage(udpMessage message)
 {
+    std::lock_guard<std::mutex> guard(compositeMutex);
     // If the message is not version 1 then ignore
     if (message.nVersion != 1) {
         return;
@@ -218,6 +223,7 @@ void ServerUDP::promptForCommand()
 
 void ServerUDP::parseCommand(int command)
 {
+    std::lock_guard<std::mutex> guard(compositeMutex);
     switch(command)
     {
         case 0:
