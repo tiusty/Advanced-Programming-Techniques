@@ -39,7 +39,6 @@ private: // Methods
     int sockQuit();
     int sockClose(SOCKET sock);
 private: // Members
-    static constexpr unsigned int kRecvTimout{900000};
     unsigned int versionNum{0};
     bool ready{false};
     int sockfd;

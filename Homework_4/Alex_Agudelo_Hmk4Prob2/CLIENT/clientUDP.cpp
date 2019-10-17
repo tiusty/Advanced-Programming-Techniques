@@ -36,7 +36,6 @@ Description:
 
 // Define constexpr members
 constexpr unsigned int ClientUDP::kMessageLength;
-constexpr unsigned int ClientUDP::kRecvTimout;
 
 int ClientUDP::sockInit()
 {
@@ -103,15 +102,6 @@ void ClientUDP::sendMessage(udpMessage buffer)
 
 void ClientUDP::receiveMessage()
 {
-
-    // Determine the timeout for the recvfrom operation
-    struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = kRecvTimout;
-
-    // Set the socket to have a timeout
-//    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
-
     // Loop until the system goes into shutdown
     while(!shutDown)
     {
@@ -137,10 +127,14 @@ void ClientUDP::receiveMessage()
         {
             error("ERROR reading from socket");
         }
-        // If the message was received sucessfully then print out the message
+        // If the message was received successfully then print out the message
         else
         {
-            handleReceivedMessage(response);
+            // Only handle messages that have at least size 1
+            if(n > 0)
+            {
+                handleReceivedMessage(response);
+            }
         }
 
     }
@@ -211,6 +205,7 @@ void ClientUDP::promptForCommand()
         // Parse the passed in command
         parseCommand(command);
     }
+    shutdown(sockfd, SHUT_RDWR);
 }
 
 bool ClientUDP::parseCommand(const char command[kMessageLength])

@@ -319,6 +319,7 @@ void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength], int msgLen)
             error("ERROR writing to socket");
         }
     }
+    compSeqNum++;
 }
 
 std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
