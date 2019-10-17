@@ -11,8 +11,13 @@ Description:
 #define HOMEWORK_4_SERVERUDP_HPP
 
 #include <map>
+#include <unordered_set>
+#include <netinet/in.h>
+#include <sys/socket.h>
 
 typedef int SOCKET;
+
+using portInfo = struct sockaddr_in;
 
 // Copied in the server and client to make it easier to submit the assignment
 struct udpMessage
@@ -46,7 +51,7 @@ private: // Methods
     int sockInit();
     void error(const char *msg);
 private: // Members
-//    std::list clientAddress;
+    std::map<int, portInfo> clientMachines;
     bool shutDown{false};
     bool initialized{false};
     int sockfd{-1};

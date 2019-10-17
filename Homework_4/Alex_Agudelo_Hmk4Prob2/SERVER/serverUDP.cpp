@@ -108,7 +108,7 @@ void ServerUDP::receiveMessages()
         {
             error("recvfrom");
         }
-
+        clientMachines[from.sin_port] = from;
         printf("Received a datagram: %s, seq: %d, version: %d, type: %d\n", buffer.chMsg, buffer.lSeqNum, buffer.nVersion, buffer.nType);
         handleMessage(buffer);
     }
@@ -302,16 +302,22 @@ void ServerUDP::sendComposite()
 void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength], int msgLen)
 {
     int n;
-    udpMessage message;
-//    message.nVersion = htons(1);
-//    message.nType = htons(1);
-//    message.lSeqNum = htons(compSeqNum);
-    message.nMsgLen = msgLen;
+    socklen_t fromlen = 0;
+    fromlen = sizeof(struct sockaddr_in);
+
+    udpMessage message{0};
+    message.lSeqNum = htonl(compSeqNum);
+    message.nMsgLen = htons(msgLen);
     strncpy(message.chMsg, chMsg, msgLen);
-//    n = sendto(sockfd, chMsg, 17, 0, (struct sockaddr *)&from, fromlen);
-    if (n < 0)
+
+    // Send out the composite message to all connected clients
+    for(const auto &x : clientMachines)
     {
-        error("ERROR writing to socket");
+        n = sendto(sockfd, &message, sizeof(message), 0, (struct sockaddr *)&x.second, fromlen);
+        if (n < 0)
+        {
+            error("ERROR writing to socket");
+        }
     }
 }
 
