@@ -126,6 +126,10 @@ void ServerUDP::receiveMessages()
 void ServerUDP::handleMessage(udpMessage message)
 {
     std::lock_guard<std::mutex> guard(compositeMutex);
+
+    message.lSeqNum = ntohl(message.lSeqNum);
+    message.nMsgLen = ntohs(message.nMsgLen);
+
     // If the message is not version 1 then ignore
     if (message.nVersion != 1) {
         return;
@@ -267,9 +271,6 @@ int ServerUDP::getCompositeMsgSize()
 
 void ServerUDP::addToComposite(udpMessage message)
 {
-//    message.lSeqNum = ntohs(message.lSeqNum);
-//    message.nMsgLen = ntohs(message.nMsgLen);
-//    message.nType = ntohs(message.nType);
     compositeMessage[message.lSeqNum] = message;
 
     if(getCompositeMsgSize() > kCompMessageMaxLength)

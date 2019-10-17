@@ -284,12 +284,12 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
                 std::cout << "Error: Version must be greater than or equal to 0" << std::endl;
                 return false;
             }
-            message.lSeqNum = tempMSeq;
+            message.lSeqNum = htonl(tempMSeq);
             commandType = CommandType::setMessage;
         }
         else if (commandType == CommandType::setMessage)
         {
-            message.nMsgLen = strlen(token);
+            message.nMsgLen = htons(strlen(token));
             strcpy(message.chMsg,token);
             commandType = CommandType::setMessage;
             std::cout << "Message is: " << message.chMsg << std::endl;
