@@ -87,7 +87,7 @@ void ServerUDP::error(const char *msg)
 }
 /////////////////////////////////////////////////
 
-void ServerUDP::handleMessages()
+void ServerUDP::receiveMessages()
 {
     struct sockaddr_in from;
     socklen_t fromlen;
@@ -104,17 +104,9 @@ void ServerUDP::handleMessages()
         {
             error("recvfrom");
         }
-        // Ignore message with version that is not equal to 1
-        if (buffer.nVersion != 1)
-        {
-            continue;
-        }
 
-        addToComposite(buffer);
         printf("Received a datagram: %s, seq: %d, version: %d, type: %d\n", buffer.chMsg, buffer.lSeqNum, buffer.nVersion, buffer.nType);
-//        n = sendto(sockfd, "Got your message\n", 17, 0, (struct sockaddr *)&from, fromlen);
-        if (n < 0)
-            error("sendto");
+        handleMessage(buffer);
     }
 
     sockClose(newsockfd);
@@ -125,6 +117,45 @@ void ServerUDP::handleMessages()
 #ifdef _WIN32
     std::cin.get();
 #endif
+}
+
+void ServerUDP::handleMessage(udpMessage message)
+{
+    // If the message is not version 1 then ignore
+    if (message.nVersion != 1) {
+        return;
+    }
+
+    switch(message.nType)
+    {
+        // Just clears composite message and ignores content
+        case 0:
+            std::cout << "Just clearing" << std::endl;
+            clearComposite();
+            break;
+        // Clears the composite message and starts a new message with the
+        //  client message starting the new message, aka lseq 0
+        case 1:
+            std::cout << "Clearing and starting a new message" << std::endl;
+            clearComposite();
+            // Marks the incoming message as the start of the new composite message
+            message.lSeqNum = 0;
+            addToComposite(message);
+            break;
+        // Just adds the client message to the composite message
+        case 2:
+            std::cout << "Just adding to composite" << std::endl;
+            addToComposite(message);
+            break;
+        // Ignores client message and sends out composite message to all clients
+        case 3:
+            std::cout << "Sending out composite" << std::endl;
+            sendComposite();
+            break;
+        // Unrecognized so do nothing
+        default:
+            break;
+    }
 }
 
 void ServerUDP::startServer(int portno)
@@ -207,7 +238,7 @@ void ServerUDP::parseCommand(int command)
 void ServerUDP::spawnWorkers()
 {
     // Spawn necessary worker threads
-    std::thread receiveMessagesThread(&ServerUDP::handleMessages, this);
+    std::thread receiveMessagesThread(&ServerUDP::receiveMessages, this);
     std::thread promptUser(&ServerUDP::promptForCommand, this);
 
     // When the threads quit due to a shutdown then wait for them to finish

@@ -29,7 +29,8 @@ public: // Methods
     static constexpr unsigned int kCompMessageMaxLength{10};
     void startServer(int portno);
     void spawnWorkers();
-    void handleMessages();
+    void receiveMessages();
+    void handleMessage(udpMessage message);
     void promptForCommand();
     void addToComposite(udpMessage message);
     std::pair<int, int> createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength]);
