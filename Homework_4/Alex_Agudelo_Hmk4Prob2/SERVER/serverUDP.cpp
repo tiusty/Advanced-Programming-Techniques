@@ -352,51 +352,33 @@ void ServerUDP::sendMessage(char chMsg[kCompMessageMaxLength], int msgLen)
 
 std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLength], char compMsgRemaining[kCompMessageMaxLength])
 {
-    unsigned int sizeMsg{0};
-    unsigned int sizeRemaining{0};
-    unsigned int msgLen{0};
+    unsigned int compMsgLen{0};
+    unsigned int compMsgRemainingLen{0};
 
-    // Loop through all client message
-    for (const auto& x : compositeMessage)
+    // Loop through all client messages to build the composite message
+    for(const auto& msg : compositeMessage)
     {
-        // If the message will keep it under the max, then just add
-        //  all the characters
-        if(msgLen + x.second.nMsgLen <= kCompMessageMaxLength)
+        for(int i=0; i<msg.second.nMsgLen; i++)
         {
-            for(int i=0; i<x.second.nMsgLen;i++)
+            // If the composite message is not filled then add to it
+            if(compMsgLen < kCompMessageMaxLength)
             {
-                compMsg[i+msgLen] = x.second.chMsg[i];
+                compMsg[compMsgLen] = msg.second.chMsg[i];
+                compMsgLen++;
             }
-            msgLen += x.second.nMsgLen;
-            sizeMsg = msgLen;
+            // Once the composite message is filled then add to the remaining char,
+            //  which will populate the new composite message
+            else
+            {
+                compMsgRemaining[compMsgRemainingLen] = msg.second.chMsg[i];
+                compMsgRemainingLen++;
+            }
         }
-        // If the new message will cause an overflow then start tracking
-        else
-        {
-            if(sizeRemaining > kCompMessageMaxLength)
-            {
-                break;
-            }
 
-            unsigned int i = 0;
-            while(i + msgLen < kCompMessageMaxLength)
-            {
-                compMsg[i+msgLen] = x.second.chMsg[i];
-                i++;
-            }
-            msgLen += i;
-            sizeMsg = msgLen;
-            unsigned int j = 0;
-            while(i < x.second.nMsgLen)
-            {
-                compMsgRemaining[j] = x.second.chMsg[i];
-                i++;
-                j++;
-            }
-            sizeRemaining += j;
-        }
     }
-    return std::make_pair(sizeMsg, sizeRemaining);
+
+    // Return both lengths
+    return std::make_pair(compMsgLen, compMsgRemainingLen);
 }
 
 void ServerUDP::clearComposite()

@@ -38,7 +38,7 @@ public: // Methods
     /**
      *  Determines the max length of a message
      */
-    static constexpr unsigned int kCompMessageMaxLength{1000};
+    static constexpr unsigned int kCompMessageMaxLength{10};
     /**
      * Starts the UDP server by binding it to a port
      * @param portno The port number to bind the server to
