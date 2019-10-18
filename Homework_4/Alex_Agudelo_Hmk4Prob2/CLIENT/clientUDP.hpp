@@ -25,10 +25,10 @@ struct udpMessage
 
 class ClientUDP {
 public: // Methods
-    static constexpr unsigned int kMessageLength = 1024;
+    static constexpr unsigned int kMaxMessageLength{1000};
     void startClient(int portno, const char* server_address);
     void promptForCommand();
-    bool parseCommand(const char command[kMessageLength]);
+    bool parseCommand(const char command[kMaxMessageLength]);
     void sendMessage(udpMessage buffer);
     void receiveMessage();
     void closeSockets();

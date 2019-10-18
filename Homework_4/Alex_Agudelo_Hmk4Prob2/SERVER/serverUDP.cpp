@@ -373,13 +373,19 @@ std::pair<int, int> ServerUDP::createCompositeMsg(char compMsg[kCompMessageMaxLe
         // If the new message will cause an overflow then start tracking
         else
         {
+            if(sizeRemaining > kCompMessageMaxLength)
+            {
+                break;
+            }
+
             unsigned int i = 0;
             while(i + msgLen < kCompMessageMaxLength)
             {
                 compMsg[i+msgLen] = x.second.chMsg[i];
                 i++;
             }
-            sizeMsg = msgLen + i;
+            msgLen += i;
+            sizeMsg = msgLen;
             unsigned int j = 0;
             while(i < x.second.nMsgLen)
             {

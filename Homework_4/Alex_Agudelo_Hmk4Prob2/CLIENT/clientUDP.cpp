@@ -35,7 +35,7 @@ Description:
 #endif
 
 // Define constexpr members
-constexpr unsigned int ClientUDP::kMessageLength;
+constexpr unsigned int ClientUDP::kMaxMessageLength;
 
 int ClientUDP::sockInit()
 {
@@ -186,7 +186,7 @@ void ClientUDP::startClient(int portno, const char *server_address)
 void ClientUDP::promptForCommand()
 {
     int commandNum;
-    char command[kMessageLength];
+    char command[kMaxMessageLength];
 
     // Keep prompting for a command until the sever is being shutdown
     while(!shutDown)
@@ -208,13 +208,13 @@ void ClientUDP::promptForCommand()
     shutdown(sockfd, SHUT_RDWR);
 }
 
-bool ClientUDP::parseCommand(const char command[kMessageLength])
+bool ClientUDP::parseCommand(const char command[kMaxMessageLength])
 {
     enum CommandType { setVersion, setType, setSequence, setMessage, Quit, None};
     CommandType commandType{CommandType::None};
 
     // Returns first token
-    char commandToParse[kMessageLength]{0};
+    char commandToParse[kMaxMessageLength]{0};
     strcpy(commandToParse, command);
     char *token = strtok(commandToParse, " ");
 
@@ -286,15 +286,26 @@ bool ClientUDP::parseCommand(const char command[kMessageLength])
                 std::cout << "Error: Version must be greater than or equal to 0" << std::endl;
                 return false;
             }
-            message.lSeqNum = htonl(tempMSeq);
+            message.lSeqNum = tempMSeq;
             commandType = CommandType::setMessage;
         }
         else if (commandType == CommandType::setMessage)
         {
-            message.nMsgLen = htons(strlen(token));
-            strcpy(message.chMsg,token);
-            commandType = CommandType::setMessage;
-            std::cout << "Message is: " << message.chMsg << std::endl;
+            message.nMsgLen = strlen(token);
+
+            // Limit client to sending out the message length
+            if(message.nMsgLen > kMaxMessageLength)
+            {
+                message.nMsgLen = kMaxMessageLength;
+            }
+
+            // Copy the desired amount of characters
+            strncpy(message.chMsg,token, message.nMsgLen);
+
+            // Convert all values to network order
+            message.nMsgLen = htons(message.nMsgLen);
+            message.lSeqNum = htonl(message.lSeqNum);
+
             sendMessage(message);
             return true;
         }
