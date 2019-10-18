@@ -179,8 +179,6 @@ void ClientUDP::startClient(int portno, const char *server_address)
     // If a connection is desired
 //    if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
 //       error("ERROR connecting");
-
-    ready = true;
 }
 
 void ClientUDP::promptForCommand()

@@ -317,7 +317,7 @@ void ServerUDP::sendComposite()
     //  as seq=0
     if(result.second > 0)
     {
-        udpMessage newMessage;
+        udpMessage newMessage{};
         memset(newMessage.chMsg, 0, kCompMessageMaxLength);
         newMessage.lSeqNum = 0;
         newMessage.nMsgLen = result.second;
