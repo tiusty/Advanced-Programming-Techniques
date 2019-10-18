@@ -12,6 +12,8 @@ Homework 2:
 
 Homework 3:
 - Multi-threading, openMP
+- Solved problems with openMP
 
 Homework 4:
 - Sockets, UDP
+- Created a UDP client and server that sends messages back and forth
