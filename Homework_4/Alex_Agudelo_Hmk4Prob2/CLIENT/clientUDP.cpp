@@ -1,8 +1,9 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 10/10/19
-Description: 
+Last date modified: 10/18/19
+Description:
+ Implements the client UDP functionality
 */
 
 #include <stdio.h>
@@ -91,7 +92,10 @@ void error(const char *msg)
 void ClientUDP::sendMessage(udpMessage buffer)
 {
     int n;
+    // Set the version number
     buffer.nVersion = versionNum;
+
+    // Sends the message to the server
     n = sendto(sockfd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if (n < 0)
     {
@@ -115,13 +119,6 @@ void ClientUDP::receiveMessage()
         fromlen = sizeof(serv_addr);
         n = recvfrom(sockfd, &response, sizeof(response), 0, (sockaddr *)&from, &fromlen);
 
-        // If the recvfrom error is from timing out then don't try to parse the result
-        //  just loop again
-        if(errno == EAGAIN)
-        {
-            continue;
-        }
-
         // If an error occurred, print out the error
         if (n < 0)
         {
@@ -142,9 +139,11 @@ void ClientUDP::receiveMessage()
 
 void ClientUDP::handleReceivedMessage(udpMessage message)
 {
+    // Convert the necessary values to host order btyes
     message.nMsgLen = ntohs(message.nMsgLen);
     message.lSeqNum = ntohl(message.lSeqNum);
 
+    // Print out the received message
     printf("Received Msg Type: %d, Seq: %ld, Msg: %.*s\n", message.nType, message.lSeqNum, message.nMsgLen, message.chMsg);
 }
 

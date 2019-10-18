@@ -32,6 +32,9 @@ struct udpMessage
  * Server UDP receives messages from clients and organizes them via sequence number
  *  and then when either the buffer overflows or the server is commanded to send the
  *  composite message, it sends it to all clients who has sent the server a message
+ *
+ *  Server will store a list of all the clients that sent it a message and will
+ *      send the composite message to all the clients when instructed to do so
  */
 class ServerUDP {
 public: // Methods
