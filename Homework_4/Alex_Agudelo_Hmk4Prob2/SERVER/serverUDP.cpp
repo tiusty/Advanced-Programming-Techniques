@@ -167,6 +167,7 @@ void ServerUDP::handleMessage(udpMessage message)
         // Ignores client message and sends out composite message to all clients
         case 3:
             std::cout << "Sending out composite" << std::endl;
+            addToComposite(message);
             sendComposite();
             break;
         // Unrecognized so do nothing
@@ -288,7 +289,7 @@ void ServerUDP::addToComposite(udpMessage message)
     // Add the message to the composite message
     compositeMessage[message.lSeqNum] = message;
 
-    // Determine if an overflow occured and if so then send
+    // Determine if an overflow occurred and if so then send
     //  out the composite message
     if(getCompositeMsgSize() > kCompMessageMaxLength)
     {
