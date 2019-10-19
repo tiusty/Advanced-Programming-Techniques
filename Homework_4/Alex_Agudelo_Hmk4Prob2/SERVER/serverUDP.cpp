@@ -147,24 +147,20 @@ void ServerUDP::handleMessage(udpMessage message)
     {
         // Just clears composite message and ignores content
         case 0:
-            std::cout << "Just clearing" << std::endl;
             clearComposite();
             break;
         // Clears the composite message and starts a new message with the
         //  client message starting the new message, aka lseq 0
         case 1:
-            std::cout << "Clearing and starting a new message" << std::endl;
             clearComposite();
             addToComposite(message);
             break;
         // Just adds the client message to the composite message
         case 2:
-            std::cout << "Just adding to composite" << std::endl;
             addToComposite(message);
             break;
         // Ignores client message and sends out composite message to all clients
         case 3:
-            std::cout << "Sending out composite" << std::endl;
             // If adding to the composite caused an overflow and thus a message to be sent
             //  then don't send another message and leave the overflow as the beginning of the new
             //  message
