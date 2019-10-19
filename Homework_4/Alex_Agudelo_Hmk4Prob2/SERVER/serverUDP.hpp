@@ -68,8 +68,10 @@ public: // Methods
     /**
      * Adds a message to the container storing all the client messages
      * @param message the message to add
+     * @return True -> A message was sent out
+     *         False -> A message was not sent out
      */
-    void addToComposite(udpMessage message);
+    bool addToComposite(udpMessage message);
     /**
      * Creates the composite message by looping through the stored client messages. It uses the first
      * 1000 bytes as the composite message and will store the remaining to create a new composite message
