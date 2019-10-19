@@ -155,8 +155,6 @@ void ServerUDP::handleMessage(udpMessage message)
         case 1:
             std::cout << "Clearing and starting a new message" << std::endl;
             clearComposite();
-            // Marks the incoming message as the start of the new composite message
-            message.lSeqNum = 0;
             addToComposite(message);
             break;
         // Just adds the client message to the composite message
