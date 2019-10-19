@@ -145,6 +145,10 @@ void ClientUDP::handleReceivedMessage(udpMessage message)
 
     // Print out the received message
     printf("Received Msg Type: %d, Seq: %ld, Msg: %.*s\n", message.nType, message.lSeqNum, message.nMsgLen, message.chMsg);
+
+    // Reprompt user since the message will interrupt terminal
+    std::cout << "Please enter a command: " << std::endl;
+
 }
 
 void ClientUDP::startClient(int portno, const char *server_address)
@@ -228,7 +232,7 @@ bool ClientUDP::parseCommand(const char command[kMaxMessageLength])
         {
             if(strlen(token) != 1)
             {
-                std::cout << "Command must be one chacater" << std::endl;
+                std::cout << "Command must be one character" << std::endl;
                 return false;
             }
 
