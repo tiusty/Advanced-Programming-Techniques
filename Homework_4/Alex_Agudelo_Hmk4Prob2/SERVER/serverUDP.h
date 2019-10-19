@@ -7,8 +7,8 @@ Description:
     changes that are necessary to make it compatible with windows
 */
 
-#ifndef HOMEWORK_4_SERVERUDP_HPP
-#define HOMEWORK_4_SERVERUDP_HPP
+#ifndef HOMEWORK_4_SERVERUDP_H
+#define HOMEWORK_4_SERVERUDP_H
 
 #include <map>
 #include <unordered_set>
@@ -152,4 +152,4 @@ private: // Members
 };
 
 
-#endif //HOMEWORK_4_SERVERUDP_HPP
+#endif //HOMEWORK_4_SERVERUDP_H

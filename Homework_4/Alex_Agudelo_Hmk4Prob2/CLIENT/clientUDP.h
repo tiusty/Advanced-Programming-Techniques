@@ -7,8 +7,8 @@ Description:
  message types can be sent to determine desired functionality
 */
 
-#ifndef HOMEWORK_4_CLIENTUDP_HPP
-#define HOMEWORK_4_CLIENTUDP_HPP
+#ifndef HOMEWORK_4_CLIENTUDP_H
+#define HOMEWORK_4_CLIENTUDP_H
 
 #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
 
@@ -107,4 +107,4 @@ private: // Members
 };
 
 
-#endif //HOMEWORK_4_CLIENTUDP_HPP
+#endif //HOMEWORK_4_CLIENTUDP_H

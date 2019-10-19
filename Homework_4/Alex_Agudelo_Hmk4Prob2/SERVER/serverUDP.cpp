@@ -11,7 +11,7 @@ Description: Implements the server UDP functionality
 #include <sys/types.h>
 #include <iostream>
 #include <limits>       // std::numeric_limits
-#include "serverUDP.hpp"
+#include "serverUDP.h"
 #include <thread>
 #include <mutex>
 

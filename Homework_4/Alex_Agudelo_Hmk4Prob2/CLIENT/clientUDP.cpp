@@ -14,7 +14,7 @@ Description:
 #include <iostream>
 #include <stdio.h>
 
-#include "clientUDP.hpp"
+#include "clientUDP.h"
 
 #ifdef _WIN32
 /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */

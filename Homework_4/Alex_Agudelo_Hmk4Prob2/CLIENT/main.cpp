@@ -6,7 +6,7 @@ Description:
  Starts up a UDP client
 */
 
-#include "clientUDP.hpp"
+#include "clientUDP.h"
 
 #include <iostream>
 
