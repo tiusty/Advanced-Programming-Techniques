@@ -9,7 +9,6 @@ Description:
 
 #include "ship.hpp"
 
-constexpr int yellowJacketMass = 10000;
 
 void handleYellowJacket();
 void calculateYellowJacketForce();

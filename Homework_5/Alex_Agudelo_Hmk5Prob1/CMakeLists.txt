@@ -17,10 +17,18 @@ endif()
 add_executable(exec
         main.cpp)
 
+target_link_libraries(exec
+        PUBLIC
+            ship)
+
 add_library(ship
         ship.cpp
         )
 target_include_directories(ship
         PUBLIC
-            ${CMAKE_CURRENT_LIST_DIR}}
+            ${CMAKE_CURRENT_LIST_DIR}
         )
+
+if(UNITTESTS)
+    add_subdirectory(test)
+endif()

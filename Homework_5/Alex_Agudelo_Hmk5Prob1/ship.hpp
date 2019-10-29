@@ -8,6 +8,8 @@ Description:
 #ifndef HOMEWORK_5_SHIP_HPP
 #define HOMEWORK_5_SHIP_HPP
 
+constexpr int yellowJacketMass = 10000;
+
 struct Coordinate
 {
     double x;
@@ -23,7 +25,8 @@ struct Coordinate
 
 class Ship {
 public: // Methods
-    int timeToStop(const Coordinate& dest);
+    int timeToStop();
+    int timeToDest(const Coordinate& dest);
     double getDistance(const Coordinate& dest);
     double getMagVel();
     double getLargestVelocityVector();

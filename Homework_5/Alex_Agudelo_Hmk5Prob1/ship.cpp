@@ -9,7 +9,13 @@ Description:
 
 #include <cmath>
 
-int Ship::timeToStop(const Coordinate& dest)
+int Ship::timeToStop()
+{
+    // Do .95 percent so there is a margin due to the misfire
+    return static_cast<int>(std::ceil((getLargestVelocityVector()/(maxForce*.95))*yellowJacketMass));
+}
+
+int Ship::timeToDest(const Coordinate& dest)
 {
     if(getLargestVelocityVector() != 0)
     {
@@ -17,6 +23,7 @@ int Ship::timeToStop(const Coordinate& dest)
     }
     return 0;
 }
+
 double Ship::getDistance(const Coordinate& dest)
 {
     return std::sqrt(std::pow(position.x - dest.x, 2) + std::pow(position.y - dest.y, 2) + std::pow(position.z - dest.z, 2));

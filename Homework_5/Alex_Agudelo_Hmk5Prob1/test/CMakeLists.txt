@@ -3,6 +3,7 @@ project(Hmk5_Problem1_Tests)
 
 add_executable(${PROJECT_NAME}
         test_main.cpp
+        test_ship.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}
