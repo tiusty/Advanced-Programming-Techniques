@@ -9,10 +9,18 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # If unittests are defined then clone down gtest repo for gtest sources files
-#if(UNITTESTS)
-#    include(cmake/gtest.cmake)
-#endif()
+if(UNITTESTS)
+    include(cmake/gtest.cmake)
+endif()
 
 # Add the directories for the different problems
 add_executable(exec
         main.cpp)
+
+add_library(ship
+        ship.cpp
+        )
+target_include_directories(ship
+        PUBLIC
+            ${CMAKE_CURRENT_LIST_DIR}}
+        )

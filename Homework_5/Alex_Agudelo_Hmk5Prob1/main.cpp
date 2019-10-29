@@ -5,45 +5,16 @@ Last date modified: 10/29/19
 Description: 
 */
 #include <iostream>
-#include <array>
 #include <cmath>
-#include <tuple>
+
+#include "ship.hpp"
 
 constexpr int yellowJacketMass = 10000;
 
-struct Coordinate
-{
-    double x;
-    double y;
-    double z;
-
-    Coordinate():Coordinate(0,0,0) {}
-    Coordinate(double xNew, double yNew, double zNew)
-    :x(xNew), y(yNew), z(zNew)
-    {}
-};
-
-struct Ship
-{
-    Coordinate position;
-    Coordinate velocity;
-    Coordinate force;
-    int status;
-
-    int getDistance(const Coordinate& ship2)
-    {
-        return static_cast<int>(std::sqrt(std::pow(position.x - ship2.x,2) + std::pow(position.y - ship2.y,2) + std::pow(position.z - ship2.z, 2)));
-    }
-
-    Coordinate getVelUnitVec()
-    {
-        int norm = static_cast<int>(std::sqrt(std::pow(velocity.x,2) + std::pow(velocity.y, 2) + std::pow(velocity.z,2)));
-        return {velocity.x/norm, velocity.y/norm, velocity.z/norm};
-    }
-};
-
 void handleYellowJacket();
+void calculateYellowJacketForce();
 Ship yellowJacket{};
+Coordinate destination{100, 100, 100};
 
 int main()
 {
@@ -90,10 +61,17 @@ void handleYellowJacket()
 {
     yellowJacket.force.x = 50000;
 //    calculateYellowJacketForce();
+    std::cout << yellowJacket.timeToStop(destination) << std::endl;
     evolveSystem(yellowJacket);
+}
+
+void calculateTimeToDest(const Coordinate& dest)
+{
+
 }
 
 void calculateYellowJacketForce()
 {
+
 }
 
