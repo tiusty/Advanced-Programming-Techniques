@@ -14,3 +14,5 @@ endif()
 #endif()
 
 # Add the directories for the different problems
+add_executable(exec
+        main.cpp)
