@@ -25,17 +25,19 @@ struct Coordinate
 
 class Ship {
 public: // Methods
-    int timeToStop();
-    int timeToDest(const Coordinate& dest);
-    double getDistance(const Coordinate& dest);
+    int timeToStop(double velocity);
+    int timeToDest(double pos, double dest, double vel);
+    double getDistance(double pos, double dest);
+    double getDistanceUnitVec(double pos, double dest);
     double getMagVel();
     double getLargestVelocityVector();
     Coordinate getVelUnitVec();
+    double stopForce(double vel);
 
 
 public: // Members
     Coordinate position{0,0,0};
-    Coordinate velocity{0,0,0};
+    Coordinate velocity{10,0,0};
     Coordinate force{0,0,0};
     int maxForce{54000};
     int status;

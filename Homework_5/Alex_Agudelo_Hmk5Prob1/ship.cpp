@@ -9,24 +9,30 @@ Description:
 
 #include <cmath>
 
-int Ship::timeToStop()
+int Ship::timeToStop(double velocity)
 {
     // Do .95 percent so there is a margin due to the misfire
-    return static_cast<int>(std::ceil((getLargestVelocityVector()/(maxForce*.95))*yellowJacketMass));
+    return std::abs(static_cast<int>(std::ceil((velocity/(maxForce*.95))*yellowJacketMass)));
 }
 
-int Ship::timeToDest(const Coordinate& dest)
+int Ship::timeToDest(double pos, double dest, double vel)
 {
-    if(getLargestVelocityVector() != 0)
+    if(vel != 0)
     {
-        return static_cast<int>(std::ceil(getDistance(dest)/getLargestVelocityVector()));
+        return std::abs(static_cast<int>(std::ceil(getDistance(pos, dest)/vel)));
     }
     return 0;
 }
 
-double Ship::getDistance(const Coordinate& dest)
+double Ship::getDistanceUnitVec(double pos, double dest)
 {
-    return std::sqrt(std::pow(position.x - dest.x, 2) + std::pow(position.y - dest.y, 2) + std::pow(position.z - dest.z, 2));
+    double distNorm = getDistance(pos, dest);
+    return (dest - pos)/distNorm;
+}
+
+double Ship::getDistance(double pos, double dest)
+{
+    return std::sqrt(std::pow(pos-dest,2));
 }
 
 double Ship::getMagVel()
@@ -48,6 +54,19 @@ double Ship::getLargestVelocityVector()
     }
 
     return largest;
+}
+
+double Ship::stopForce(double vel)
+{
+    double forceToStop = -vel*yellowJacketMass;
+    if(forceToStop > maxForce)
+    {
+        return maxForce;
+    }
+    else
+    {
+        return forceToStop;
+    }
 }
 
 Coordinate Ship::getVelUnitVec()
