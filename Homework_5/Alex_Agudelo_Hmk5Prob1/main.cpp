@@ -13,7 +13,7 @@ Description:
 void handleYellowJacket();
 double calculateYellowJacketForce(double position, double vel, double dest);
 Ship yellowJacket{};
-Coordinate destination{-5000,0, 0};
+Coordinate destination{-5000,5000, 3000};
 
 int main()
 {
@@ -59,8 +59,8 @@ void evolveSystem(Ship& currShip)
 void handleYellowJacket()
 {
     yellowJacket.force.x = calculateYellowJacketForce(yellowJacket.position.x, yellowJacket.velocity.x, destination.x);
-//    yellowJacket.force.y = calculateYellowJacketForce(yellowJacket.position.y, yellowJacket.velocity.y, destination.y);
-//    yellowJacket.force.z = calculateYellowJacketForce(yellowJacket.position.z, yellowJacket.velocity.z, destination.z);
+    yellowJacket.force.y = calculateYellowJacketForce(yellowJacket.position.y, yellowJacket.velocity.y, destination.y);
+    yellowJacket.force.z = calculateYellowJacketForce(yellowJacket.position.z, yellowJacket.velocity.z, destination.z);
 
     evolveSystem(yellowJacket);
 }
