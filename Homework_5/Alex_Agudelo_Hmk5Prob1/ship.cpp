@@ -35,6 +35,10 @@ double Ship::getDistance(double pos, double dest)
     return std::sqrt(std::pow(pos-dest,2));
 }
 
+double Ship::getFullDistance(Coordinate dest)
+{
+    return std::sqrt(std::pow(position.x - dest.x, 2) + std::pow(position.y - dest.y, 2) + std::pow(position.z - dest.z, 2));}
+
 double Ship::getMagVel()
 {
 
@@ -56,12 +60,33 @@ double Ship::getLargestVelocityVector()
     return largest;
 }
 
+double Ship::forceToGetVel(double startVel, double endVel)
+{
+    double forceToGetVel = (endVel - startVel)*yellowJacketMass;
+    if(forceToGetVel > maxForce)
+    {
+        return maxForce;
+    }
+    else if(forceToGetVel < -maxForce)
+    {
+        return -maxForce;
+    }
+    else
+    {
+        return forceToGetVel;
+    }
+}
+
 double Ship::stopForce(double vel)
 {
     double forceToStop = -vel*yellowJacketMass;
     if(forceToStop > maxForce)
     {
         return maxForce;
+    }
+    else if(forceToStop < -maxForce)
+    {
+        return -maxForce;
     }
     else
     {

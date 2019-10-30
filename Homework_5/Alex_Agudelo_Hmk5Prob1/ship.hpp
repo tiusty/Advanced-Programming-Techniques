@@ -28,7 +28,9 @@ public: // Methods
     int timeToStop(double velocity);
     int timeToDest(double pos, double dest, double vel);
     double getDistance(double pos, double dest);
+    double getFullDistance(Coordinate dest);
     double getDistanceUnitVec(double pos, double dest);
+    double forceToGetVel(double startVel, double endVel);
     double getMagVel();
     double getLargestVelocityVector();
     Coordinate getVelUnitVec();

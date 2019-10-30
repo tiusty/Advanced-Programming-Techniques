@@ -11,9 +11,12 @@ Description:
 
 
 void handleYellowJacket();
-double calculateYellowJacketForce(double position, double vel, double dest);
+double calculateYellowJacketForceApproach(double position, double vel, double dest);
+double calculateYellowJackDock(double position, double vel, double dest, double unitVec);
 Ship yellowJacket{};
-Coordinate destination{-5000,5000, 3000};
+Coordinate destination{400,100, -100};
+double buzzySpeed = 5;
+Coordinate buzzyUnitVec{1,0,0};
 
 int main()
 {
@@ -58,9 +61,24 @@ void evolveSystem(Ship& currShip)
 
 void handleYellowJacket()
 {
-    yellowJacket.force.x = calculateYellowJacketForce(yellowJacket.position.x, yellowJacket.velocity.x, destination.x);
-    yellowJacket.force.y = calculateYellowJacketForce(yellowJacket.position.y, yellowJacket.velocity.y, destination.y);
-    yellowJacket.force.z = calculateYellowJacketForce(yellowJacket.position.z, yellowJacket.velocity.z, destination.z);
+    if(yellowJacket.getFullDistance(destination) > 100)
+    {
+        yellowJacket.force.x = calculateYellowJacketForceApproach(yellowJacket.position.x, yellowJacket.velocity.x,
+                                                                  destination.x);
+        yellowJacket.force.y = calculateYellowJacketForceApproach(yellowJacket.position.y, yellowJacket.velocity.y,
+                                                                  destination.y);
+        yellowJacket.force.z = calculateYellowJacketForceApproach(yellowJacket.position.z, yellowJacket.velocity.z,
+                                                                  destination.z);
+    }
+    else
+    {
+        yellowJacket.force.x = calculateYellowJackDock(yellowJacket.position.x, yellowJacket.velocity.x, destination.x,
+                                                       buzzyUnitVec.x);
+        yellowJacket.force.y = calculateYellowJackDock(yellowJacket.position.y, yellowJacket.velocity.y, destination.y,
+                                                       buzzyUnitVec.y);
+        yellowJacket.force.z = calculateYellowJackDock(yellowJacket.position.z, yellowJacket.velocity.z, destination.z,
+                                                       buzzyUnitVec.z);
+    }
 
     evolveSystem(yellowJacket);
 }
@@ -70,7 +88,14 @@ void calculateTimeToDest(const Coordinate& dest)
 
 }
 
-double calculateYellowJacketForce(double position, double vel, double dest)
+double calculateYellowJackDock(double position, double vel, double dest, double unitVec)
+{
+    double force;
+    force = yellowJacket.forceToGetVel(vel, 1.05*buzzySpeed*unitVec);
+    return force;
+}
+
+double calculateYellowJacketForceApproach(double position, double vel, double dest)
 {
     double force{0};
     double timeDif{0};
@@ -78,6 +103,7 @@ double calculateYellowJacketForce(double position, double vel, double dest)
     {
         timeDif = static_cast<double>(yellowJacket.timeToDest(position, dest, vel))/yellowJacket.timeToStop(vel);
     }
+
     if(timeDif > 3)
     {
         force = yellowJacket.maxForce*yellowJacket.getDistanceUnitVec(position, dest);
@@ -86,15 +112,15 @@ double calculateYellowJacketForce(double position, double vel, double dest)
     {
         force = -yellowJacket.maxForce*(-(timeDif-1.5) + 1)*yellowJacket.getDistanceUnitVec(position, dest);
     }
-    else if (timeDif > .1)
+    else if (timeDif > .01)
     {
         force = yellowJacket.stopForce(vel);
     }
     else
     {
-        if(yellowJacket.getDistance(position, dest) > 2000)
+        if(yellowJacket.getDistance(position, dest) > 10)
         {
-            force = yellowJacket.maxForce*.2*yellowJacket.getDistanceUnitVec(position, dest);
+            force = yellowJacket.maxForce*.1*yellowJacket.getDistanceUnitVec(position, dest);
         }
         else
         {
