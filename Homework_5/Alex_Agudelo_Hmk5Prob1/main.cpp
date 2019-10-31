@@ -18,30 +18,23 @@ int main()
 
     for(int i=0; i< world.duration; i++)
     {
-        for(auto &ship : world.ships)
+        for(auto &ship : world.fighers)
         {
             world.handleYellowJacket(ship);
         }
 
-        for(auto &ship : world.ships)
+        world.evolveSystem(world.buzzy);
+        for(auto &ship : world.fighers)
         {
             world.evolveSystem(ship);
         }
 
-        for(unsigned int j=1; j<world.ships.size(); j++)
+        for(auto &ship : world.fighers)
         {
-            if(world.checkConditions(world.ships.at(j)))
-            {
-                break;
-            }
+            world.checkConditions(ship);
         }
+        std::cout << "End" << std::endl;
     }
 
     return 1;
 }
-
-void initializeShips()
-{
-}
-
-

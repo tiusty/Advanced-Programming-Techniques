@@ -25,12 +25,19 @@ World::World()
     file >> duration;
     file >> maxForce;
 
-    for(auto & ship : ships)
+    double shipSpeed{0};
+    double xVec{0};
+    double yVec{0};
+    double zVec{0};
+
+    file >> buzzy.position.x >> buzzy.position.y >> buzzy.position.z >> shipSpeed >> xVec >> yVec >> zVec;
+    buzzy.velocity.x = shipSpeed * xVec;
+    buzzy.velocity.y = shipSpeed * yVec;
+    buzzy.velocity.z = shipSpeed * zVec;
+    buzzy.maxForce = maxForce;
+
+    for(auto & ship : fighers)
     {
-        double shipSpeed{0};
-        double xVec{0};
-        double yVec{0};
-        double zVec{0};
         file >> ship.position.x >> ship.position.y >> ship.position.z >> shipSpeed >> xVec >> yVec >> zVec;
         ship.velocity.x = shipSpeed * xVec;
         ship.velocity.y = shipSpeed * yVec;
@@ -41,7 +48,7 @@ World::World()
 
 double World::setForce(double force)
 {
-    double newForce{0};
+    double newForce = force;
     if(force > maxForce)
     {
         newForce = maxForce;
@@ -55,11 +62,11 @@ double World::setForce(double force)
 
 }
 
-void World::handleYellowJacket(Ship yellowJacket)
+void World::handleYellowJacket(Ship &yellowJacket)
 {
-    yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(ships.at(0).position), yellowJacket.position.x, ships.at(0).position.x, yellowJacket.velocity.x, ships.at(0).velocity.x);
-    yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(ships.at(0).position), yellowJacket.position.y, ships.at(0).position.y, yellowJacket.velocity.y, ships.at(0).velocity.y);
-    yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(ships.at(0).position), yellowJacket.position.z, ships.at(0).position.z, yellowJacket.velocity.z, ships.at(0).velocity.z);
+    yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
+    yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
+    yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
 }
 
 double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel)
@@ -87,31 +94,31 @@ double World::calculateForce(Ship ship, double dist3D, double currPos, double ta
     return force;
 }
 
-bool World::checkConditions(Ship &yellowJacket)
+void World::checkConditions(Ship &yellowJacket)
 {
-    Ship buzzy = ships.at(0);
-    if(yellowJacket.getFullDistance(buzzy.position) < 50)
+    if(yellowJacket.status == 1)
     {
-        if(yellowJacket.getMagVel() < 1.1*buzzy.getMagVel())
+        if(yellowJacket.getFullDistance(buzzy.position) < 50)
         {
-            double dotProduct = yellowJacket.velocity.x*buzzy.velocity.x + yellowJacket.velocity.y*buzzy.velocity.y+yellowJacket.velocity.z*buzzy.velocity.z;
-            if(dotProduct/(yellowJacket.getMagVel()*buzzy.getMagVel()) > .8)
+            if(yellowJacket.getMagVel() < 1.1*buzzy.getMagVel())
             {
-                yellowJacket.status = 2;
+                double dotProduct = yellowJacket.velocity.x*buzzy.velocity.x + yellowJacket.velocity.y*buzzy.velocity.y+yellowJacket.velocity.z*buzzy.velocity.z;
+                if(dotProduct/(yellowJacket.getMagVel()*buzzy.getMagVel()) > .8)
+                {
+                    yellowJacket.status = 2;
+                }
+                else
+                {
+                    yellowJacket.status = 0;
+                }
             }
             else
             {
                 yellowJacket.status = 0;
             }
         }
-        else
-        {
-            yellowJacket.status = 0;
-        }
-        return true;
-    }
 
-    return false;
+    }
 }
 
 void World::evolveSystem(Ship& currShip)
