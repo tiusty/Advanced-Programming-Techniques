@@ -54,18 +54,29 @@ int main(int argc, char *argv[])
     {
         if(taskid == MASTER)
         {
+
+            // Evolve the world
             world.evolveSystem(world.buzzy);
 //            printf("Before all gather master on %s!\n", taskid, hostname);
-            MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
-            for(int j=0; j<numtasks; i++)
+
+            // Get the data for buzzy
+            world.getShipDataBuzzy(shipData);
+
+            MPI_Allgather(shipData, 10, MPI_DOUBLE, pWorldData, 10, MPI_DOUBLE, MPI_COMM_WORLD);
+
+            // Update the world with the new data
+            world.setWorldData(pWorldData);
+
+            for(int j=0; j<numtasks-1; j++)
             {
                 Ship *fighter = &world.fighters.at(j);
-                std::cout << j << "," fighter->status << "," << fighter->position.x << "," fighter->position.y << "," fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
+                std::cout << j << "," << fighter->status << "," << fighter->position.x << "," << fighter->position.y << "," << fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
             }
         }
         else
         {
             int shipNum = taskid -1;
+
             // Calculate and set forces for each yellow jacket
             world.handleYellowJacket(world.fighters.at(shipNum), i);
 
@@ -76,11 +87,10 @@ int main(int argc, char *argv[])
             world.getShipData(shipData, shipNum);
 
             // Wait for everyone to send the data
-//            printf("Before all gather task %d on %s!\n", taskid, hostname);
-            MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
+            MPI_Allgather(shipData, 10, MPI_DOUBLE, pWorldData, 10, MPI_DOUBLE, MPI_COMM_WORLD);
 
             // Update the world with the new data
-            world.setWorldData(pWorldData, shipNum);
+            world.setWorldData(pWorldData);
 
             // Check the conditions to see if any fighters crashed etc
             world.checkConditions(world.fighters.at(shipNum));

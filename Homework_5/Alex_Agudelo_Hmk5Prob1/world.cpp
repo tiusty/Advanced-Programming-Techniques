@@ -24,16 +24,29 @@ void World::setWorldData(double *recBuf)
     buzzy.force = {recBuf[6], recBuf[7], recBuf[8]};
 
     int fighterCount{1};
-    int counter = 0;
     for(auto &ship : fighters)
     {
         ship.position = {recBuf[elementsPerShip*fighterCount], recBuf[elementsPerShip*fighterCount+1], recBuf[elementsPerShip*fighterCount+2]};
         ship.velocity = {recBuf[elementsPerShip*fighterCount+3], recBuf[elementsPerShip*fighterCount+4], recBuf[elementsPerShip*fighterCount+5]};
         ship.force = {recBuf[elementsPerShip*fighterCount+6], recBuf[elementsPerShip*fighterCount+7], recBuf[elementsPerShip*fighterCount+8]};
         ship.status = static_cast<int>(recBuf[elementsPerShip*fighterCount+9]);
-        ship.id = counter;
-        counter ++;
+        ship.id = fighterCount - 1;
+        fighterCount++;
     }
+}
+
+void World::getShipDataBuzzy(double *sendBuff)
+{
+    sendBuff[0] = buzzy.position.x;
+    sendBuff[1] = buzzy.position.y;
+    sendBuff[2] = buzzy.position.z;
+    sendBuff[3] = buzzy.velocity.x;
+    sendBuff[4] = buzzy.velocity.y;
+    sendBuff[5] = buzzy.velocity.z;
+    sendBuff[6] = buzzy.force.x;
+    sendBuff[7] = buzzy.force.y;
+    sendBuff[8] = buzzy.force.z;
+    sendBuff[9] =  1;
 }
 
 void World::getShipData(double *sendBuff, int shipNum)
@@ -62,24 +75,20 @@ void World::getWorldData(double *sendBuff)
     sendBuff[6] = buzzy.force.y;
     sendBuff[6] = buzzy.force.z;
 
+    int fighterCount{1};
     for(auto &ship : fighters)
     {
-        int fighterCount{1};
-        for(auto &ship : fighters)
-        {
-            sendBuff[elementsPerShip*fighterCount] = ship.position.x;
-            sendBuff[elementsPerShip*fighterCount+1] = ship.position.y;
-            sendBuff[elementsPerShip*fighterCount+2] = ship.position.z;
-            sendBuff[elementsPerShip*fighterCount+3] = ship.velocity.x;
-            sendBuff[elementsPerShip*fighterCount+4] = ship.velocity.y;
-            sendBuff[elementsPerShip*fighterCount+5] = ship.velocity.z;
-            sendBuff[elementsPerShip*fighterCount+6] = ship.force.x;
-            sendBuff[elementsPerShip*fighterCount+7] = ship.force.y;
-            sendBuff[elementsPerShip*fighterCount+8] = ship.force.z;
-            sendBuff[elementsPerShip*fighterCount+9] = ship.status;
-            fighterCount++;
-        }
-
+        sendBuff[elementsPerShip*fighterCount] = ship.position.x;
+        sendBuff[elementsPerShip*fighterCount+1] = ship.position.y;
+        sendBuff[elementsPerShip*fighterCount+2] = ship.position.z;
+        sendBuff[elementsPerShip*fighterCount+3] = ship.velocity.x;
+        sendBuff[elementsPerShip*fighterCount+4] = ship.velocity.y;
+        sendBuff[elementsPerShip*fighterCount+5] = ship.velocity.z;
+        sendBuff[elementsPerShip*fighterCount+6] = ship.force.x;
+        sendBuff[elementsPerShip*fighterCount+7] = ship.force.y;
+        sendBuff[elementsPerShip*fighterCount+8] = ship.force.z;
+        sendBuff[elementsPerShip*fighterCount+9] = ship.status;
+        fighterCount++;
     }
 }
 

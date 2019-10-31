@@ -17,6 +17,7 @@ public: // Methods
     World() = default;
     void setWorldData(double *recBuf);
     void getShipData(double *sendBuff, int shipNum);
+    void getShipDataBuzzy(double *sendBuff);
     void getWorldData(double *sendBuff);
     void loadData();
     double setForce(double force);
