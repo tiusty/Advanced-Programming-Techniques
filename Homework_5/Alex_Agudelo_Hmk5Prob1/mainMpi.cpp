@@ -36,57 +36,58 @@ int main(int argc, char *argv[])
     // Set up variables for all MPI processes
     World world;
     int numWorldElements = world.elementsPerShip*numtasks;
+    int miscData[2]{0};
     pWorldData = new double[numWorldElements];
 
     if(taskid == MASTER)
     {
         world.loadData();
         world.getWorldData(pWorldData);
+        miscData[0] = world.maxForce;
+        miscData[1] = world.duration;
     }
     MPI_Bcast(pWorldData, numWorldElements, MPI_DOUBLE, MASTER, MPI_COMM_WORLD);
     world.setWorldData(pWorldData);
+    MPI_Bcast(miscData, 2, MPI_INT, MASTER, MPI_COMM_WORLD);
+    world.maxForce = miscData[0];
+    world.duration = miscData[1];
 
-    if(taskid == 1)
-    {
-        std::cout << "printing world data" << std::endl;
-        for(int i=0; i<numWorldElements; i++)
-        {
-            std::cout << pWorldData[i] << " ";
-        }
-    }
-
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    int counter = 1;
-    for(int i=0; i<3; i++)
+    for(int i=0; i<world.duration; i++)
     {
         if(taskid == MASTER)
         {
-            for(int i=0; i<7; i++)
-            {
-                shipData[i] = counter*i*(taskid+1);
-            }
+            world.evolveSystem(world.buzzy);
+//            printf("Before all gather master on %s!\n", taskid, hostname);
             MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
-            printf("Master got");
-            for(int i=0; i<7*8; i++)
-            {
-                std::cout << pWorldData[i] << " ";
-            }
-            std::cout << std::endl;
         }
         else
         {
+            int shipNum = taskid -1;
+            // Calculate and set forces for each yellow jacket
+            world.handleYellowJacket(world.fighters.at(shipNum), i);
 
-            for(int i=0; i<7; i++)
-            {
-                shipData[i] = counter*i*(taskid+1);
-            }
-            shipData[6] += .2;
+            // Evolve the world
+            world.evolveSystem(world.fighters.at(shipNum));
+
+            // Return the ship data for this process
+            world.getShipData(shipData, shipNum);
+
+            // Wait for everyone to send the data
+//            printf("Before all gather task %d on %s!\n", taskid, hostname);
             MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
+
+            // Update the world with the new data
+            world.setWorldData(pWorldData);
+
+            // Check the conditions to see if any fighters crashed etc
+            world.checkConditions(world.fighters.at(shipNum));
         }
-        counter++;
     }
 
+    if(taskid == MASTER)
+    {
+        world.printResult();
+    }
     MPI_Finalize();
 }
 

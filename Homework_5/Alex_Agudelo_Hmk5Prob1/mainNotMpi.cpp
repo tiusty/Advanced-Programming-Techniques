@@ -37,10 +37,7 @@ int main()
         }
     }
 
-    for(auto &ship :world.fighters)
-    {
-        std::cout << "Fighter: " << ship.id << ", status: " << world.getStatus(ship) << std::endl;
-    }
+    world.printResult();
 
     return 1;
 }

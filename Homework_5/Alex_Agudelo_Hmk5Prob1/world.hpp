@@ -26,6 +26,7 @@ public: // Methods
     void evolveSystem(Ship& currShip);
     int rankOfFighter(Ship& currShip);
     std::string getStatus(const Ship &ship);
+    void printResult();
 
 public: // Members
     static constexpr int elementsPerShip{7};

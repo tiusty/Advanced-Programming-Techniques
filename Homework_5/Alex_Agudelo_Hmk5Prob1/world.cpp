@@ -262,5 +262,13 @@ std::string World::getStatus(const Ship &ship)
     }
 }
 
+void World::printResult()
+{
+    for(auto &ship : fighters)
+    {
+        std::cout << "Fighter: " << ship.id << ", status: " << getStatus(ship) << std::endl;
+    }
+}
+
 
 
