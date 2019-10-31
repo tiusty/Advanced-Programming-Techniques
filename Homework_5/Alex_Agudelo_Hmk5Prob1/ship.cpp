@@ -32,10 +32,9 @@ int Ship::timeToDest(double pos, double dest, double vel)
     return 0;
 }
 
-double Ship::getDistanceUnitVec(double pos, double dest)
+double Ship::getDistanceUnitVec(double pos, double norm)
 {
-    double distNorm = getDistance(pos, dest);
-    return (dest - pos)/distNorm;
+    return pos/norm;
 }
 
 double Ship::getDistance(double pos, double dest)
@@ -53,21 +52,6 @@ double Ship::getMagVel()
     return std::sqrt(std::pow(velocity.x,2) + std::pow(velocity.y,2) + std::pow(velocity.z, 2));
 }
 
-double Ship::getLargestVelocityVector()
-{
-    double largest = std::abs(velocity.x);
-    if(largest < std::abs(velocity.y))
-    {
-        largest = std::abs(velocity.y);
-    }
-    if(largest < std::abs(velocity.z))
-    {
-        largest = std::abs(velocity.z);
-    }
-
-    return largest;
-}
-
 double Ship::forceToGetVel(double startVel, double endVel)
 {
     double forceToGetVel = (endVel - startVel)*yellowJacketMass;
@@ -83,27 +67,4 @@ double Ship::forceToGetVel(double startVel, double endVel)
     {
         return forceToGetVel;
     }
-}
-
-double Ship::stopForce(double vel)
-{
-    double forceToStop = -vel*yellowJacketMass;
-    if(forceToStop > maxForce)
-    {
-        return maxForce;
-    }
-    else if(forceToStop < -maxForce)
-    {
-        return -maxForce;
-    }
-    else
-    {
-        return forceToStop;
-    }
-}
-
-Coordinate Ship::getVelUnitVec()
-{
-    int norm = static_cast<int>(std::sqrt(std::pow(velocity.x,2) + std::pow(velocity.y, 2) + std::pow(velocity.z,2)));
-    return {velocity.x/norm, velocity.y/norm, velocity.z/norm};
 }
