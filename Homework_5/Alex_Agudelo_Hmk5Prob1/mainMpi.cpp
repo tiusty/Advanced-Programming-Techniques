@@ -11,6 +11,7 @@ Description:
 #include <array>
 
 #include "mpi.h"
+#include "world.hpp"
 #define  MASTER		0
 
 int main(int argc, char *argv[])
@@ -31,10 +32,15 @@ int main(int argc, char *argv[])
     MPI_Get_processor_name(hostname, &len);
 
     printf("Hello from task %d on %s!\n", taskid, hostname);
-    pGatherBuffer = new double[7*8];
 
-    if (taskid == MASTER)
-        printf("MASTER: Number of MPI tasks is: %d\n", numtasks);
+    // Set up variables for all MPI processes
+    World world;
+    pGatherBuffer = new double[world.elementsPerShip*numtasks];
+
+    if(taskid == MASTER)
+    {
+        world.loadData();
+    }
 
     int counter = 1;
     for(int i=0; i<3; i++)

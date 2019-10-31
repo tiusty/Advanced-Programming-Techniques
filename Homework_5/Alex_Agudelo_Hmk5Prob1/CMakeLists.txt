@@ -15,7 +15,7 @@ endif()
 
 # Add the directories for the different problems
 add_executable(exec
-        main.cpp)
+        mainNotMpi.cpp)
 
 target_link_libraries(exec
         PUBLIC

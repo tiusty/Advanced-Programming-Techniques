@@ -12,17 +12,12 @@ Description:
 // Define constexpr variables
 constexpr int World::elementsPerShip;
 
-World::World(double recBuf[], int bufLen)
+void World::setWorldData(double *recBuf)
 {
     // Array follows format
     // [xPos, yPos, zPos, xVel, yVel, zVel, status]
     // The first 7 are buzz
     // each 7 after that is each fighter
-    if(bufLen < elementsPerShip * fighters.size())
-    {
-        std::cerr << "recBuf too small" << std::endl;
-        exit(1);
-    }
     buzzy.position = {recBuf[0], recBuf[1], recBuf[2]};
     buzzy.velocity = {recBuf[3], recBuf[4], recBuf[5]};
 
@@ -35,7 +30,7 @@ World::World(double recBuf[], int bufLen)
     }
 }
 
-void World::MpiSendBuf(double sendBuff[], int shipNum)
+void World::getShipData(double *sendBuff, int shipNum)
 {
     sendBuff[0] = fighters.at(shipNum).position.x;
     sendBuff[1] = fighters.at(shipNum).position.y;
@@ -44,6 +39,32 @@ void World::MpiSendBuf(double sendBuff[], int shipNum)
     sendBuff[4] = fighters.at(shipNum).velocity.y;
     sendBuff[5] = fighters.at(shipNum).velocity.z;
     sendBuff[6] = static_cast<int>(fighters.at(shipNum).status);
+}
+
+void World::getWorldData(double *sendBuff)
+{
+    sendBuff[0] = buzzy.position.x;
+    sendBuff[1] = buzzy.position.y;
+    sendBuff[2] = buzzy.position.z;
+    sendBuff[3] = buzzy.velocity.x;
+    sendBuff[4] = buzzy.velocity.y;
+    sendBuff[5] = buzzy.velocity.z;
+
+    for(auto &ship : fighters)
+    {
+        int fighterCount{1};
+        for(auto &ship : fighters)
+        {
+            sendBuff[elementsPerShip*fighterCount] = ship.position.x;
+            sendBuff[elementsPerShip*fighterCount+1] = ship.position.y;
+            sendBuff[elementsPerShip*fighterCount+2] = ship.position.z;
+            sendBuff[elementsPerShip*fighterCount+3] = ship.velocity.x;
+            sendBuff[elementsPerShip*fighterCount+4] = ship.velocity.y;
+            sendBuff[elementsPerShip*fighterCount+5] = ship.velocity.z;
+            sendBuff[elementsPerShip*fighterCount+6] = ship.status;
+        }
+
+    }
 }
 
 void World::loadData()
