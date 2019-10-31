@@ -2,7 +2,8 @@
 Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 10/31/19
-Description: 
+Description:
+ Implements world class
 */
 
 #include <fstream>
@@ -16,10 +17,7 @@ constexpr int World::elementsPerShip;
 
 void World::setWorldData(double *recBuf)
 {
-    // Array follows format
-    // [xPos, yPos, zPos, xVel, yVel, zVel, xForce, yForce, zForce, status]
-    // The first 7 are buzz
-    // each 7 after that is each fighter
+    // Given the world data sets the appropriate members according to the defined structure
     buzzy.position = {recBuf[0], recBuf[1], recBuf[2]};
     buzzy.velocity = {recBuf[3], recBuf[4], recBuf[5]};
     buzzy.force = {recBuf[6], recBuf[7], recBuf[8]};
@@ -38,6 +36,7 @@ void World::setWorldData(double *recBuf)
 
 void World::getShipDataBuzzy(double *sendBuff)
 {
+    // Given a ship data, populate the data for buzzy
     sendBuff[0] = buzzy.position.x;
     sendBuff[1] = buzzy.position.y;
     sendBuff[2] = buzzy.position.z;
@@ -52,6 +51,7 @@ void World::getShipDataBuzzy(double *sendBuff)
 
 void World::getShipData(double *sendBuff, int shipNum)
 {
+    // Given a ship data, populate the corresponding ship values
     sendBuff[0] = fighters.at(shipNum).position.x;
     sendBuff[1] = fighters.at(shipNum).position.y;
     sendBuff[2] = fighters.at(shipNum).position.z;
@@ -66,6 +66,7 @@ void World::getShipData(double *sendBuff, int shipNum)
 
 void World::getWorldData(double *sendBuff)
 {
+    // Populate the world data array given the member values
     sendBuff[0] = buzzy.position.x;
     sendBuff[1] = buzzy.position.y;
     sendBuff[2] = buzzy.position.z;
@@ -95,6 +96,7 @@ void World::getWorldData(double *sendBuff)
 
 void World::loadData()
 {
+    // Load data from input file
     std::ifstream file("in.dat");
 
     if(!file)
@@ -114,12 +116,14 @@ void World::loadData()
     double yVec{0};
     double zVec{0};
 
+    // Load data for buzzy
     file >> buzzy.position.x >> buzzy.position.y >> buzzy.position.z >> shipSpeed >> xVec >> yVec >> zVec;
     buzzy.velocity.x = shipSpeed * xVec;
     buzzy.velocity.y = shipSpeed * yVec;
     buzzy.velocity.z = shipSpeed * zVec;
     buzzy.maxForce = maxForce;
 
+    // Load data for each fighter
     int counter{0};
     for(auto & ship : fighters)
     {
@@ -135,6 +139,7 @@ void World::loadData()
 
 double World::setForce(double force)
 {
+    // Make sure the force is in the correct bounds
     double newForce = force;
     if(force > maxForce)
     {
@@ -145,10 +150,12 @@ double World::setForce(double force)
         newForce = -maxForce;
     }
 
+    // Generate a random number between .8 and 1.2 to simulate misfiring
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
     std::uniform_int_distribution<> distr(80, 120); // define the range
     double ran = static_cast<double>(distr(eng))/100;
+
     return newForce*ran;
 
 }
@@ -161,6 +168,7 @@ void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
         // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
         if(currDuration > rankOfFighter(yellowJacket)*200)
         {
+            // Calculate the force that each yellow jacket needs to exert
             yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
             yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
             yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
@@ -171,8 +179,12 @@ void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
 double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel)
 {
     double force{0};
+
+    // Case for when the ships are far away from the target
     if (dist3D > 1000)
     {
+        // If there is a large distance gap then have the fighters go at a constant velocity
+        //  that is faster than buzzy so the fighters can catch up
         if (std::fabs(currPos - targetPos) > 1000)
         {
 
@@ -196,12 +208,16 @@ double World::calculateForce(Ship ship, double dist3D, double currPos, double ta
 
 void World::checkConditions(Ship &yellowJacket)
 {
+    // Condition only matters if the ship is still active
     if(yellowJacket.status == 1)
     {
+        // Case for when the fighter is ready to dock
         if(yellowJacket.getDistance(buzzy.position) < 50)
         {
+            // make sure that the yellow jacket is going slow enough
             if(yellowJacket.getMagVel() < 1.1*buzzy.getMagVel())
             {
+                // Make sure the velocity vector lines up
                 double dotProduct = yellowJacket.velocity.x*buzzy.velocity.x + yellowJacket.velocity.y*buzzy.velocity.y+yellowJacket.velocity.z*buzzy.velocity.z;
                 if(dotProduct/(yellowJacket.getMagVel()*buzzy.getMagVel()) > .8)
                 {
@@ -224,6 +240,7 @@ void World::checkConditions(Ship &yellowJacket)
             double distance = yellowJacket.getDistance(ship.position);
             if(distance < 250 && yellowJacket.id != ship.id && ship.status == 1)
             {
+                // Both get destroyed if there was a crash
                 yellowJacket.status = 0;
                 ship.status=0;
             }
@@ -262,6 +279,9 @@ int World::rankOfFighter(Ship& currShip)
 {
     double currDistance = currShip.getDistance(buzzy.position);
     int rank{0};
+
+    // Find the rank for each fighter
+    // The lower the rank the closer the fighter is to buzzy compared to the other fighters
     for(auto &ship : fighters)
     {
         if(ship.id != currShip.id)
@@ -271,6 +291,7 @@ int World::rankOfFighter(Ship& currShip)
             {
                 rank++;
             }
+            // In case of a tie, the rank is determined by fighter id
             else if (shipDist == currDistance)
             {
                 if(ship.id < currShip.id)
@@ -286,6 +307,7 @@ int World::rankOfFighter(Ship& currShip)
 
 std::string World::getStatus(const Ship &ship)
 {
+    // Prints the status as a string
     if(ship.status == 0)
     {
         return "Destroyed";
@@ -306,6 +328,7 @@ std::string World::getStatus(const Ship &ship)
 
 void World::printResult()
 {
+    // Print the results for each fighter
     for(auto &ship : fighters)
     {
         std::cout << "Fighter: " << ship.id << ", status: " << getStatus(ship) << std::endl;
