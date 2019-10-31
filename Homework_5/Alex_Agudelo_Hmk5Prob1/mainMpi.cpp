@@ -57,6 +57,11 @@ int main(int argc, char *argv[])
             world.evolveSystem(world.buzzy);
 //            printf("Before all gather master on %s!\n", taskid, hostname);
             MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
+            for(int j=0; j<numtasks; i++)
+            {
+                Ship *fighter = &world.fighters.at(j);
+                std::cout << j << "," fighter->status << "," << fighter->position.x << "," fighter->position.y << "," fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
+            }
         }
         else
         {
@@ -75,7 +80,7 @@ int main(int argc, char *argv[])
             MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
 
             // Update the world with the new data
-            world.setWorldData(pWorldData);
+            world.setWorldData(pWorldData, shipNum);
 
             // Check the conditions to see if any fighters crashed etc
             world.checkConditions(world.fighters.at(shipNum));

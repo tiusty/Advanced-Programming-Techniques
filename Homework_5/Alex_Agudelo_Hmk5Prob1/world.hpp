@@ -21,7 +21,7 @@ public: // Methods
     void loadData();
     double setForce(double force);
     void handleYellowJacket(Ship &yellowJacket, int currDuration);
-    double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel, double forceVec);
+    double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel);
     void checkConditions(Ship &yellowJacket);
     void evolveSystem(Ship& currShip);
     int rankOfFighter(Ship& currShip);
@@ -29,7 +29,7 @@ public: // Methods
     void printResult();
 
 public: // Members
-    static constexpr int elementsPerShip{7};
+    static constexpr int elementsPerShip{10};
     double maxForce{0};
     int duration{0};
 

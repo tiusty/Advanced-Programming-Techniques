@@ -16,18 +16,23 @@ constexpr int World::elementsPerShip;
 void World::setWorldData(double *recBuf)
 {
     // Array follows format
-    // [xPos, yPos, zPos, xVel, yVel, zVel, status]
+    // [xPos, yPos, zPos, xVel, yVel, zVel, xForce, yForce, zForce, status]
     // The first 7 are buzz
     // each 7 after that is each fighter
     buzzy.position = {recBuf[0], recBuf[1], recBuf[2]};
     buzzy.velocity = {recBuf[3], recBuf[4], recBuf[5]};
+    buzzy.force = {recBuf[6], recBuf[7], recBuf[8]};
 
     int fighterCount{1};
+    int counter = 0;
     for(auto &ship : fighters)
     {
         ship.position = {recBuf[elementsPerShip*fighterCount], recBuf[elementsPerShip*fighterCount+1], recBuf[elementsPerShip*fighterCount+2]};
         ship.velocity = {recBuf[elementsPerShip*fighterCount+3], recBuf[elementsPerShip*fighterCount+4], recBuf[elementsPerShip*fighterCount+5]};
-        ship.status = static_cast<int>(recBuf[elementsPerShip*fighterCount+6]);
+        ship.force = {recBuf[elementsPerShip*fighterCount+6], recBuf[elementsPerShip*fighterCount+7], recBuf[elementsPerShip*fighterCount+8]};
+        ship.status = static_cast<int>(recBuf[elementsPerShip*fighterCount+9]);
+        ship.id = counter;
+        counter ++;
     }
 }
 
@@ -39,7 +44,10 @@ void World::getShipData(double *sendBuff, int shipNum)
     sendBuff[3] = fighters.at(shipNum).velocity.x;
     sendBuff[4] = fighters.at(shipNum).velocity.y;
     sendBuff[5] = fighters.at(shipNum).velocity.z;
-    sendBuff[6] = static_cast<int>(fighters.at(shipNum).status);
+    sendBuff[6] = fighters.at(shipNum).force.x;
+    sendBuff[7] = fighters.at(shipNum).force.y;
+    sendBuff[8] = fighters.at(shipNum).force.z;
+    sendBuff[9] = static_cast<int>(fighters.at(shipNum).status);
 }
 
 void World::getWorldData(double *sendBuff)
@@ -50,6 +58,9 @@ void World::getWorldData(double *sendBuff)
     sendBuff[3] = buzzy.velocity.x;
     sendBuff[4] = buzzy.velocity.y;
     sendBuff[5] = buzzy.velocity.z;
+    sendBuff[6] = buzzy.force.x;
+    sendBuff[6] = buzzy.force.y;
+    sendBuff[6] = buzzy.force.z;
 
     for(auto &ship : fighters)
     {
@@ -62,7 +73,10 @@ void World::getWorldData(double *sendBuff)
             sendBuff[elementsPerShip*fighterCount+3] = ship.velocity.x;
             sendBuff[elementsPerShip*fighterCount+4] = ship.velocity.y;
             sendBuff[elementsPerShip*fighterCount+5] = ship.velocity.z;
-            sendBuff[elementsPerShip*fighterCount+6] = ship.status;
+            sendBuff[elementsPerShip*fighterCount+6] = ship.force.x;
+            sendBuff[elementsPerShip*fighterCount+7] = ship.force.y;
+            sendBuff[elementsPerShip*fighterCount+8] = ship.force.z;
+            sendBuff[elementsPerShip*fighterCount+9] = ship.status;
             fighterCount++;
         }
 
@@ -127,21 +141,20 @@ double World::setForce(double force)
 
 void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
 {
-    // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
-    if(currDuration > rankOfFighter(yellowJacket)*200)
+    // If it is not active then do nothing
+    if(yellowJacket.status == 1)
     {
-        Coordinate forceVec = {(buzzy.position.x - yellowJacket.position.x)/ yellowJacket.getDistance(buzzy.position), (buzzy.position.y - yellowJacket.position.y) /
-                                                                                                                      yellowJacket.getDistance(
-                                                                                                                                  buzzy.position), (buzzy.position.z - yellowJacket.position.z) /
-                                                                                                                                                                                                                 yellowJacket.getDistance(
-                                                                                                                                                                                                                             buzzy.position)};
-        yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x, forceVec.x);
-        yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y, forceVec.y);
-        yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z, forceVec.z);
+        // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
+        if(currDuration > rankOfFighter(yellowJacket)*200)
+        {
+            yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
+            yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
+            yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
+        }
     }
 }
 
-double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel, double forceVec)
+double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel)
 {
     double force{0};
     if (dist3D > 1000)
@@ -207,13 +220,28 @@ void World::checkConditions(Ship &yellowJacket)
 
 void World::evolveSystem(Ship& currShip)
 {
-    currShip.position.x = currShip.position.x + currShip.velocity.x + (currShip.force.x/yellowJacketMass)/2;
-    currShip.position.y = currShip.position.y + currShip.velocity.y + (currShip.force.y/yellowJacketMass)/2;
-    currShip.position.z = currShip.position.z + currShip.velocity.z + (currShip.force.z/yellowJacketMass)/2;
+    // Simulate the ship movement if it is active
+    if(currShip.status == 1)
+    {
+        currShip.position.x = currShip.position.x + currShip.velocity.x + (currShip.force.x/yellowJacketMass)/2;
+        currShip.position.y = currShip.position.y + currShip.velocity.y + (currShip.force.y/yellowJacketMass)/2;
+        currShip.position.z = currShip.position.z + currShip.velocity.z + (currShip.force.z/yellowJacketMass)/2;
 
-    currShip.velocity.x = currShip.velocity.x + currShip.force.x/yellowJacketMass;
-    currShip.velocity.y = currShip.velocity.y + currShip.force.y/yellowJacketMass;
-    currShip.velocity.z = currShip.velocity.z + currShip.force.z/yellowJacketMass;
+        currShip.velocity.x = currShip.velocity.x + currShip.force.x/yellowJacketMass;
+        currShip.velocity.y = currShip.velocity.y + currShip.force.y/yellowJacketMass;
+        currShip.velocity.z = currShip.velocity.z + currShip.force.z/yellowJacketMass;
+    }
+    // If the ship is docked then its position is just the last broadcast position of buzzy
+    else if(currShip.status == 2)
+    {
+        currShip.position.x = buzzy.position.x;
+        currShip.position.y = buzzy.position.y;
+        currShip.position.z = buzzy.position.z;
+    }
+    else
+    {
+        // If the ship is destroyed then do nothing
+    }
 }
 
 int World::rankOfFighter(Ship& currShip)
