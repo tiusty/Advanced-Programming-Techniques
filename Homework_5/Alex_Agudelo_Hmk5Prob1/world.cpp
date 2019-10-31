@@ -35,6 +35,17 @@ World::World(double recBuf[], int bufLen)
     }
 }
 
+void World::MpiSendBuf(double sendBuff[], int shipNum)
+{
+    sendBuff[0] = fighters.at(shipNum).position.x;
+    sendBuff[1] = fighters.at(shipNum).position.y;
+    sendBuff[2] = fighters.at(shipNum).position.z;
+    sendBuff[3] = fighters.at(shipNum).velocity.x;
+    sendBuff[4] = fighters.at(shipNum).velocity.y;
+    sendBuff[5] = fighters.at(shipNum).velocity.z;
+    sendBuff[6] = static_cast<int>(fighters.at(shipNum).status);
+}
+
 void World::loadData()
 {
 std::ifstream file("in.dat");

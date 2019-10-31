@@ -16,6 +16,7 @@ class World {
 public: // Methods
     World() = default;
     World(double recBuf[], int bufLen);
+    void MpiSendBuf(double sendBuff[], int shipNum);
     void loadData();
     double setForce(double force);
     void handleYellowJacket(Ship &yellowJacket, int currDuration);

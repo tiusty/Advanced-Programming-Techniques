@@ -49,9 +49,9 @@ int main(int argc, char *argv[])
             printf("Master got");
             for(int i=0; i<7*8; i++)
             {
-                printf("%d ", pGatherBuffer[i]);
+                std::cout << pGatherBuffer[i] << " ";
             }
-            printf("\n");
+            std::cout << std::endl;
         }
         else
         {
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
                 sendArray[i] = counter*i*(taskid+1);
             }
             sendArray[6] += .2;
-            MPI_Allgather(sendArray, 7, MPI_INT, pGatherBuffer, 7, MPI_INT, MPI_COMM_WORLD);
+            MPI_Allgather(sendArray, 7, MPI_DOUBLE, pGatherBuffer, 7, MPI_DOUBLE, MPI_COMM_WORLD);
         }
         counter++;
     }
