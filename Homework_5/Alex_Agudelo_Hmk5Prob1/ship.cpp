@@ -32,11 +32,6 @@ int Ship::timeToDest(double pos, double dest, double vel)
     return 0;
 }
 
-double Ship::getDistanceUnitVec(double pos, double norm)
-{
-    return pos/norm;
-}
-
 Coordinate Ship::getVelUnitVec()
 {
     if(getMagVel() != 0)
