@@ -14,7 +14,8 @@ Description:
 
 class World {
 public: // Methods
-    World();
+    World() = default;
+    void loadData();
     double setForce(double force);
     void handleYellowJacket(Ship &yellowJacket, int currDuration);
     double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel, double forceVec);

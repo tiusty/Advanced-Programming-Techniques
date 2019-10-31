@@ -50,7 +50,7 @@ double Ship::getDistance(double pos, double dest)
     return std::sqrt(std::pow(pos-dest,2));
 }
 
-double Ship::getFullDistance(Coordinate dest)
+double Ship::getDistance(Coordinate dest)
 {
     return std::sqrt(std::pow(position.x - dest.x, 2) + std::pow(position.y - dest.y, 2) + std::pow(position.z - dest.z, 2));}
 

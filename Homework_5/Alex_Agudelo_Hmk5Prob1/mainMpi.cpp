@@ -36,19 +36,20 @@ int main(int argc, char *argv[])
     if (taskid == MASTER)
         printf("MASTER: Number of MPI tasks is: %d\n", numtasks);
 
-//    for(int i=0; i<1; i++)
-//    {
+    int counter = 1;
+    for(int i=0; i<3; i++)
+    {
         if(taskid == MASTER)
         {
             for(int i=0; i<6; i++)
             {
-                sendArray[i] = i*(taskid+1);
+                sendArray[i] = counter*i*(taskid+1);
             }
             MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6, MPI_INT, MPI_COMM_WORLD);
             printf("Master got");
             for(int i=0; i<6*8; i++)
             {
-                printf("%d", pGatherBuffer[i]);
+                printf("%d ", pGatherBuffer[i]);
             }
             printf("\n");
         }
@@ -57,11 +58,12 @@ int main(int argc, char *argv[])
 
             for(int i=0; i<6; i++)
             {
-                sendArray[i] = i*(taskid+1);
+                sendArray[i] = counter*i*(taskid+1);
             }
             MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6, MPI_INT, MPI_COMM_WORLD);
         }
-//    }
+        counter++;
+    }
 
     MPI_Finalize();
 }

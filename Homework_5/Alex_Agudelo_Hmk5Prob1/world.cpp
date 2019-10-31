@@ -11,7 +11,12 @@ Description:
 
 World::World()
 {
-    std::ifstream file("in.dat");
+
+}
+
+void Ship::loadData();
+{
+std::ifstream file("in.dat");
 
     if(!file)
     {
@@ -70,10 +75,14 @@ void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
     // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
     if(currDuration > rankOfFighter(yellowJacket)*200)
     {
-        Coordinate forceVec = {(buzzy.position.x - yellowJacket.position.x)/yellowJacket.getFullDistance(buzzy.position), (buzzy.position.y - yellowJacket.position.y)/yellowJacket.getFullDistance(buzzy.position), (buzzy.position.z - yellowJacket.position.z)/yellowJacket.getFullDistance(buzzy.position)};
-        yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x, forceVec.x);
-        yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y, forceVec.y);
-        yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z, forceVec.z);
+        Coordinate forceVec = {(buzzy.position.x - yellowJacket.position.x)/ yellowJacket.getDistance(buzzy.position), (buzzy.position.y - yellowJacket.position.y) /
+                                                                                                                      yellowJacket.getDistance(
+                                                                                                                                  buzzy.position), (buzzy.position.z - yellowJacket.position.z) /
+                                                                                                                                                                                                                 yellowJacket.getDistance(
+                                                                                                                                                                                                                             buzzy.position)};
+        yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x, forceVec.x);
+        yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y, forceVec.y);
+        yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z, forceVec.z);
     }
 }
 
@@ -107,7 +116,7 @@ void World::checkConditions(Ship &yellowJacket)
 {
     if(yellowJacket.status == 1)
     {
-        if(yellowJacket.getFullDistance(buzzy.position) < 50)
+        if(yellowJacket.getDistance(buzzy.position) < 50)
         {
             if(yellowJacket.getMagVel() < 1.1*buzzy.getMagVel())
             {
@@ -130,7 +139,7 @@ void World::checkConditions(Ship &yellowJacket)
         // Check to see if any fighters crashed
         for(auto &ship : fighters)
         {
-            double distance = yellowJacket.getFullDistance(ship.position);
+            double distance = yellowJacket.getDistance(ship.position);
             if(distance < 250 && yellowJacket.id != ship.id && ship.status == 1)
             {
                 yellowJacket.status = 0;
@@ -154,13 +163,13 @@ void World::evolveSystem(Ship& currShip)
 
 int World::rankOfFighter(Ship& currShip)
 {
-    double currDistance = currShip.getFullDistance(buzzy.position);
+    double currDistance = currShip.getDistance(buzzy.position);
     int rank{0};
     for(auto &ship : fighters)
     {
         if(ship.id != currShip.id)
         {
-            double shipDist = ship.getFullDistance(buzzy.position);
+            double shipDist = ship.getDistance(buzzy.position);
             if(shipDist < currDistance)
             {
                 rank++;

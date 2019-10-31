@@ -25,10 +25,8 @@ struct Coordinate
 
 class Ship {
 public: // Methods
-    int timeToGetToVel(double vel, double desiredVel);
-    int timeToDest(double pos, double dest, double vel);
     double getDistance(double pos, double dest);
-    double getFullDistance(Coordinate dest);
+    double getDistance(Coordinate dest);
     double forceToGetVel(double startVel, double endVel);
     double getMagVel();
     double getMagPos();
