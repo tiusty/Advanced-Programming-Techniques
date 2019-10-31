@@ -9,6 +9,7 @@ Description:
 #include <stdio.h>
 #include <stdlib.h>
 #include <array>
+#include <iomanip>
 
 #include "mpi.h"
 #include "world.hpp"
@@ -70,6 +71,7 @@ int main(int argc, char *argv[])
             for(int j=0; j<numtasks-1; j++)
             {
                 Ship *fighter = &world.fighters.at(j);
+                std::cout << std::scientific << std::setprecision(6);
                 std::cout << j << "," << fighter->status << "," << fighter->position.x << "," << fighter->position.y << "," << fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
             }
         }
