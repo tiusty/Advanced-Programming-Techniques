@@ -1,4 +1,4 @@
 #/bin/bash
 
-mpic++ main.cpp -o exec -std=c++11
+mpic++ mainMpi.cpp -o exec -std=c++11
 qsub hmwk5.pbs

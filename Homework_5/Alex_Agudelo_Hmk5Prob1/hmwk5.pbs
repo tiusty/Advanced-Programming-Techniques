@@ -12,7 +12,7 @@ module load gcc mvapich2
 
 rm -f exec
 echo "Before compiling"
-mpic++ main.cpp -o exec -std=c++11
+mpic++ mainMpi.cpp -o exec -std=c++11
 echo "Before running"
 mpirun -np 8 ./exec
 echo "After running"

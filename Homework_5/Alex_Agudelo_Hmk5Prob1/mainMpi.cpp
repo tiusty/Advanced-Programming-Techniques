@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                 sendArray[i] = i*(taskid+1);
             }
             printf("Task done %d on %s!\n", taskid, hostname);
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6*8, MPI_INT, MPI_COMM_WORLD);
+            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 8, MPI_INT, MPI_COMM_WORLD);
         }
     }
 
