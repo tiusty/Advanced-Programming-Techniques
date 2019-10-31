@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 {
     int   numtasks, taskid, len;
     char hostname[MPI_MAX_PROCESSOR_NAME];
-    std::array<int,6> sendArray;
+    int sendArray[6];
 
     int duration{0};
 
@@ -38,28 +38,34 @@ int main(int argc, char *argv[])
     {
         if(taskid == MASTER)
         {
-            std::array<int, 6*8> rbuf{0};
+            int* pGatherBuffer = new int[6*8];
             for(int i=0; i<6; i++)
             {
-                sendArray.at(i) = i*taskid;
+                sendArray[i] = i*(taskid+1);
             }
-            MPI_Allgather(static_cast<void*>(sendArray.data()), 6, MPI_INT, static_cast<void*>(rbuf.data()), 6*8, MPI_INT, MPI_COMM_WORLD);
+            for(int i=0; i<6; i++)
+            {
+                printf("%d", sendArray[i]);
+            }
+            printf("\n");
+            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6*8, MPI_INT, MPI_COMM_WORLD);
             printf("Master got");
             for(int i=0; i<6*8; i++)
             {
-                printf("%d", rbuf.at(i));
+                printf("%d", pGatherBuffer[i]);
             }
             printf("\n");
         }
         else
         {
 
-            std::array<int, 6*8> rbuf{0};
+            int* pGatherBuffer = new int[6*8];
             for(int i=0; i<6; i++)
             {
-                sendArray.at(i) = i*taskid;
+                sendArray[i] = i*(taskid+1);
             }
-            MPI_Allgather(static_cast<void*>(sendArray.data()), 6, MPI_INT, static_cast<void*>(rbuf.data()), 6*8, MPI_INT, MPI_COMM_WORLD);
+            printf("Task done %d on %s!\n", taskid, hostname);
+            MPI_Allgather(sendArray, 1, MPI_INT, pGatherBuffer, 1, MPI_INT, MPI_COMM_WORLD);
         }
     }
 
