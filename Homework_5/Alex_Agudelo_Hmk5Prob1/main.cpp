@@ -27,8 +27,8 @@ int main()
     // Determine stating positions
 
     // On Buzzy just calculate new position
-    buzzy.position = {1000,0,0};
-    buzzy.velocity = {300,0,0};
+    buzzy.position = {1000,500,0};
+    buzzy.velocity = {300,-10,0};
 
     for(int i=0; i< 5000; i++)
     {
@@ -84,6 +84,8 @@ void evolveSystem(Ship& currShip)
 void handleYellowJacket()
 {
     yellowJacket.force.x = calculateForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
+    yellowJacket.force.y = calculateForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
+    yellowJacket.force.z = calculateForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
 //    yellowJacket.force.x = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, yellowJacket.velocity.x,
 //                                                      buzzy.velocity.x,
 //                                                      buzzy.position.x, buzzy.getVelUnitVec().x, buzzy.getDistUnitVec().x);
