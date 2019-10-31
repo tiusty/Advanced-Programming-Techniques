@@ -9,10 +9,4 @@
 cd ~/data/Alex_Agudelo_Hmk5Prob1/
 echo "Started Job..."
 module load gcc mvapich2
-
-rm -f exec
-echo "Before compiling"
-mpic++ mainMpi.cpp world.cpp ship.cpp -o exec -std=c++11
-echo "Before running"
 mpirun -np 8 ./exec
-echo "After running"

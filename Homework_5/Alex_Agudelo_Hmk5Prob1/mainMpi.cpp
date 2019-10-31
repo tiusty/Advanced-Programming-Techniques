@@ -31,8 +31,6 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
     MPI_Get_processor_name(hostname, &len);
 
-    printf("Hello from task %d on %s!\n", taskid, hostname);
-
     // Set up variables for all MPI processes
     World world;
     int numWorldElements = world.elementsPerShip*numtasks;
