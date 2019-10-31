@@ -9,6 +9,7 @@ Description:
 #include <fstream>
 
 #include "ship.hpp"
+#include "world.hpp"
 
 
 void handleYellowJacket();
@@ -21,11 +22,7 @@ Ship buzzy{};
 
 int main()
 {
-
-    std::cout << "Hello World" << std::endl;
-
-    // Read in files
-
+    World world;
     // Determine stating positions
 
     // On Buzzy just calculate new position
