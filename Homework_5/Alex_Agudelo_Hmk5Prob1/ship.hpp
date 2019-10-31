@@ -36,6 +36,7 @@ public: // Methods
     Coordinate getDistUnitVec();
 
 public: // Members
+    int id{0};
     Coordinate position{0,0,0};
     Coordinate velocity{10,0,0};
     Coordinate force{0,0,0};

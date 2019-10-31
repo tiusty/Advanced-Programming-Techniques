@@ -16,7 +16,7 @@ class World {
 public: // Methods
     World();
     double setForce(double force);
-    void handleYellowJacket(Ship &yellowJacket);
+    void handleYellowJacket(Ship &yellowJacket, int currDuration);
     double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel);
     void checkConditions(Ship &yellowJacket);
     void evolveSystem(Ship& currShip);
@@ -24,7 +24,7 @@ public: // Members
     double maxForce{0};
     int duration{0};
 
-    std::array<Ship, 7> fighers;
+    std::array<Ship, 7> fighters;
     Ship buzzy;
 };
 

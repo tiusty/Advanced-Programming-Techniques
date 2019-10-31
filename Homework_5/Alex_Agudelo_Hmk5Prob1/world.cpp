@@ -36,13 +36,16 @@ World::World()
     buzzy.velocity.z = shipSpeed * zVec;
     buzzy.maxForce = maxForce;
 
-    for(auto & ship : fighers)
+    int counter{0};
+    for(auto & ship : fighters)
     {
         file >> ship.position.x >> ship.position.y >> ship.position.z >> shipSpeed >> xVec >> yVec >> zVec;
         ship.velocity.x = shipSpeed * xVec;
         ship.velocity.y = shipSpeed * yVec;
         ship.velocity.z = shipSpeed * zVec;
         ship.maxForce = maxForce;
+        ship.id = counter;
+        counter++;
     }
 }
 
@@ -62,11 +65,15 @@ double World::setForce(double force)
 
 }
 
-void World::handleYellowJacket(Ship &yellowJacket)
+void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
 {
-    yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
-    yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
-    yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
+    // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
+    if(currDuration > yellowJacket.id*200)
+    {
+        yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
+        yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
+        yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
+    }
 }
 
 double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel)
@@ -115,6 +122,17 @@ void World::checkConditions(Ship &yellowJacket)
             else
             {
                 yellowJacket.status = 0;
+            }
+        }
+
+        // Check to see if any fighters crashed
+        for(auto &ship : fighters)
+        {
+            double distance = yellowJacket.getFullDistance(ship.position);
+            if(distance < 250 && yellowJacket.id != ship.id)
+            {
+                yellowJacket.status = 0;
+                ship.status=0;
             }
         }
 
