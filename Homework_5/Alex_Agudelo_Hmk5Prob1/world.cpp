@@ -7,6 +7,7 @@ Description:
 
 #include <fstream>
 #include <iostream>
+#include <cmath>
 #include "world.hpp"
 
 // Define constexpr variables
@@ -144,7 +145,7 @@ double World::calculateForce(Ship ship, double dist3D, double currPos, double ta
     double force{0};
     if (dist3D > 1000)
     {
-        if (std::abs(currPos - targetPos) > 1000)
+        if (std::fabs(currPos - targetPos) > 1000)
         {
 
             // Accelerate to the targetVel + 75 as quickly as possible

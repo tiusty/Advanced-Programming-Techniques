@@ -16,10 +16,10 @@ Description:
 
 int main(int argc, char *argv[])
 {
-    int   numtasks, taskid, len;
+    int   numtasks, taskid, len, rc;
     char hostname[MPI_MAX_PROCESSOR_NAME];
-    double sendArray[7];
-    double* pGatherBuffer;
+    double shipData[World::elementsPerShip];
+    double* pWorldData;
 
     int duration{0};
 
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
     // Set up variables for all MPI processes
     World world;
-    pGatherBuffer = new double[world.elementsPerShip*numtasks];
+    pWorldData = new double[world.elementsPerShip*numtasks];
 
     if(taskid == MASTER)
     {
@@ -49,13 +49,13 @@ int main(int argc, char *argv[])
         {
             for(int i=0; i<7; i++)
             {
-                sendArray[i] = counter*i*(taskid+1);
+                shipData[i] = counter*i*(taskid+1);
             }
-            MPI_Allgather(sendArray, 7, MPI_DOUBLE, pGatherBuffer, 7, MPI_DOUBLE, MPI_COMM_WORLD);
+            MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
             printf("Master got");
             for(int i=0; i<7*8; i++)
             {
-                std::cout << pGatherBuffer[i] << " ";
+                std::cout << pWorldData[i] << " ";
             }
             std::cout << std::endl;
         }
@@ -64,10 +64,10 @@ int main(int argc, char *argv[])
 
             for(int i=0; i<7; i++)
             {
-                sendArray[i] = counter*i*(taskid+1);
+                shipData[i] = counter*i*(taskid+1);
             }
-            sendArray[6] += .2;
-            MPI_Allgather(sendArray, 7, MPI_DOUBLE, pGatherBuffer, 7, MPI_DOUBLE, MPI_COMM_WORLD);
+            shipData[6] += .2;
+            MPI_Allgather(shipData, 7, MPI_DOUBLE, pWorldData, 7, MPI_DOUBLE, MPI_COMM_WORLD);
         }
         counter++;
     }

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(Homework_5)
 
 # CMake 3.1 or older needs this method of setting compiler standards
-add_compile_options(-std=c++14)
+add_compile_options(-std=c++11)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
