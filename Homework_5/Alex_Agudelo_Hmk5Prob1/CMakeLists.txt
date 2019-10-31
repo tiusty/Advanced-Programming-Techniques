@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(Homework_5)
 
+find_package(MPI REQUIRED)
+
 # CMake 3.1 or older needs this method of setting compiler standards
 add_compile_options(-std=c++14)
 

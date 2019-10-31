@@ -1,0 +1,15 @@
+#PBS -N job1
+#PBS -q coc-ice
+#PBS -o test.out
+#PBS -l nodes=4:ppn=2
+#PBS -l walltime=1:00
+
+#PBS -j oe
+
+cd ~/data/Alex_Agudelo_Hmk5Prob1/
+echo "Started Job..."
+module load gcc mvapich2
+
+rm -f exec
+mpic++ main.cpp -o exec -std=c++11
+mpirun -np 8 ./exec
