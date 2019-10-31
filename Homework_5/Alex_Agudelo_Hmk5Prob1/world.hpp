@@ -20,6 +20,7 @@ public: // Methods
     double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel);
     void checkConditions(Ship &yellowJacket);
     void evolveSystem(Ship& currShip);
+    int rankOfFighter(Ship& currShip);
 public: // Members
     double maxForce{0};
     int duration{0};

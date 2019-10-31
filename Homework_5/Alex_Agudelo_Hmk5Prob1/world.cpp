@@ -68,7 +68,7 @@ double World::setForce(double force)
 void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
 {
     // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
-    if(currDuration > yellowJacket.id*200)
+    if(currDuration > rankOfFighter(yellowJacket)*200)
     {
         yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
         yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
@@ -148,6 +148,30 @@ void World::evolveSystem(Ship& currShip)
     currShip.velocity.x = currShip.velocity.x + currShip.force.x/yellowJacketMass;
     currShip.velocity.y = currShip.velocity.y + currShip.force.y/yellowJacketMass;
     currShip.velocity.z = currShip.velocity.z + currShip.force.z/yellowJacketMass;
+}
+
+int World::rankOfFighter(Ship& currShip)
+{
+    double currDistance = currShip.getFullDistance(buzzy.position);
+    int rank{0};
+    for(auto &ship : fighters)
+    {
+        if(ship.id != currShip.id)
+        {
+            double shipDist = ship.getFullDistance(buzzy.position);
+            if(shipDist < currDistance)
+            {
+                rank++;
+            }
+            else if (shipDist == currDistance)
+            {
+                if(ship.id < currShip.id)
+                {
+                    rank++;
+                }
+            }
+        }
+    }
 }
 
 
