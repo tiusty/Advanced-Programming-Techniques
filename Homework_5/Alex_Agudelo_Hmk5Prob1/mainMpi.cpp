@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 {
     int   numtasks, taskid, len;
     char hostname[MPI_MAX_PROCESSOR_NAME];
-    int sendArray[6];
-    int* pGatherBuffer;
+    double sendArray[7];
+    double* pGatherBuffer;
 
     int duration{0};
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     MPI_Get_processor_name(hostname, &len);
 
     printf("Hello from task %d on %s!\n", taskid, hostname);
-    pGatherBuffer = new int[6*8];
+    pGatherBuffer = new double[7*8];
 
     if (taskid == MASTER)
         printf("MASTER: Number of MPI tasks is: %d\n", numtasks);
@@ -41,13 +41,13 @@ int main(int argc, char *argv[])
     {
         if(taskid == MASTER)
         {
-            for(int i=0; i<6; i++)
+            for(int i=0; i<7; i++)
             {
                 sendArray[i] = counter*i*(taskid+1);
             }
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6, MPI_INT, MPI_COMM_WORLD);
+            MPI_Allgather(sendArray, 7, MPI_DOUBLE, pGatherBuffer, 7, MPI_DOUBLE, MPI_COMM_WORLD);
             printf("Master got");
-            for(int i=0; i<6*8; i++)
+            for(int i=0; i<7*8; i++)
             {
                 printf("%d ", pGatherBuffer[i]);
             }
@@ -56,11 +56,12 @@ int main(int argc, char *argv[])
         else
         {
 
-            for(int i=0; i<6; i++)
+            for(int i=0; i<7; i++)
             {
                 sendArray[i] = counter*i*(taskid+1);
             }
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6, MPI_INT, MPI_COMM_WORLD);
+            sendArray[6] += .2;
+            MPI_Allgather(sendArray, 7, MPI_INT, pGatherBuffer, 7, MPI_INT, MPI_COMM_WORLD);
         }
         counter++;
     }

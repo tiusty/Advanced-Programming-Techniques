@@ -15,6 +15,7 @@ Description:
 class World {
 public: // Methods
     World() = default;
+    World(double recBuf[], int bufLen);
     void loadData();
     double setForce(double force);
     void handleYellowJacket(Ship &yellowJacket, int currDuration);
@@ -25,6 +26,7 @@ public: // Methods
     std::string getStatus(const Ship &ship);
 
 public: // Members
+    static constexpr int elementsPerShip{7};
     double maxForce{0};
     int duration{0};
 

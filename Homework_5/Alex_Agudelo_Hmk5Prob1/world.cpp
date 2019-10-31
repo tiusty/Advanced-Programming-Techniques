@@ -9,6 +9,32 @@ Description:
 #include <iostream>
 #include "world.hpp"
 
+// Define constexpr variables
+constexpr int World::elementsPerShip;
+
+World::World(double recBuf[], int bufLen)
+{
+    // Array follows format
+    // [xPos, yPos, zPos, xVel, yVel, zVel, status]
+    // The first 7 are buzz
+    // each 7 after that is each fighter
+    if(bufLen < elementsPerShip * fighters.size())
+    {
+        std::cerr << "recBuf too small" << std::endl;
+        exit(1);
+    }
+    buzzy.position = {recBuf[0], recBuf[1], recBuf[2]};
+    buzzy.velocity = {recBuf[3], recBuf[4], recBuf[5]};
+
+    int fighterCount{1};
+    for(auto &ship : fighters)
+    {
+        ship.position = {recBuf[elementsPerShip*fighterCount], recBuf[elementsPerShip*fighterCount+1], recBuf[elementsPerShip*fighterCount+2]};
+        ship.velocity = {recBuf[elementsPerShip*fighterCount+3], recBuf[elementsPerShip*fighterCount+4], recBuf[elementsPerShip*fighterCount+5]};
+        ship.status = static_cast<int>(recBuf[elementsPerShip*fighterCount+6]);
+    }
+}
+
 void World::loadData()
 {
 std::ifstream file("in.dat");
