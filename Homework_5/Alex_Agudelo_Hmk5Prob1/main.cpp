@@ -16,7 +16,6 @@ bool checkConditions(Ship &yellowJacket,Ship &buzzy);
 void evolveSystem(Ship& currShip);
 Ship yellowJacket{};
 Ship buzzy{};
-Coordinate buzzyUnitVec{1,0,0};
 
 int main()
 {
@@ -85,13 +84,13 @@ void handleYellowJacket()
 {
     yellowJacket.force.x = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, yellowJacket.velocity.x,
                                                       buzzy.velocity.x,
-                                                      buzzy.position.x, buzzyUnitVec.x);
+                                                      buzzy.position.x, buzzy.getVelUnitVec().x);
     yellowJacket.force.y = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, yellowJacket.velocity.y,
                                                       buzzy.velocity.y,
-                                                      buzzy.position.y, buzzyUnitVec.y);
+                                                      buzzy.position.y, buzzy.getVelUnitVec().y);
     yellowJacket.force.z = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, yellowJacket.velocity.z,
                                                       buzzy.velocity.z,
-                                                      buzzy.position.z, buzzyUnitVec.z);
+                                                      buzzy.position.z, buzzy.getVelUnitVec().z);
 
     evolveSystem(yellowJacket);
 }

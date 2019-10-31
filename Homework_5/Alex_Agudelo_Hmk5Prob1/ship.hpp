@@ -32,7 +32,9 @@ public: // Methods
     double forceToGetVel(double startVel, double endVel);
     double getForce(double force);
     double getMagVel();
-    double getDistanceUnitVec(double pos, double norm);
+    double getMagPos();
+    Coordinate getVelUnitVec();
+    Coordinate getDistUnitVec();
 
 public: // Members
     Coordinate position{0,0,0};
