@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
             {
                 sendArray[i] = i*(taskid+1);
             }
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 8, MPI_INT, MPI_COMM_WORLD);
+            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6, MPI_INT, MPI_COMM_WORLD);
             printf("Master got");
             for(int i=0; i<6*8; i++)
             {
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
             {
                 sendArray[i] = i*(taskid+1);
             }
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 8, MPI_INT, MPI_COMM_WORLD);
+            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6, MPI_INT, MPI_COMM_WORLD);
         }
 //    }
 
