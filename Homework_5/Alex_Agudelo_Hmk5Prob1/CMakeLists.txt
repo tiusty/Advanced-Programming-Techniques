@@ -19,7 +19,8 @@ add_executable(exec
 
 target_link_libraries(exec
         PUBLIC
-            ship)
+            ship
+            world)
 
 add_library(ship
         ship.cpp
@@ -28,6 +29,13 @@ target_include_directories(ship
         PUBLIC
             ${CMAKE_CURRENT_LIST_DIR}
         )
+
+add_library(world
+        world.cpp)
+
+target_include_directories(world
+        PUBLIC
+            ${CMAKE_CURRENT_LIST_DIR})
 
 if(UNITTESTS)
     add_subdirectory(test)

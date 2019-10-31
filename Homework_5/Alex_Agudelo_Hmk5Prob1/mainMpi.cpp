@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     int   numtasks, taskid, len;
     char hostname[MPI_MAX_PROCESSOR_NAME];
     int sendArray[6];
+    int* pGatherBuffer;
 
     int duration{0};
 
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
     {
         if(taskid == MASTER)
         {
-            int* pGatherBuffer = new int[6*8];
+            pGatherBuffer = new int[6*8];
             for(int i=0; i<6; i++)
             {
                 sendArray[i] = i*(taskid+1);
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
                 printf("%d", sendArray[i]);
             }
             printf("\n");
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6*8, MPI_INT, MPI_COMM_WORLD);
+            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 8, MPI_INT, MPI_COMM_WORLD);
             printf("Master got");
             for(int i=0; i<6*8; i++)
             {
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
         else
         {
 
-            int* pGatherBuffer = new int[6*8];
+            pGatherBuffer = new int[6*8];
             for(int i=0; i<6; i++)
             {
                 sendArray[i] = i*(taskid+1);

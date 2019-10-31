@@ -6,6 +6,7 @@ Description:
 */
 #include <iostream>
 #include <cmath>
+#include <fstream>
 
 #include "ship.hpp"
 
@@ -20,6 +21,7 @@ Ship buzzy{};
 
 int main()
 {
+
     std::cout << "Hello World" << std::endl;
 
     // Read in files
@@ -41,6 +43,10 @@ int main()
     }
 
     return 1;
+}
+
+void initializeShips()
+{
 }
 
 bool checkConditions(Ship &yellowJacket,Ship &buzzy)
