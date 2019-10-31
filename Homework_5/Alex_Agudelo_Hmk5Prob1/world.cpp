@@ -9,12 +9,7 @@ Description:
 #include <iostream>
 #include "world.hpp"
 
-World::World()
-{
-
-}
-
-void Ship::loadData();
+void World::loadData()
 {
 std::ifstream file("in.dat");
 

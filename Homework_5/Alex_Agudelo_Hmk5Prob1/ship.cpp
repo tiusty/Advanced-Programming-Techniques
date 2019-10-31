@@ -9,24 +9,6 @@ Description:
 
 #include <cmath>
 
-int Ship::timeToGetToVel(double currVel, double desiredVel)
-{
-    return std::abs((desiredVel - currVel)*yellowJacketMass/maxForce);
-}
-
-int Ship::timeToDest(double pos, double dest, double vel)
-{
-    if(vel < 0)
-    {
-        return 10000;
-    }
-    if(vel != 0)
-    {
-        return std::abs(static_cast<int>(std::floor(getDistance(pos, dest)/vel)));
-    }
-    return 0;
-}
-
 Coordinate Ship::getVelUnitVec()
 {
     if(getMagVel() != 0)

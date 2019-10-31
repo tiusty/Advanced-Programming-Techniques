@@ -12,6 +12,7 @@ int main()
 {
     // Generate the world
     World world;
+    world.loadData();
 
     // Loop for the mount of time we are allowed
     for(int i=0; i< world.duration; i++)
