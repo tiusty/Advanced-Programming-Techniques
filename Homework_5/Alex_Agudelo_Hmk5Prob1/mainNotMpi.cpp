@@ -14,6 +14,9 @@ int main()
     World world;
     world.loadData();
 
+    double test[7*8];
+    world.getWorldData(test);
+
     // Loop for the mount of time we are allowed
     for(int i=0; i< world.duration; i++)
     {

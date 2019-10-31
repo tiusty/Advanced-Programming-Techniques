@@ -35,12 +35,27 @@ int main(int argc, char *argv[])
 
     // Set up variables for all MPI processes
     World world;
-    pWorldData = new double[world.elementsPerShip*numtasks];
+    int numWorldElements = world.elementsPerShip*numtasks;
+    pWorldData = new double[numWorldElements];
 
     if(taskid == MASTER)
     {
         world.loadData();
+        world.getWorldData(pWorldData);
     }
+    MPI_Bcast(pWorldData, numWorldElements, MPI_DOUBLE, MASTER, MPI_COMM_WORLD);
+    world.setWorldData(pWorldData);
+
+    if(taskid == 1)
+    {
+        std::cout << "printing world data" << std::endl;
+        for(int i=0; i<numWorldElements; i++)
+        {
+            std::cout << pWorldData[i] << " ";
+        }
+    }
+
+    MPI_Barrier(MPI_COMM_WORLD);
 
     int counter = 1;
     for(int i=0; i<3; i++)

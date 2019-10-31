@@ -63,6 +63,7 @@ void World::getWorldData(double *sendBuff)
             sendBuff[elementsPerShip*fighterCount+4] = ship.velocity.y;
             sendBuff[elementsPerShip*fighterCount+5] = ship.velocity.z;
             sendBuff[elementsPerShip*fighterCount+6] = ship.status;
+            fighterCount++;
         }
 
     }
