@@ -31,8 +31,13 @@ int main()
         {
             world.checkConditions(ship);
         }
-        std::cout << "End" << std::endl;
+    }
+
+    for(auto &ship :world.fighters)
+    {
+        std::cout << "Fighter: " << ship.id << ", status: " << world.getStatus(ship) << std::endl;
     }
 
     return 1;
 }
+

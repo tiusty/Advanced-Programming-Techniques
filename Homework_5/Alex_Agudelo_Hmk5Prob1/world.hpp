@@ -17,10 +17,12 @@ public: // Methods
     World();
     double setForce(double force);
     void handleYellowJacket(Ship &yellowJacket, int currDuration);
-    double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel);
+    double calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel, double forceVec);
     void checkConditions(Ship &yellowJacket);
     void evolveSystem(Ship& currShip);
     int rankOfFighter(Ship& currShip);
+    std::string getStatus(const Ship &ship);
+
 public: // Members
     double maxForce{0};
     int duration{0};

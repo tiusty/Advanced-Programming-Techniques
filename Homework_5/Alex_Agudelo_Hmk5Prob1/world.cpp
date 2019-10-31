@@ -70,19 +70,21 @@ void World::handleYellowJacket(Ship &yellowJacket, int currDuration)
     // Stagger the fighters from moving so that the one with the highest rank approaches buzzy first
     if(currDuration > rankOfFighter(yellowJacket)*200)
     {
-        yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
-        yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y);
-        yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z);
+        Coordinate forceVec = {(buzzy.position.x - yellowJacket.position.x)/yellowJacket.getFullDistance(buzzy.position), (buzzy.position.y - yellowJacket.position.y)/yellowJacket.getFullDistance(buzzy.position), (buzzy.position.z - yellowJacket.position.z)/yellowJacket.getFullDistance(buzzy.position)};
+        yellowJacket.force.x = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x, forceVec.x);
+        yellowJacket.force.y = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, buzzy.position.y, yellowJacket.velocity.y, buzzy.velocity.y, forceVec.y);
+        yellowJacket.force.z = calculateForce(yellowJacket, yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, buzzy.position.z, yellowJacket.velocity.z, buzzy.velocity.z, forceVec.z);
     }
 }
 
-double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel)
+double World::calculateForce(Ship ship, double dist3D, double currPos, double targetPos, double currVel, double targetVel, double forceVec)
 {
     double force{0};
     if (dist3D > 1000)
     {
         if (std::abs(currPos - targetPos) > 1000)
         {
+
             // Accelerate to the targetVel + 75 as quickly as possible
             force = setForce(ship.forceToGetVel(currVel, targetVel + 75));
         }
@@ -129,7 +131,7 @@ void World::checkConditions(Ship &yellowJacket)
         for(auto &ship : fighters)
         {
             double distance = yellowJacket.getFullDistance(ship.position);
-            if(distance < 250 && yellowJacket.id != ship.id)
+            if(distance < 250 && yellowJacket.id != ship.id && ship.status == 1)
             {
                 yellowJacket.status = 0;
                 ship.status=0;
@@ -171,6 +173,28 @@ int World::rankOfFighter(Ship& currShip)
                 }
             }
         }
+    }
+
+    return rank;
+}
+
+std::string World::getStatus(const Ship &ship)
+{
+    if(ship.status == 0)
+    {
+        return "Destroyed";
+    }
+    else if(ship.status == 1)
+    {
+        return "Still active";
+    }
+    else if (ship.status == 2)
+    {
+        return "Docked";
+    }
+    else
+    {
+        return "Unknown";
     }
 }
 
