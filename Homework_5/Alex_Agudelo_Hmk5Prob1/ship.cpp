@@ -9,17 +9,25 @@ Description:
 
 #include <cmath>
 
-int Ship::timeToStop(double velocity)
+int Ship::timeToGetToVel(double currVel, double desiredVel)
 {
-    // Do .95 percent so there is a margin due to the misfire
-    return std::abs(static_cast<int>(std::ceil((velocity/(maxForce*.95))*yellowJacketMass)));
+    return std::abs((desiredVel - currVel)*yellowJacketMass/maxForce);
+}
+
+double Ship::getForce(double force)
+{
+    return force;
 }
 
 int Ship::timeToDest(double pos, double dest, double vel)
 {
+    if(vel < 0)
+    {
+        return 10000;
+    }
     if(vel != 0)
     {
-        return std::abs(static_cast<int>(std::ceil(getDistance(pos, dest)/vel)));
+        return std::abs(static_cast<int>(std::floor(getDistance(pos, dest)/vel)));
     }
     return 0;
 }

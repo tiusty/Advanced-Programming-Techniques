@@ -19,7 +19,7 @@ TEST_P(ShipTimeToStopTestFixture, TestNominalAtFourFour)
     ship.velocity = std::get<0>(GetParam());
 
     // Act
-    int result = ship.timeToStop();
+    int result = ship.timeToGetToVel();
 
     // Result
     ASSERT_EQ(result, std::get<1>(GetParam()));

@@ -11,11 +11,11 @@ Description:
 
 
 void handleYellowJacket();
-double calculateYellowJacketForceApproach(double position, double vel, double dest);
-double calculateYellowJackDock(double position, double vel, double dest, double unitVec);
+double calculateYellowJacketForceApproach(double currPos, double currVel, double targetVel, double targetPos, double unitVec);
+bool checkConditions(Ship &yellowJacket,Ship &buzzy);
+void evolveSystem(Ship& currShip);
 Ship yellowJacket{};
-Coordinate destination{400,100, -100};
-double buzzySpeed = 5;
+Ship buzzy{};
 Coordinate buzzyUnitVec{1,0,0};
 
 int main()
@@ -27,24 +27,46 @@ int main()
     // Determine stating positions
 
     // On Buzzy just calculate new position
-    Ship buzzy{};
+    buzzy.position = {40,0,0};
+    buzzy.velocity = {300,0,0};
 
     for(int i=0; i< 500; i++)
     {
+        evolveSystem(buzzy);
         handleYellowJacket();
+        if(checkConditions(yellowJacket, buzzy))
+        {
+            break;
+        }
     }
 
-    // For each jacket
-    // 1. Determine the force necessary
-    //      Determine how many time steps to reach goal location at max speed
-    //      Calculate the position of buzz at that time step
-    //      Determine number of time steps to slow down to necessary speed
-    //          When the number of steps of steps is 4 then start slowing down at 4 + 4
-
-    //  If mag of distance is less than 1000 then stop and wait turn
-    //      The closest person who is less than 1000 will proceed to dock
-    // 2. Evolve the system
     return 1;
+}
+
+bool checkConditions(Ship &yellowJacket,Ship &buzzy)
+{
+    if(yellowJacket.getFullDistance(buzzy.position) < 50)
+    {
+        if(yellowJacket.getMagVel() < 1.1*buzzy.getMagVel())
+        {
+            double dotProduct = yellowJacket.velocity.x*buzzy.velocity.x + yellowJacket.velocity.y*buzzy.velocity.y+yellowJacket.velocity.z*buzzy.velocity.z;
+            if(dotProduct/(yellowJacket.getMagVel()*buzzy.getMagVel()) > .8)
+            {
+                yellowJacket.status = 2;
+            }
+            else
+            {
+                yellowJacket.status = 0;
+            }
+        }
+        else
+        {
+            yellowJacket.status = 0;
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -61,71 +83,45 @@ void evolveSystem(Ship& currShip)
 
 void handleYellowJacket()
 {
-    if(yellowJacket.getFullDistance(destination) > 100)
-    {
-        yellowJacket.force.x = calculateYellowJacketForceApproach(yellowJacket.position.x, yellowJacket.velocity.x,
-                                                                  destination.x);
-        yellowJacket.force.y = calculateYellowJacketForceApproach(yellowJacket.position.y, yellowJacket.velocity.y,
-                                                                  destination.y);
-        yellowJacket.force.z = calculateYellowJacketForceApproach(yellowJacket.position.z, yellowJacket.velocity.z,
-                                                                  destination.z);
-    }
-    else
-    {
-        yellowJacket.force.x = calculateYellowJackDock(yellowJacket.position.x, yellowJacket.velocity.x, destination.x,
-                                                       buzzyUnitVec.x);
-        yellowJacket.force.y = calculateYellowJackDock(yellowJacket.position.y, yellowJacket.velocity.y, destination.y,
-                                                       buzzyUnitVec.y);
-        yellowJacket.force.z = calculateYellowJackDock(yellowJacket.position.z, yellowJacket.velocity.z, destination.z,
-                                                       buzzyUnitVec.z);
-    }
+    Coordinate destination = buzzy.position;
+    yellowJacket.force.x = calculateYellowJacketForceApproach(yellowJacket.position.x, yellowJacket.velocity.x, buzzy.velocity.x,
+                                                              destination.x, buzzyUnitVec.x);
 
     evolveSystem(yellowJacket);
 }
 
-void calculateTimeToDest(const Coordinate& dest)
-{
-
-}
-
-double calculateYellowJackDock(double position, double vel, double dest, double unitVec)
-{
-    double force;
-    force = yellowJacket.forceToGetVel(vel, 1.05*buzzySpeed*unitVec);
-    return force;
-}
-
-double calculateYellowJacketForceApproach(double position, double vel, double dest)
+double calculateYellowJacketForceApproach(double currPos, double currVel, double targetVel, double targetPos, double unitVec)
 {
     double force{0};
     double timeDif{0};
-    if(yellowJacket.timeToStop(vel) > 0)
+    double timeToDest = yellowJacket.timeToDest(currPos, targetPos, currVel - targetVel);
+    double timeToVel = yellowJacket.timeToGetToVel(currVel, targetVel);
+    if(timeToVel > 0)
     {
-        timeDif = static_cast<double>(yellowJacket.timeToDest(position, dest, vel))/yellowJacket.timeToStop(vel);
+        timeDif = timeToDest/timeToVel;
     }
 
-    if(timeDif > 3)
+    // Force the docking speed when close to the target
+    if(std::abs(currPos - targetPos) < 500)
     {
-        force = yellowJacket.maxForce*yellowJacket.getDistanceUnitVec(position, dest);
+
+        force = yellowJacket.forceToGetVel(currVel, 1.05 * targetVel * unitVec);
     }
-    else if(timeDif > 1.5)
+    // If the current velocity is less than the target velocity then force it to accelerate at full speed
+    else if(currVel < targetVel)
     {
-        force = -yellowJacket.maxForce*(-(timeDif-1.5) + 1)*yellowJacket.getDistanceUnitVec(position, dest);
+
+        force = yellowJacket.getForce(yellowJacket.maxForce);
     }
-    else if (timeDif > .01)
+    // If the ship is far enough away then accelerate at full force
+    else if(timeDif > 2)
     {
-        force = yellowJacket.stopForce(vel);
+        force = yellowJacket.getForce(yellowJacket.maxForce);
     }
+    // If the ship is getting close then force it to slow down to a resonable speed
     else
     {
-        if(yellowJacket.getDistance(position, dest) > 10)
-        {
-            force = yellowJacket.maxForce*.1*yellowJacket.getDistanceUnitVec(position, dest);
-        }
-        else
-        {
-            std::cout << "2000 away" << std::endl;
-        }
+        force = yellowJacket.forceToGetVel(currVel, 1.05 * targetVel * unitVec);
     }
 
     return force;
