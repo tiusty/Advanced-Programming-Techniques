@@ -14,22 +14,6 @@ int Ship::timeToGetToVel(double currVel, double desiredVel)
     return std::abs((desiredVel - currVel)*yellowJacketMass/maxForce);
 }
 
-double Ship::getForce(double force)
-{
-    if(force > maxForce)
-    {
-        return maxForce;
-    }
-    else if(force < -maxForce)
-    {
-        return -maxForce;
-    }
-    else
-    {
-        return force;
-    }
-}
-
 int Ship::timeToDest(double pos, double dest, double vel)
 {
     if(vel < 0)

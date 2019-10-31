@@ -30,7 +30,6 @@ public: // Methods
     double getDistance(double pos, double dest);
     double getFullDistance(Coordinate dest);
     double forceToGetVel(double startVel, double endVel);
-    double getForce(double force);
     double getMagVel();
     double getMagPos();
     Coordinate getVelUnitVec();
@@ -40,7 +39,7 @@ public: // Members
     Coordinate position{0,0,0};
     Coordinate velocity{10,0,0};
     Coordinate force{0,0,0};
-    int maxForce{54000};
+    double maxForce{0};
     int status{1};
 };
 
