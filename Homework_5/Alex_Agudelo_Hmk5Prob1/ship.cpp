@@ -16,7 +16,18 @@ int Ship::timeToGetToVel(double currVel, double desiredVel)
 
 double Ship::getForce(double force)
 {
-    return force;
+    if(force > maxForce)
+    {
+        return maxForce;
+    }
+    else if(force < -maxForce)
+    {
+        return -maxForce;
+    }
+    else
+    {
+        return force;
+    }
 }
 
 int Ship::timeToDest(double pos, double dest, double vel)

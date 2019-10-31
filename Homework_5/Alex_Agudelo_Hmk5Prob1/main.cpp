@@ -1,74 +1,162 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 10/31/19
+Last date modified: 10/29/19
 Description: 
 */
-
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <array>
+#include <cmath>
 
-#include "mpi.h"
-#define  MASTER		0
+#include "ship.hpp"
 
-int main(int argc, char *argv[])
+
+void handleYellowJacket();
+double calculateForce(double dist3D, double currPos, double targetPos, double currVel, double targetVel);
+double calculateYellowJacketForce(double fullDist, double currPos, double currVel, double targetVel, double targetPos, double targetVelUnitVec, double targetDistUnitVec);
+bool checkConditions(Ship &yellowJacket,Ship &buzzy);
+void evolveSystem(Ship& currShip);
+Ship yellowJacket{};
+Ship buzzy{};
+
+int main()
 {
-    int   numtasks, taskid, len;
-    char hostname[MPI_MAX_PROCESSOR_NAME];
-    int sendArray[6];
+    std::cout << "Hello World" << std::endl;
 
-    int duration{0};
+    // Read in files
 
+    // Determine stating positions
 
-    MPI_Init(&argc, &argv);
+    // On Buzzy just calculate new position
+    buzzy.position = {1000,0,0};
+    buzzy.velocity = {300,0,0};
 
-
-    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
-    MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
-    MPI_Get_processor_name(hostname, &len);
-
-    printf("Hello from task %d on %s!\n", taskid, hostname);
-
-    if (taskid == MASTER)
-        printf("MASTER: Number of MPI tasks is: %d\n", numtasks);
-
-    for(int i=0; i<2; i++)
+    for(int i=0; i< 5000; i++)
     {
-        if(taskid == MASTER)
+        evolveSystem(buzzy);
+        handleYellowJacket();
+        if(checkConditions(yellowJacket, buzzy))
         {
-            int* pGatherBuffer = new int[6*8];
-            for(int i=0; i<6; i++)
-            {
-                sendArray[i] = i*(taskid+1);
-            }
-            for(int i=0; i<6; i++)
-            {
-                printf("%d", sendArray[i]);
-            }
-            printf("\n");
-            MPI_Allgather(sendArray, 6, MPI_INT, pGatherBuffer, 6*8, MPI_INT, MPI_COMM_WORLD);
-            printf("Master got");
-            for(int i=0; i<6*8; i++)
-            {
-                printf("%d", pGatherBuffer[i]);
-            }
-            printf("\n");
-        }
-        else
-        {
-
-            int* pGatherBuffer = new int[6*8];
-            for(int i=0; i<6; i++)
-            {
-                sendArray[i] = i*(taskid+1);
-            }
-            printf("Task done %d on %s!\n", taskid, hostname);
-            MPI_Allgather(sendArray, 1, MPI_INT, pGatherBuffer, 1, MPI_INT, MPI_COMM_WORLD);
+            break;
         }
     }
 
-    MPI_Finalize();
+    return 1;
+}
+
+bool checkConditions(Ship &yellowJacket,Ship &buzzy)
+{
+    if(yellowJacket.getFullDistance(buzzy.position) < 50)
+    {
+        if(yellowJacket.getMagVel() < 1.1*buzzy.getMagVel())
+        {
+            double dotProduct = yellowJacket.velocity.x*buzzy.velocity.x + yellowJacket.velocity.y*buzzy.velocity.y+yellowJacket.velocity.z*buzzy.velocity.z;
+            if(dotProduct/(yellowJacket.getMagVel()*buzzy.getMagVel()) > .8)
+            {
+                yellowJacket.status = 2;
+            }
+            else
+            {
+                yellowJacket.status = 0;
+            }
+        }
+        else
+        {
+            yellowJacket.status = 0;
+        }
+        return true;
+    }
+
+    return false;
+}
+
+
+void evolveSystem(Ship& currShip)
+{
+    currShip.position.x = currShip.position.x + currShip.velocity.x + (currShip.force.x/yellowJacketMass)/2;
+    currShip.position.y = currShip.position.y + currShip.velocity.y + (currShip.force.y/yellowJacketMass)/2;
+    currShip.position.z = currShip.position.z + currShip.velocity.z + (currShip.force.z/yellowJacketMass)/2;
+
+    currShip.velocity.x = currShip.velocity.x + currShip.force.x/yellowJacketMass;
+    currShip.velocity.y = currShip.velocity.y + currShip.force.y/yellowJacketMass;
+    currShip.velocity.z = currShip.velocity.z + currShip.force.z/yellowJacketMass;
+}
+
+void handleYellowJacket()
+{
+    yellowJacket.force.x = calculateForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, buzzy.position.x, yellowJacket.velocity.x, buzzy.velocity.x);
+//    yellowJacket.force.x = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.x, yellowJacket.velocity.x,
+//                                                      buzzy.velocity.x,
+//                                                      buzzy.position.x, buzzy.getVelUnitVec().x, buzzy.getDistUnitVec().x);
+//    yellowJacket.force.y = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.y, yellowJacket.velocity.y,
+//                                                      buzzy.velocity.y,
+//                                                      buzzy.position.y, buzzy.getVelUnitVec().y, buzzy.getDistUnitVec().y);
+//    yellowJacket.force.z = calculateYellowJacketForce(yellowJacket.getFullDistance(buzzy.position), yellowJacket.position.z, yellowJacket.velocity.z,
+//                                                      buzzy.velocity.z,
+//                                                      buzzy.position.z, buzzy.getVelUnitVec().z, buzzy.getDistUnitVec().z);
+
+    evolveSystem(yellowJacket);
+}
+
+double calculateForce(double dist3D, double currPos, double targetPos, double currVel, double targetVel)
+{
+    double force{0};
+    if (dist3D > 1000)
+    {
+        if (std::abs(currPos - targetPos) > 1000)
+        {
+            force = yellowJacket.getForce(yellowJacket.forceToGetVel(currVel, targetVel + 75));
+
+        }
+        else
+        {
+            force = yellowJacket.getForce(yellowJacket.forceToGetVel(currVel, targetVel) + (targetPos - currPos)*.01*yellowJacket.maxForce);
+        }
+    }
+    else
+    {
+        force = yellowJacket.getForce(yellowJacket.forceToGetVel(currVel, targetVel) + (targetPos - currPos)*.0003*yellowJacket.maxForce);
+    }
+
+    return force;
+}
+
+double calculateYellowJacketForce(double fullDist, double currPos, double currVel, double targetVel, double targetCurrPos, double targetVelUnitVec, double targetDistUnitVec)
+{
+    double targetPos = targetCurrPos + targetVel;
+    double force{0};
+    double timeDif{0};
+    double timeToDest = yellowJacket.timeToDest(currPos, targetPos, currVel - targetVel);
+    double timeToVel = yellowJacket.timeToGetToVel(currVel, targetVel);
+    if(timeToVel > 0)
+    {
+        timeDif = timeToDest/timeToVel;
+    }
+
+    // When close, line up
+
+    // Force the docking speed when close to the target
+    if(fullDist < 100)
+    {
+        force = yellowJacket.forceToGetVel(currVel, 1.05*targetVel);
+    }
+    // If the ship is far enough away then accelerate at full force
+    else if(timeDif > 2)
+    {
+        force = yellowJacket.getForce(yellowJacket.maxForce);
+    }
+    // If the ship is getting close then force it to slow down to a resonable speed
+    else
+    {
+        if(std::abs(currPos - targetPos) > 10 && timeDif == 0)
+        {
+            force = yellowJacket.maxForce*.1;
+        }
+        else
+        {
+            force = yellowJacket.forceToGetVel(currVel, .99*targetVel * targetVelUnitVec);
+        }
+    }
+
+    return force;
 }
 
