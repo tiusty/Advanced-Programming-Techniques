@@ -17,16 +17,14 @@ Description:
 
 int main(int argc, char *argv[])
 {
+    // Declare variables
     int   numtasks, taskid, len, rc;
     char hostname[MPI_MAX_PROCESSOR_NAME];
     double shipData[World::elementsPerShip];
     double* pWorldData;
 
-    int duration{0};
-
-
+    // Setup MPI
     MPI_Init(&argc, &argv);
-
 
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
@@ -38,6 +36,7 @@ int main(int argc, char *argv[])
     int miscData[2]{0};
     pWorldData = new double[numWorldElements];
 
+    // Master will load data
     if(taskid == MASTER)
     {
         world.loadData();
@@ -45,12 +44,15 @@ int main(int argc, char *argv[])
         miscData[0] = world.maxForce;
         miscData[1] = world.duration;
     }
+    // Send world data to all other processes
     MPI_Bcast(pWorldData, numWorldElements, MPI_DOUBLE, MASTER, MPI_COMM_WORLD);
     world.setWorldData(pWorldData);
+    // Send misc data such as max force and duration to other processes
     MPI_Bcast(miscData, 2, MPI_INT, MASTER, MPI_COMM_WORLD);
     world.maxForce = miscData[0];
     world.duration = miscData[1];
 
+    // Run simulation for the duration allocated
     for(int i=0; i<world.duration; i++)
     {
         if(taskid == MASTER)
@@ -58,7 +60,6 @@ int main(int argc, char *argv[])
 
             // Evolve the world
             world.evolveSystem(world.buzzy);
-//            printf("Before all gather master on %s!\n", taskid, hostname);
 
             // Get the data for buzzy
             world.getShipDataBuzzy(shipData);
@@ -68,6 +69,7 @@ int main(int argc, char *argv[])
             // Update the world with the new data
             world.setWorldData(pWorldData);
 
+            // Print out fighter data
             for(int j=0; j<numtasks-1; j++)
             {
                 Ship *fighter = &world.fighters.at(j);
@@ -77,6 +79,7 @@ int main(int argc, char *argv[])
         }
         else
         {
+            //The fighter num is determined by taskid
             int shipNum = taskid -1;
 
             // Calculate and set forces for each yellow jacket
@@ -99,10 +102,13 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Master process print out result of simulation
     if(taskid == MASTER)
     {
         world.printResult();
     }
+
+    // End MPI
     MPI_Finalize();
 }
 
