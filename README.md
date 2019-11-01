@@ -17,3 +17,7 @@ Homework 3:
 Homework 4:
 - Sockets, UDP
 - Created a UDP client and server that sends messages back and forth
+
+Homework 5:
+- Used MPI
+- docking fighter jets onto the main ship, each ship using its own process and communicating over MPI
