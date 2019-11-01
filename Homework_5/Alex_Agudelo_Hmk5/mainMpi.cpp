@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
             world.setWorldData(pWorldData);
 
             // Print out fighter data
-            for(int j=1; j<numtasks; j++)
+            for(int j=0; j<numtasks-1; j++)
             {
                 Ship *fighter = &world.fighters.at(j);
                 std::cout << std::scientific << std::setprecision(6);
-                std::cout << j << "," << fighter->status << "," << fighter->position.x << "," << fighter->position.y << "," << fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
+                std::cout << j+1 << "," << fighter->status << "," << fighter->position.x << "," << fighter->position.y << "," << fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
             }
         }
         // Each of the other processes handles one of the yellow jackets
