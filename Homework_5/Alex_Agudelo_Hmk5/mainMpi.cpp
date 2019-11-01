@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
             world.setWorldData(pWorldData);
 
             // Print out fighter data
-            for(int j=0; j<numtasks-1; j++)
+            for(int j=1; j<numtasks; j++)
             {
                 Ship *fighter = &world.fighters.at(j);
                 std::cout << std::scientific << std::setprecision(6);
