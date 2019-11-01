@@ -6,7 +6,7 @@ Description: This main function tests the code without using mpi
 */
 #include <iostream>
 
-#include "world.hpp"
+#include "world.h"
 
 int main()
 {

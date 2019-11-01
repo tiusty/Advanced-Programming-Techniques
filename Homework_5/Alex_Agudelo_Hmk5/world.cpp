@@ -9,7 +9,7 @@ Description:
 #include <fstream>
 #include <iostream>
 #include <cmath>
-#include "world.hpp"
+#include "world.h"
 #include <random>
 
 // Define constexpr variables

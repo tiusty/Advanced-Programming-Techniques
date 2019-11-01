@@ -12,7 +12,7 @@ Description:
 #include <iomanip>
 
 #include "mpi.h"
-#include "world.hpp"
+#include "world.h"
 #define  MASTER		0
 
 int main(int argc, char *argv[])
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     // Master process print out result of simulation
     if(taskid == MASTER)
     {
-        world.printResult();
+//        world.printResult();
     }
 
     // End MPI

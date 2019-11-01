@@ -6,7 +6,7 @@ Description:
  Implements ship functionality
 */
 
-#include "ship.hpp"
+#include "ship.h"
 
 #include <cmath>
 

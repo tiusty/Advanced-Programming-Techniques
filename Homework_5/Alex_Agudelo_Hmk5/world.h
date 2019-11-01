@@ -11,7 +11,7 @@ Description:
 
 #include <array>
 
-#include "ship.hpp"
+#include "ship.h"
 
 /**
  * The world stores all the ships, and functionality related to moving the ships
