@@ -6,7 +6,7 @@
 
 #PBS -j oe
 
-cd ~/data/Alex_Agudelo_Hmk5Prob1/
+cd ~/data/Alex_Agudelo_Hmk5/
 echo "Started Job..."
 module load gcc mvapich2
 mpirun -np 8 ./exec
