@@ -21,7 +21,7 @@ Description:
  *
  * This is used in two ways
  * 1. Just as the ship data which only contains those 10 elements for a single ship
- * 2. in the world data ship contains those 10 elements concatenated together with the
+ * 2. In the world dataw which contains those 10 elements concatenated together with the
  * rest of the ships so that follow the format
  * [buzzy, ship1, ship2...]
  * that patter is repeated for buzzy + # of fighters

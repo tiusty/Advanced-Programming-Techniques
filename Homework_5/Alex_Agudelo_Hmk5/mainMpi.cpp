@@ -45,15 +45,28 @@ int main(int argc, char *argv[])
         miscData[0] = world.maxForce;
         miscData[1] = world.duration;
     }
-    // Send world data to all other processes
+    // Master node will send data to all other processes
+    //  All other processes will block here until master broadcasts the data
     MPI_Bcast(pWorldData, numWorldElements, MPI_DOUBLE, MASTER, MPI_COMM_WORLD);
+
+    // This is executed on all processes.
+    // Given the pWorldData that every process received from master (including master itself)
+    //  Use that data to initialize the world data locally for each process
     world.setWorldData(pWorldData);
-    // Send misc data such as max force and duration to other processes
+
+    // Master process will send the MISC data to all other processes
+    // Blocking call, that waits for all processes to call MPI_Bcast before moving on
     MPI_Bcast(miscData, 2, MPI_INT, MASTER, MPI_COMM_WORLD);
+
+    // All processes will set the misc data locally
     world.maxForce = miscData[0];
     world.duration = miscData[1];
 
-    // Run simulation for the duration allocated
+    // All processes will run the simulation locally for the allocated amount of time
+    // This for loop stay syncronized by the MPI_Allgather.
+    // MPI_Allgather blocks until all processes (including master) call the function.
+    // Once all the processes call MPI_Allgather, they all receive the aggregated data from
+    //  all the processes and continue executing
     for(int i=0; i<world.duration; i++)
     {
         // Master handles only the buzzy dynamics
@@ -61,6 +74,7 @@ int main(int argc, char *argv[])
         {
 
             // Evolve buzzy location
+            // Buzzy moves at constant speed so no need to calculate force
             world.evolveSystem(world.buzzy);
 
             // Get the data for buzzy
@@ -79,13 +93,13 @@ int main(int argc, char *argv[])
                 std::cout << j+1 << "," << fighter->status << "," << fighter->position.x << "," << fighter->position.y << "," << fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
             }
         }
-        // Each of the other processes handles one of the yellow jackets
+        // Each of the other processes handles one of the yellow jackets (fighters)
         else
         {
             //The fighter num is determined by taskid
             int shipNum = taskid -1;
 
-            // Calculate and set forces for the processes yellow jacket
+            // Calculate and set forces for the processes's yellow jacket
             world.handleYellowJacket(world.fighters.at(shipNum), i);
 
             // Evolve the ship location based on force calculated
@@ -101,8 +115,8 @@ int main(int argc, char *argv[])
             //  All the ship data together in one array.
             MPI_Allgather(shipData, 10, MPI_DOUBLE, pWorldData, 10, MPI_DOUBLE, MPI_COMM_WORLD);
 
-            // Since every process has the ship data from every other process
-            //  Update the current processes world information from the data it received from all the other processes
+            // Since every process has the aggregated ship data from every other process
+            //  Update the ;pca; process's world information from the data it received from all the other processes
             world.setWorldData(pWorldData);
 
             // Check the conditions to see if any fighters crashed etc
