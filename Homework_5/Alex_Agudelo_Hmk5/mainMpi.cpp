@@ -3,6 +3,7 @@ Author: Alex Agudelo
 Class: ECE 6122
 Last date modified: 10/31/19
 Description: 
+    Main function using MPI. Initializes MPI framework and calls each fighter on a different node(Process)
 */
 
 #include <iostream>
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
     int miscData[2]{0};
     pWorldData = new double[numWorldElements];
 
-    // Master will load data
+    // Master will load data, the rest of the processes will wait to receive the data from the Master process
     if(taskid == MASTER)
     {
         world.loadData();
@@ -55,10 +56,11 @@ int main(int argc, char *argv[])
     // Run simulation for the duration allocated
     for(int i=0; i<world.duration; i++)
     {
+        // Master handles only the buzzy dynamics
         if(taskid == MASTER)
         {
 
-            // Evolve the world
+            // Evolve buzzy location
             world.evolveSystem(world.buzzy);
 
             // Get the data for buzzy
@@ -77,24 +79,30 @@ int main(int argc, char *argv[])
                 std::cout << j << "," << fighter->status << "," << fighter->position.x << "," << fighter->position.y << "," << fighter->position.z << "," << fighter->force.x << "," << fighter->force.y << "," << fighter->force.z << std::endl;
             }
         }
+        // Each of the other processes handles one of the yellow jackets
         else
         {
             //The fighter num is determined by taskid
             int shipNum = taskid -1;
 
-            // Calculate and set forces for each yellow jacket
+            // Calculate and set forces for the processes yellow jacket
             world.handleYellowJacket(world.fighters.at(shipNum), i);
 
-            // Evolve the world
+            // Evolve the ship location based on force calculated
+            // Each process will evolve their own ship
             world.evolveSystem(world.fighters.at(shipNum));
 
             // Return the ship data for this process
             world.getShipData(shipData, shipNum);
 
-            // Wait for everyone to send the data
+            // Blocks until everyone calls allgather (including master)
+            // Each process will add their own shipData and afterwards,
+            //  Every process will have the aggregated pWorldData which contains
+            //  All the ship data together in one array.
             MPI_Allgather(shipData, 10, MPI_DOUBLE, pWorldData, 10, MPI_DOUBLE, MPI_COMM_WORLD);
 
-            // Update the world with the new data
+            // Since every process has the ship data from every other process
+            //  Update the current processes world information from the data it received from all the other processes
             world.setWorldData(pWorldData);
 
             // Check the conditions to see if any fighters crashed etc
