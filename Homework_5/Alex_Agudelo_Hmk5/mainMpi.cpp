@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 //        world.printResult();
     }
     
-    // Delete the dynamic memory on each proces to prevent memory leak
+    // Delete the dynamic memory on each process to prevent memory leak
     delete pWorldData;
 
     // End MPI
