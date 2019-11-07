@@ -12,7 +12,6 @@ Homework 2:
 
 Homework 3:
 - Multi-threading, openMP
-- Solved problems with openMP
 
 Homework 4:
 - Sockets, UDP
