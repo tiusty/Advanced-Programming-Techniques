@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
             // Update the world with the new data
             world.setWorldData(pWorldData);
 
-            // Print out fighter data
+            // Print out fighter data each iteration
             for(int j=0; j<numtasks-1; j++)
             {
                 Ship *fighter = &world.fighters.at(j);
@@ -129,6 +129,9 @@ int main(int argc, char *argv[])
     {
 //        world.printResult();
     }
+    
+    // Delete the dynamic memory on each proces to prevent memory leak
+    delete pWorldData;
 
     // End MPI
     MPI_Finalize();
