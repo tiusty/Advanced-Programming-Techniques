@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_executable(${PROJECT_NAME}
-        exampleCode/mainHelloWorld.cpp)
+        main.cpp)
 
 target_link_libraries (${PROJECT_NAME}
         PUBLIC
