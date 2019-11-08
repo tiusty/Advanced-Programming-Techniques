@@ -9,11 +9,12 @@ Description:
 #include <iostream>
 
 // Camera position
-float x = 100.0, y = 100.0; // initially 5 units south of origin
+float x = 30, y = 30; // initially 5 units south of origin
 float deltaMove = 0.0; // initially camera doesn't move
+double squareLen = 10;
 
 // Camera direction
-float lx = 0.0, ly = 1.0; // camera points initially along y-axis
+float lx = 1.0, ly = 0; // camera points initially along y-axis
 float angle = 0.0; // angle of rotation for the camera direction
 float deltaAngle = 0.0; // additional angle change when dragging
 
@@ -29,6 +30,16 @@ void display()
     glVertex2f(0.5, -0.5);
     glEnd();
     glutSwapBuffers();
+}
+
+void changeSize(int w, int h)
+{
+    float ratio = ((float)w) / ((float)h); // window aspect ratio
+    glMatrixMode(GL_PROJECTION); // projection matrix is active
+    glLoadIdentity(); // reset the projection
+    gluPerspective(45.0, ratio, 0.1, 200.0); // perspective transformation
+    glMatrixMode(GL_MODELVIEW); // return to modelview mode
+    glViewport(0, 0, w, h); // set viewport (drawing area) to entire window
 }
 
 void update(void)
@@ -59,11 +70,21 @@ void releaseSpecialKey(int key, int x, int y)
     }
 }
 
+void drawSquare()
+{
+    glBegin(GL_QUADS);
+    glVertex3f(0, 0, 0.0);
+    glVertex3f(squareLen, 0, 0.0);
+    glVertex3f(squareLen, squareLen, 0.0);
+    glVertex3f(0, squareLen, 0.0);
+    glEnd();
+}
+
 
 void renderScene()
-    {
-        // Clear color and depth buffers
-        glClearColor(0.0, 0.7, 1.0, 1.0); // sky color is light blue
+{
+    // Clear color and depth buffers
+    glClearColor(0.0, 0.7, 1.0, 1.0); // sky color is light blue
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Reset transformations
@@ -72,9 +93,9 @@ void renderScene()
         // Set the camera centered at (x,y,1) and looking along directional
         // vector (lx, ly, 0), with the z-axis pointing up
         gluLookAt(
-                x, y, 1.0,
+                x, y, 150,
                 x + lx, y + ly, 0.0,
-                0.0, 0.0, 1.0);
+                0.0, 1.0, 0.0);
 
         // Draw ground - 200x200 square colored green
         bool color = true;
@@ -95,12 +116,8 @@ void renderScene()
                     glColor3f(0,0,0);
                 }
                 glPushMatrix();
-                glBegin(GL_QUADS);
-                glVertex3f(0+100*i, 0+100*j, 0.0);
-                glVertex3f(100+100*i, 0 + 100*j, 0.0);
-                glVertex3f(100.0+100*i, 100.0+100*j, 0.0);
-                glVertex3f(0 + 100*i, 100.0 + 100*j, 0.0);
-                glEnd();
+                glTranslatef(i*squareLen, j*squareLen, 0);
+                drawSquare();
                 glPopMatrix();
                 color = !color;
             }
@@ -121,6 +138,10 @@ int main(int argc, char **argv)
     // Warning: Nonstandard function! Delete if desired.
     glutSpecialUpFunc(releaseSpecialKey); // process special key release
     glutDisplayFunc(renderScene);
+    glutReshapeFunc(changeSize); // window reshape callback
+
+    // OpenGL init
+    glEnable(GL_DEPTH_TEST);
     glutMainLoop();
 }
 
