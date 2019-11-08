@@ -12,7 +12,14 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Add the directories for the different problems
+add_executable(${PROJECT_NAME}
+        exampleCode/mainHelloWorld.cpp)
+
+target_link_libraries (${PROJECT_NAME}
+        PUBLIC
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARIES})
+
 add_executable(helloWorld
         exampleCode/mainHelloWorld.cpp)
 
