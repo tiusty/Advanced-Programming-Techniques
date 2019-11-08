@@ -13,10 +13,26 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Add the directories for the different problems
-add_executable(${PROJECT_NAME}
-        main.cpp)
+add_executable(helloWorld
+        exampleCode/mainHelloWorld.cpp)
 
-target_link_libraries (${PROJECT_NAME}
+target_link_libraries (helloWorld
+        PUBLIC
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARIES})
+
+add_executable(snowMen
+        exampleCode/mainSnowMen.cpp)
+
+target_link_libraries (snowMen
+        PUBLIC
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARIES})
+
+add_executable(solarSystem
+        exampleCode/mainSolarSystem.cpp)
+
+target_link_libraries (solarSystem
         PUBLIC
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES})
