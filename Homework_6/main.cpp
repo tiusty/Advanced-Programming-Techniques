@@ -132,20 +132,31 @@ void renderScene()
 
 int main(int argc, char **argv)
 {
-    int mode = GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH;
+
+    // Initialize glut
     glutInit(&argc, argv);
+
+    // Turn on RGB color, double buffering and depth testing
+    int mode = GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH;
     glutInitDisplayMode(mode);
+
+    // Set the initial window size
     glutInitWindowSize(600, 600);
+
+    // Create the window, with the program name as the window name
     glutCreateWindow(argv[0]);
+
     glutIdleFunc(update); // incremental update
     glutSpecialFunc(pressSpecialKey); // process special key pressed
     // Warning: Nonstandard function! Delete if desired.
     glutSpecialUpFunc(releaseSpecialKey); // process special key release
-    glutDisplayFunc(renderScene);
+    glutDisplayFunc(renderScene); // Renders the scene
     glutReshapeFunc(changeSize); // window reshape callback
 
-    // OpenGL init
+    // Enable depth test so thigns are rendered based on depth
     glEnable(GL_DEPTH_TEST);
+
+    // Start blocking glut main loop
     glutMainLoop();
 }
 
