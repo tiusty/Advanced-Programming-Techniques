@@ -9,7 +9,11 @@ Description:
 #include <iostream>
 #include <GL/glut.h>
 
+#include "board.h"
+
 #define ESC 27
+
+Board board;
 
 // Camera position
 float x = 40, y = -40, z = 100; // initially 5 units south of origin
@@ -25,19 +29,6 @@ GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_position[] = { 1.0, 1.0, 1.0, 0.0 };
-
-void display()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor4f(1, 1, 0, 1);
-    glBegin(GL_POLYGON);
-    glVertex2f(-0.5, -0.5);
-    glVertex2f(-0.5, 0.5);
-    glVertex2f(0.5, 0.5);
-    glVertex2f(0.5, -0.5);
-    glEnd();
-    glutSwapBuffers();
-}
 
 void changeSize(int w, int h)
 {
@@ -184,9 +175,6 @@ int main(int argc, char **argv)
     glutDisplayFunc(renderScene); // Renders the scene
     glutReshapeFunc(changeSize); // window reshape callback
     glutKeyboardFunc(processNormalKeys);
-//    glMatrixMode(GL_PROJECTION);
-//    gluPerspective(180.0, 4.5, 1.0,10.0);
-//    glMatrixMode(GL_MODELVIEW);
 
     // Start blocking glut main loop
     glutMainLoop();

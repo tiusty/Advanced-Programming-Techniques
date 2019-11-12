@@ -17,7 +17,8 @@ add_executable(${PROJECT_NAME}
 target_link_libraries (${PROJECT_NAME}
         PUBLIC
         ${OPENGL_LIBRARIES}
-        ${GLUT_LIBRARIES})
+        ${GLUT_LIBRARIES}
+        board)
 
 add_executable(helloWorld
         exampleCode/mainHelloWorld.cpp)
@@ -42,3 +43,12 @@ target_link_libraries (solarSystem
         PUBLIC
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES})
+
+add_library(board
+        board.cpp
+        space.cpp)
+
+target_include_directories(board
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}
+        )
