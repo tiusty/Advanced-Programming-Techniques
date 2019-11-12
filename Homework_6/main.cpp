@@ -12,7 +12,7 @@ Description:
 #define ESC 27
 
 // Camera position
-float x = 30, y = 30; // initially 5 units south of origin
+float x = 40, y = -40, z = 100; // initially 5 units south of origin
 float deltaMove = 0.0; // initially camera doesn't move
 double squareLen = 10;
 
@@ -123,9 +123,9 @@ void renderScene()
     // Set the camera centered at (x,y,1) and looking along directional
     // vector (lx, ly, 0), with the z-axis pointing up
     gluLookAt(
-            x, y, 150,
-            x + lx, y + ly, 0.0,
-            0.0, 1.0, 0.0);
+            x, y, z,
+            40, 40, 0.0,
+            0.0, 0.0, 1.0);
 
     // Draw ground - 200x200 square colored green
     bool color = true;
