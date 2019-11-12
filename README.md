@@ -22,5 +22,5 @@ Homework 5:
 - docking fighter jets onto the main ship, each ship using its own process and communicating over MPI
 
 Homework 6:
-Open GL, glut
-Drawing a chess board
+- Open GL, glut
+- Drawing a chess board
