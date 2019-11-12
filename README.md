@@ -20,3 +20,7 @@ Homework 4:
 Homework 5:
 - Used MPI
 - docking fighter jets onto the main ship, each ship using its own process and communicating over MPI
+
+Homework 6:
+Open GL, glut
+Drawing a chess board
