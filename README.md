@@ -23,4 +23,4 @@ Homework 5:
 
 Homework 6:
 - Open GL, glut
-- Drawing a chess board
+- Drawing a 3D chess board with lighting and key stroke actions
