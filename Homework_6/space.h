@@ -12,7 +12,7 @@ enum class Piece
 {
     nothing,
     pawn,
-    rock,
+    rook,
     knight,
     bishop,
     king,
@@ -20,7 +20,18 @@ enum class Piece
 };
 
 class Space {
+public: // Methods
+    void draw();
+    void drawPawn();
+    void drawRook();
+    void drawKnight();
+    void drawBishop();
+    void drawQueen();
+    void drawKing();
+    void setColor();
+
 public: // Members
+    bool team{false};
     bool occupied{false};
     Piece type{Piece::nothing};
 };

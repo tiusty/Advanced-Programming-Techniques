@@ -16,19 +16,20 @@ Description:
 Board board;
 
 // Camera position
-float x = 40, y = -40, z = 100; // initially 5 units south of origin
+float x = 4, y = -5, z = 10; // initially 5 units south of origin
 float deltaMove = 0.0; // initially camera doesn't move
-double squareLen = 10;
 
 // Camera direction
 float lx = 1.0, ly = 0; // camera points initially along y-axis
 float angle = 0.0; // angle of rotation for the camera direction
 float deltaAngle = 0.0; // additional angle change when dragging
 
-GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+GLfloat light0_specular[] = { 0.8, 0.8, 0.8, 1.0 };
 GLfloat light0_position[] = { 1.0, 1.0, 1.0, 0.0 };
+
+GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light1_position[] = { -5, -5, 8};
 
 void changeSize(int w, int h)
 {
@@ -80,9 +81,9 @@ void drawSquare()
 {
     glBegin(GL_QUADS);
     glVertex3f(0, 0, 0.0);
-    glVertex3f(squareLen, 0, 0.0);
-    glVertex3f(squareLen, squareLen, 0.0);
-    glVertex3f(0, squareLen, 0.0);
+    glVertex3f(Board::boardLen, 0, 0.0);
+    glVertex3f(Board::boardLen, Board::boardLen, 0.0);
+    glVertex3f(0, Board::boardLen, 0.0);
     glEnd();
 }
 
@@ -104,8 +105,11 @@ void renderScene()
     glEnable(GL_LIGHT0);
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
     glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+
+    glEnable(GL_LIGHT1);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+    glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 
     // Enable depth test so things are rendered based on depth
     glEnable(GL_DEPTH_TEST);
@@ -115,21 +119,14 @@ void renderScene()
     // vector (lx, ly, 0), with the z-axis pointing up
     gluLookAt(
             x, y, z,
-            40, 40, 0.0,
+            4, 4, 0.0,
             0.0, 0.0, 1.0);
 
     // Draw ground - 200x200 square colored green
     bool color = true;
     for(int i=0; i<8; i++)
     {
-        if(i%2 == 0)
-        {
-            color = false;
-        }
-        else
-        {
-            color = true;
-        }
+        color = i % 2 != 0;
         for(int j=0; j<8; j++)
         {
             if(color)
@@ -141,12 +138,14 @@ void renderScene()
                 glColor3f(0,0,0);
             }
             glPushMatrix();
-            glTranslatef(i*squareLen, j*squareLen, 0);
+            glTranslatef(i*Board::boardLen, j*Board::boardLen, 0);
             drawSquare();
             glPopMatrix();
             color = !color;
         }
     }
+
+    board.drawPieces();
 
     // Use swap buffer to prevent flickering
     glutSwapBuffers(); // Make it all visible

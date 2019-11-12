@@ -6,13 +6,24 @@ Description:
  Implements the board class
 */
 
+#include <GL/glut.h>
 #include "board.h"
+
+// Define constexpr
+constexpr double Board::boardLen;
+constexpr unsigned int Board::boardSize;
 
 Board::Board()
 {
-    for(int i=0; i < boardLen; i++)
+    bool team = false;
+    for(int i=0; i < boardSize; i++)
     {
-        for(int j=0; j < boardLen; j++)
+        // After finishing the first team, the second team will be true
+        if(i > 2)
+        {
+            team  = true;
+        }
+        for(int j=0; j < boardSize; j++)
         {
             Piece type{Piece::nothing};
 
@@ -26,7 +37,7 @@ Board::Board()
             {
                 if(j == 0 || j == 7)
                 {
-                    type = Piece::rock;
+                    type = Piece::rook;
                 }
                 else if(j == 1 || j == 6)
                 {
@@ -48,6 +59,22 @@ Board::Board()
             }
             board.at(i).at(j).type = type;
             board.at(i).at(j).occupied = true;
+            board.at(i).at(j).team = team;
+        }
+    }
+}
+
+void Board::drawPieces()
+{
+
+    for(int i=0; i < boardSize; i++)
+    {
+        for(int j=0; j < boardSize; j++)
+        {
+            glPushMatrix();
+                glTranslatef(j*Board::boardLen+Board::boardLen/2, i*Board::boardLen+Board::boardLen/2, 0);
+                board.at(i).at(j).draw();
+            glPopMatrix();
         }
     }
 }

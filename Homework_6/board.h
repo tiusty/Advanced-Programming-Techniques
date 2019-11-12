@@ -15,10 +15,12 @@ Description:
 class Board {
 public: // Methods
     Board();
+    void drawPieces();
 
 public: // Members
-    static constexpr unsigned int boardLen = 8;
-    std::array<std::array<Space, boardLen>, boardLen> board;
+    static constexpr unsigned int boardSize = 8;
+    static constexpr double boardLen = 1; // The size of the length of one board
+    std::array<std::array<Space, boardSize>, boardSize> board;
 };
 
 
