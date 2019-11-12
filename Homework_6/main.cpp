@@ -16,7 +16,7 @@ Description:
 Board board;
 
 // Camera position
-float x = 4, y = -5, z = 10; // initially 5 units south of origin
+float x = 4, y = -10, z = 10; // initially 5 units south of origin
 float deltaMove = 0.0; // initially camera doesn't move
 
 // Camera direction

@@ -73,7 +73,8 @@ void Board::drawPieces()
         {
             glPushMatrix();
                 glTranslatef(j*Board::boardLen+Board::boardLen/2, i*Board::boardLen+Board::boardLen/2, 0);
-                board.at(i).at(j).draw();
+            glScalef(.75, .75, 1);
+            board.at(i).at(j).draw();
             glPopMatrix();
         }
     }

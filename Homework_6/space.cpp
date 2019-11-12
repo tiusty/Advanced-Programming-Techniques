@@ -52,22 +52,41 @@ void Space::drawPawn()
 
 void Space::drawRook()
 {
-
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.5);
+    glutSolidCube(1);
+    glPopMatrix();
 }
 
 void Space::drawKnight()
 {
 
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.4);
+    glutSolidTeapot(.4);
+    glPopMatrix();
 }
 
 void Space::drawBishop()
 {
 
+    glPushMatrix();
+    setColor();
+    glutSolidCone(.5, 1, 20, 20);
+    glPopMatrix();
 }
 
 void Space::drawQueen()
 {
 
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.4);
+    glRotatef(60, 0,1,0);
+    glutSolidTetrahedron();
+    glPopMatrix();
 }
 
 void Space::drawKing()
