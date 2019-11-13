@@ -11,6 +11,9 @@ Description:
 
 GLfloat lightTeamColor[] = { 100.0, 100.0, 100.0};
 GLfloat darkTeamColor[] = { 150, 75, 0 };
+float mat_specular[] = {0.992157, 0.941176, 0.807843, 1.0};
+float shininess = 10;
+
 
 
 void Space::draw()
@@ -83,25 +86,32 @@ void Space::drawQueen()
 
     glPushMatrix();
     setColor();
-    glTranslatef(0,0,.4);
-    glRotatef(60, 0,1,0);
+    glTranslatef(0,0,.7);
+    glRotatef(50, 0,.5,.5);
     glutSolidTetrahedron();
     glPopMatrix();
 }
 
 void Space::drawKing()
 {
-
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.7);
+    glRotatef(50, 0,.5,.5);
+    glutSolidOctahedron();
+    glPopMatrix();
 }
 
 void Space::setColor()
 {
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     if(team)
     {
-        glColor3f(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
+        glColor3i(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
     }
     else
     {
-        glColor3f(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
+        glColor3i(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
     }
 }

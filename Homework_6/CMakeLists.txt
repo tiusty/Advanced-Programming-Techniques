@@ -36,6 +36,22 @@ target_link_libraries (snowMen
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES})
 
+add_executable(snowMenLighting
+        exampleCode/mainSnowMenLighting.cpp)
+
+target_link_libraries (snowMenLighting
+        PUBLIC
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARIES})
+
+add_executable(moveLightingRelativeToScene
+        exampleCode/mainMoveLightingRelativeToScene.cpp)
+
+target_link_libraries (moveLightingRelativeToScene
+        PUBLIC
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARIES})
+
 add_executable(solarSystem
         exampleCode/mainSolarSystem.cpp)
 

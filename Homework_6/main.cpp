@@ -26,7 +26,7 @@ float deltaAngle = 0.0; // additional angle change when dragging
 
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 GLfloat light0_specular[] = { 0.8, 0.8, 0.8, 1.0 };
-GLfloat light0_position[] = { 1.0, 1.0, 1.0, 0.0 };
+GLfloat light0_position[] = { 4.0, 4.0, 10.0, 0.0 };
 
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_position[] = { -5, -5, 8};
