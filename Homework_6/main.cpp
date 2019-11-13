@@ -8,12 +8,16 @@ Description:
 
 #include <iostream>
 #include <GL/glut.h>
+#include <cmath>
 
 #include "board.h"
 
 #define ESC 27
 
 Board board;
+
+bool gl0Enable{true};
+bool gl1Enable{true};
 
 // Camera position
 float x = 4, y = -10, z = 10; // initially 5 units south of origin
@@ -29,7 +33,7 @@ GLfloat light0_specular[] = { 0.8, 0.8, 0.8, 1.0 };
 GLfloat light0_position[] = { 4.0, 4.0, 10.0, 0.0 };
 
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light1_position[] = { -5, -5, 8};
+GLfloat light1_position[] = { 1, 1, 2};
 
 void changeSize(int w, int h)
 {
@@ -54,6 +58,29 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     if (key == ESC || key == 'q' || key == 'Q')
     {
         exit(0);
+    }
+    else if (key == 'r' || key == 'R')
+    {
+        double theta = atan(y/x);
+        theta = theta - (10.0/180)*3.14;
+        x = cos(theta);
+        y = sin(theta);
+    }
+    else if(key == 'd' || key == 'D')
+    {
+        z = z - .25;
+    }
+    else if(key == 'u' || key == 'P')
+    {
+        z = z + .25;
+    }
+    else if(key == '0')
+    {
+        gl0Enable = !gl0Enable;
+    }
+    else if(key == '1')
+    {
+        gl1Enable = !gl1Enable;
     }
 }
 
@@ -102,12 +129,26 @@ void renderScene()
     // Enable material color since lighting without material color looks black
     glEnable(GL_COLOR_MATERIAL);
     // Enable light 0
-    glEnable(GL_LIGHT0);
+    if(gl0Enable)
+    {
+        glEnable(GL_LIGHT0);
+    }
+    else
+    {
+        glDisable(GL_LIGHT0);
+    }
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
     glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
 
-    glEnable(GL_LIGHT1);
+    if(gl1Enable)
+    {
+        glEnable(GL_LIGHT1);
+    }
+    else
+    {
+        glDisable(GL_LIGHT1);
+    }
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
     glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 
