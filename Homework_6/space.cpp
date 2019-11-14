@@ -23,6 +23,10 @@ void Space::draw()
 {
     if(type == Piece::pawn)
     {
+        setColor();
+        glTranslatef(-.2,.15,0);
+        glScalef(1, 1, 1);
+        glRotatef(90,1,0,0);
         drawPawn();
     }
     else if(type == Piece::rook)
@@ -57,12 +61,80 @@ void Space::draw()
 
 void Space::drawPawn()
 {
+    float x=0,y=0;
+    float scale = 3.72*0.75;
+    GLUquadricObj* object;
+    object = gluNewQuadric();
+    gluQuadricDrawStyle(object, GLU_FILL);
+    gluQuadricNormals(object, GL_SMOOTH);
+    gluQuadricTexture(object, GL_TRUE);
+    //head
     glPushMatrix();
-    setColor();
-    glTranslatef(0, 0, .5);
-    glutSolidSphere(.5, 20, 20);
+    glTranslatef((x+.5)/4.0f, 3.18/scale, (y+.5)/4.0);
+    gluSphere(object, .54/scale, 10, 10);
     glPopMatrix();
-}
+    //B-C
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, (2.46f)/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object,.64/scale, .25/scale, .21/scale, 10,10);
+    glPopMatrix();
+    //C-D
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, 2.19f/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, .48/scale, .64/scale, .27/scale, 10, 10);
+    glPopMatrix();
+    //E-F
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, .98/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, .80f/scale, .3/scale, 1.21/scale, 10, 10);
+    glPopMatrix();
+    //F-G - Disk
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, .98/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluDisk(object, .8/scale, .83/scale, 10, 10);
+    glPopMatrix();
+    //G-H
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, .41/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, 1.2/scale, .83f/scale, .57/scale, 10, 10);
+    glPopMatrix();
+    //H-I
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, .32/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, 1.25/scale, 1.2/scale, .09/scale, 10,10);
+    glPopMatrix();
+    //I-J
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, .22/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, 1.2/scale, 1.25/scale, .1/scale, 10,10);
+    glPopMatrix();
+    //J-K
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, .18/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, 1.25/scale, 1.2/scale, .04/scale, 10,10);
+    glPopMatrix();
+    //K-L
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, 0/scale, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluCylinder(object, 1.25f/scale, 1.25f/scale, .18/scale, 10,10);
+    glPopMatrix();
+    //Base
+    glPushMatrix();
+    glTranslatef((x+.5)/4.0f, 0.0, (y+.5)/4.0);
+    glRotatef(90, -1, 0, 0);
+    gluDisk(object, 0, 1.25/scale, 10, 10);
+    glPopMatrix();
+
+    gluDeleteQuadric(object);}
 
 void Space::drawRook()
 {
