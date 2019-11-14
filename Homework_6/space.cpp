@@ -40,9 +40,107 @@ void rescalenormals(float* array)
     *(array+2) = *(array+2)/factor;
 }
 
+void Space::draw(bool enhanced)
+{
+    if(enhanced)
+    {
+        drawEnhanced();
+    }
+    else
+    {
+        drawRegular();
+    }
+}
+
+void Space::drawRegular()
+{
+    if(type == Piece::pawn)
+    {
+        drawPawn();
+    }
+    else if(type == Piece::rook)
+    {
+        drawRook();
+    }
+    else if(type == Piece::knight)
+    {
+        drawKnight();
+    }
+    else if(type == Piece::bishop)
+    {
+        drawBishop();
+    }
+    else if(type == Piece::queen)
+    {
+        drawQueen();
+    }
+    else if(type == Piece::king)
+    {
+        drawKing();
+    }
+}
+
+void Space::drawPawn()
+{
+    glPushMatrix();
+    setColor();
+    glTranslatef(0, 0, .5);
+    glutSolidSphere(.5, 20, 20);
+    glPopMatrix();
+}
+
+void Space::drawRook()
+{
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.5);
+    glutSolidCube(1);
+    glPopMatrix();
+}
+
+void Space::drawKnight()
+{
+
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.4);
+    glutSolidTeapot(.4);
+    glPopMatrix();
+}
+
+void Space::drawBishop()
+{
+
+    glPushMatrix();
+    setColor();
+    glutSolidCone(.5, 1, 20, 20);
+    glPopMatrix();
+}
+
+void Space::drawQueen()
+{
+
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.7);
+    glRotatef(50, 0,.5,.5);
+    glutSolidTetrahedron();
+    glPopMatrix();
+}
+
+void Space::drawKing()
+{
+    glPushMatrix();
+    setColor();
+    glTranslatef(0,0,.7);
+    glRotatef(50, 0,.5,.5);
+    glutSolidOctahedron();
+    glPopMatrix();
+}
 
 
-void Space::draw()
+
+void Space::drawEnhanced()
 {
     if(type == Piece::pawn)
     {
@@ -50,7 +148,7 @@ void Space::draw()
         glTranslatef(-.2,.15,0);
         glScalef(1, 1, 1);
         glRotatef(90,1,0,0);
-        drawPawn();
+        drawPawnEnhanced();
     }
     else if(type == Piece::rook)
     {
@@ -58,7 +156,7 @@ void Space::draw()
         glTranslatef(-.1,.1,0);
         glScalef(1.1, 1.1, .75);
         glRotatef(90,1,0,0);
-        drawRook();
+        drawRookEnhanced();
     }
     else if(type == Piece::knight)
     {
@@ -66,7 +164,7 @@ void Space::draw()
         glTranslatef(-.1,.1,0);
         glScalef(.9, .9, .75);
         glRotatef(90,1,0,0);
-        drawKnight();
+        drawKnightEnhanced();
     }
     else if(type == Piece::bishop)
     {
@@ -74,7 +172,7 @@ void Space::draw()
         glTranslatef(-.6,.6,0);
         glScalef(5, 5, 4);
         glRotatef(90,1,0,0);
-        drawBishop();
+        drawBishopEnhanced();
     }
     else if(type == Piece::queen)
     {
@@ -82,7 +180,7 @@ void Space::draw()
         glTranslatef(-0.1,.1,0);
         glScalef(1, 1, .75);
         glRotatef(90,1,0,0);
-        drawQueen();
+        drawQueenEnhanced();
     }
     else if(type == Piece::king)
     {
@@ -90,11 +188,11 @@ void Space::draw()
         glTranslatef(-.1,.1,0);
         glScalef(.9, .9, .75);
         glRotatef(90,1,0,0);
-        drawKing();
+        drawKingEnhanced();
     }
 }
 
-void Space::drawPawn()
+void Space::drawPawnEnhanced()
 {
     float x=0,y=0;
     float scale = 3.72*0.75;
@@ -171,7 +269,7 @@ void Space::drawPawn()
 
     gluDeleteQuadric(object);}
 
-void Space::drawRook()
+void Space::drawRookEnhanced()
 {
     float x=0,y=0;
     float scale = 3.72*.7;
@@ -261,7 +359,7 @@ void Space::drawRook()
 
     gluDeleteQuadric(object);}
 
-void Space::drawKnight()
+void Space::drawKnightEnhanced()
 {
     float x=0,y=0;
 //Below are listed the vertices and their mirror on the back since the knight is symmetrical
@@ -816,7 +914,7 @@ void Space::drawKnight()
 
     gluDeleteQuadric(object);}
 
-void Space::drawBishop()
+void Space::drawBishopEnhanced()
 {
 
     glPushMatrix();
@@ -977,7 +1075,7 @@ void Space::drawBishop()
     glPopMatrix();
 }
 
-void Space::drawQueen()
+void Space::drawQueenEnhanced()
 {
     float x=0,y=0;
     float scale = 3.72*0.75;
@@ -1118,7 +1216,7 @@ void Space::drawQueen()
 
     gluDeleteQuadric(object);}
 
-void Space::drawKing()
+void Space::drawKingEnhanced()
 {
     float x=0,y=0;
     float scale = 3.72*0.75;

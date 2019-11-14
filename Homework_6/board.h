@@ -15,7 +15,7 @@ Description:
 class Board {
 public: // Methods
     Board();
-    void drawPieces();
+    void drawPieces(bool enhanced);
 
 public: // Members
     static constexpr unsigned int boardSize = 8;

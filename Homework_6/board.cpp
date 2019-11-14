@@ -64,7 +64,7 @@ Board::Board()
     }
 }
 
-void Board::drawPieces()
+void Board::drawPieces(bool enhanced)
 {
 
     for(int i=0; i < boardSize; i++)
@@ -74,7 +74,7 @@ void Board::drawPieces()
             glPushMatrix();
                 glTranslatef(j*Board::boardLen+Board::boardLen/2, i*Board::boardLen+Board::boardLen/2, 0);
             glScalef(.75, .75, 1);
-            board.at(i).at(j).draw();
+            board.at(i).at(j).draw(enhanced);
             glPopMatrix();
         }
     }

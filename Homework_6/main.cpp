@@ -18,6 +18,7 @@ Board board;
 
 bool gl0Enable{true};
 bool gl1Enable{true};
+bool enhanced{true};
 
 // Camera position
 float x = 4, y = -10, z = 10; // initially 5 units south of origin
@@ -86,6 +87,10 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     else if(key == '1')
     {
         gl1Enable = !gl1Enable;
+    }
+    else if(key == 'e' || key == 'E')
+    {
+        enhanced = !enhanced;
     }
 }
 
@@ -191,7 +196,7 @@ void renderScene()
         }
     }
 
-    board.drawPieces();
+    board.drawPieces(enhanced);
 
     // Use swap buffer to prevent flickering
     glutSwapBuffers(); // Make it all visible

@@ -21,13 +21,21 @@ enum class Piece
 
 class Space {
 public: // Methods
-    void draw();
+    void draw(bool enhanced);
+    void drawRegular();
     void drawPawn();
     void drawRook();
     void drawKnight();
     void drawBishop();
     void drawQueen();
     void drawKing();
+    void drawEnhanced();
+    void drawPawnEnhanced();
+    void drawRookEnhanced();
+    void drawKnightEnhanced();
+    void drawBishopEnhanced();
+    void drawQueenEnhanced();
+    void drawKingEnhanced();
     void setColor();
 
 public: // Members
