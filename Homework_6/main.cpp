@@ -61,9 +61,13 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     }
     else if (key == 'r' || key == 'R')
     {
+        // We want it to circle around the point (4,4) which is the center of the chess board
         double theta = atan2((y-4),(x-4));
+        // Add 10 degree to the angle
         theta = theta - (10.0/180)*3.14;
+        // Find the distance from the center
         double r = sqrt((x-4)*(x-4) + (y-4)*(y-4));
+        // Calculate the new position of the camera
         x = r*cos(theta) + 4;
         y = r*sin(theta) + 4;
     }
