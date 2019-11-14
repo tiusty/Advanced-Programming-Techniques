@@ -1,8 +1,9 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 11/12/2019
-Description: 
+Last date modified: 11/14/2019
+Description:
+ Implements space class functionality
 */
 
 // For drawing the 3D pieces, used code from:
@@ -13,12 +14,15 @@ Description:
 
 #include "space.h"
 
+// Determine team colors
 GLfloat lightTeamColor[] = { 140.0/255, 140.0/255, 135.0/255};
 GLfloat darkTeamColor[] = { 150/255, 75/255, 0/255 };
+
+// Determine piece material properties
 float mat_specular[] = {0.5, 0.5, 0.5, 1.0};
 float shininess = 50;
 
-
+// Helper functions for drawing pieces
 void crossproduct3f(float *first, float *second, float *wheretoreturn)
 {
     *wheretoreturn = *(first+1)*(*(second+2)) - *(first+2)*(*(second+1));
@@ -42,7 +46,10 @@ void rescalenormals(float* array)
 
 void Space::draw(bool enhanced)
 {
+    // Clear the color
     glClearColor(0.0, 0.7, 1.0, 1.0); // sky color is light blue
+
+    // Determine which version of the piece to draw
     if(enhanced)
     {
         drawEnhanced();
@@ -55,6 +62,7 @@ void Space::draw(bool enhanced)
 
 void Space::drawRegular()
 {
+    // Determines which piece to draw
     if(type == Piece::pawn)
     {
         drawPawn();
@@ -141,6 +149,7 @@ void Space::drawKing()
 
 void Space::drawEnhanced()
 {
+    // Determines which piece to draw
     if(type == Piece::pawn)
     {
         setColor();
@@ -1576,8 +1585,11 @@ void Space::drawKingEnhanced()
 
 void Space::setColor()
 {
+    // Set material properties
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+
+    // Set color based on team
     if(team)
     {
         glColor3f(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
