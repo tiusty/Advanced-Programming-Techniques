@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 11/7/2019
+Last date modified: 11/14/2019
 Description:
  Main function that serves as the entry point
 */
@@ -14,6 +14,7 @@ Description:
 
 #define ESC 27
 
+// Global board class
 Board board;
 
 bool gl0Enable{true};
@@ -23,6 +24,7 @@ bool enhanced{true};
 // Camera position
 float x = 4, y = -10, z = 10; // initially 5 units south of origin
 
+// Set light properties
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -63,30 +65,37 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     }
     else if(key == 'd' || key == 'D')
     {
+        // Move camera position down
         z = z - .25;
     }
     else if(key == 'u' || key == 'P')
     {
+        // Move camera position up
         z = z + .25;
     }
     else if(key == '0')
     {
+        // Disable/Enable light0
         gl0Enable = !gl0Enable;
     }
     else if(key == '1')
     {
+        //Disable/Enable light 1
         gl1Enable = !gl1Enable;
     }
     else if(key == 'e' || key == 'E')
     {
+        // Determine if enhanced mode should be used or not
         enhanced = !enhanced;
     }
     else if(key == 'p' || key == 'P')
     {
+        // Moves a random pawn
         board.movePawn();
     }
     else if(key == 'k' || key == 'K')
     {
+        // Moves a random knight
         board.moveKnight();
     }
 }
@@ -94,20 +103,15 @@ void processNormalKeys(unsigned char key, int xx, int yy)
 
 void pressSpecialKey(int key, int xx, int yy)
 {
-    switch (key)
-    {
-    }
 }
 
 void releaseSpecialKey(int key, int x, int y)
 {
-    switch (key)
-    {
-    }
 }
 
 void drawSquare()
 {
+    // Draws a single square
     glBegin(GL_QUADS);
     glVertex3f(0, 0, 0.0);
     glVertex3f(Board::boardLen, 0, 0.0);
@@ -130,7 +134,7 @@ void renderScene()
     glEnable(GL_LIGHTING);
     // Enable material color since lighting without material color looks black
     glEnable(GL_COLOR_MATERIAL);
-    // Enable light 0
+    // Enable/Disable light 0
     if(gl0Enable)
     {
         glEnable(GL_LIGHT0);
@@ -141,6 +145,7 @@ void renderScene()
     }
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 
+    // Enable/Disable light 1
     if(gl1Enable)
     {
         glEnable(GL_LIGHT1);
@@ -149,6 +154,7 @@ void renderScene()
     {
         glDisable(GL_LIGHT1);
     }
+    // set light 1 properties
     glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
     glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
@@ -164,10 +170,12 @@ void renderScene()
             4, 4, 0.0,
             0.0, 0.0, 1.0);
 
-    // Draw ground - 200x200 square colored green
+    // Draw board
     bool color = true;
+    // Draw all the squares
     for(int i=0; i<8; i++)
     {
+        // Alternate colors for white and black squares
         color = i % 2 != 0;
         for(int j=0; j<8; j++)
         {
@@ -179,7 +187,9 @@ void renderScene()
             {
                 glColor3f(0,0,0);
             }
+            // Draw the square piece
             glPushMatrix();
+            // Move the square to the right spot
             glTranslatef(i*Board::boardLen, j*Board::boardLen, 0);
             drawSquare();
             glPopMatrix();
@@ -187,6 +197,7 @@ void renderScene()
         }
     }
 
+    // Draw all the pieces on the board
     board.drawPieces(enhanced);
 
     // Use swap buffer to prevent flickering

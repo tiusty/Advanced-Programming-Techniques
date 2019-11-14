@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 11/12/2019
+Last date modified: 11/14/2019
 Description:
  Stores information about which pieces are on the board and where they are
 */

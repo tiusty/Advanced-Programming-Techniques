@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 11/12/2019
+Last date modified: 11/14/2019
 Description:
  Implements the board class
 */
@@ -294,6 +294,7 @@ void Board::moveKnight()
 
 bool Board::checkIfValid(int x, int y)
 {
+    // Piece can't be off the board, in an occupied space
     return !(x > 7 || x < 0 || y > 7 || y < 0 || board.at(y).at(x).occupied);
 }
 
