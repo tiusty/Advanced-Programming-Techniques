@@ -107,7 +107,7 @@ void Board::movePawn()
     while(!pieceMoved)
     {
         // End condition if no pawns can move
-        if(triedPawnsCounter == 16)
+        if(triedPawnsCounter == triedPawns.size())
         {
             break;
         }
@@ -131,7 +131,6 @@ void Board::movePawn()
         }
         if(alreadyTested)
         {
-            printf("already tested\n");
             continue;
         }
 
@@ -153,8 +152,18 @@ void Board::movePawn()
             // Loop through the 2 possible moves the pawn can do
             for(int i=0; i<2;i++)
             {
-                // If the move is not feasible, the switch the direction the pawn wants to travel
-                if(y+direction > 7 || y+direction < 0 || board.at(y+direction).at(x).occupied)
+                int newX = x;
+                int newY = y+direction;
+
+                // If the move is valid, then move the piece
+                if(checkIfValid(newX, newY))
+                {
+                    movePiece(x,y,newX, newY);
+                    pieceMoved = true;
+                    break;
+                }
+                // If the move is not valid then try the other direction
+                else
                 {
                     if(direction == -1)
                     {
@@ -165,18 +174,95 @@ void Board::movePawn()
                         direction = -1;
                     }
                 }
-                // If the move is feasable then move the pawn and remove it from its previous spot
-                else
-                {
-                    board.at(y).at(x).occupied = false;
-                    board.at(y).at(x).type = Piece::nothing;
-                    board.at(y+direction).at(x).occupied=true;
-                    board.at(y+direction).at(x).type = Piece::pawn;
-                    board.at(y+direction).at(x).team = board.at(y).at(x).team;
-                    pieceMoved = true;
-                    break;
-                }
             }
         }
     }
+}
+
+void Board::moveKnight()
+{
+    bool pieceMoved{false};
+
+    // Stores the pawns that were attempted to be moved
+    // Prevents repeating pawns and also if there is no solution, then instead of looping
+    //  forever, once all the pawns have been tried, then the loop will exit
+    std::array<std::tuple<int,int>, 4> triedKnights;
+    //Stores how many pawns are in the triedArray
+    int triedKnightsCounter{0};
+
+    while(!pieceMoved)
+    {
+        // End condition if no pawns can move
+        if(triedKnightsCounter == triedKnights.size())
+        {
+            break;
+        }
+
+        // Generate a random number between .8 and 1.2 to simulate misfiring
+        std::random_device rd; // obtain a random number from hardware
+        std::mt19937 eng(rd()); // seed the generator
+        std::uniform_int_distribution<> distr(0, 7); // define the range
+        int x = distr(eng);
+        int y = distr(eng);
+
+        // Tests to see if this pawn was already tested
+        bool alreadyTested{false};
+        for(auto &test : triedKnights)
+        {
+            if(std::get<0>(test) == x && std::get<1>(test) == y)
+            {
+                alreadyTested = true;
+            }
+        }
+        if(alreadyTested)
+        {
+            continue;
+        }
+
+        // If the space has a pawn and it is occupied then attempt to move the pawn
+        if(board.at(y).at(x).type == Piece::pawn && board.at(y).at(x).occupied)
+        {
+            // Mark that the pawn has been tried
+            triedKnights.at(triedKnightsCounter) = std::make_tuple(x, y);
+            triedKnightsCounter++;
+
+            // Randomly determine the direction the pawn will move first
+            int direction = distr(eng);
+
+            // Loop through the 2 possible moves the pawn can do
+            for(int i=0; i<8;i++)
+            {
+                int newX{0}, newY{0};
+                if(direction+i % 8 == 0)
+                {
+//                    if(check)
+                }
+
+                if(checkIfValid(newX, newY))
+                {
+                    movePiece(x,y,newX,newY);
+                    pieceMoved = true;
+                    break;
+                }
+
+            }
+        }
+    }
+}
+
+bool Board::checkIfValid(int x, int y)
+{
+    return !(x > 7 || x < 0 || y > 7 || y < 0 || board.at(y).at(x).occupied);
+}
+
+void Board::movePiece(int oldX, int oldY, int newX, int newY)
+{
+    // Set new sapce
+    board.at(newY).at(newX).type = board.at(oldY).at(oldX).type;
+    board.at(newY).at(newX).team = board.at(oldY).at(oldX).team;
+    board.at(newY).at(newX).occupied=true;
+
+    // Reset old space
+    board.at(oldY).at(oldX).occupied = false;
+    board.at(oldY).at(oldX).type = Piece::nothing;
 }

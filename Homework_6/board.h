@@ -17,6 +17,9 @@ public: // Methods
     Board();
     void drawPieces(bool enhanced);
     void movePawn();
+    void moveKnight();
+    bool checkIfValid(int x, int y);
+    void movePiece(int oldX, int oldY, int newX, int newY);
 
 public: // Members
     static constexpr unsigned int boardSize = 8;
