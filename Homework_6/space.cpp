@@ -13,10 +13,10 @@ Description:
 
 #include "space.h"
 
-GLfloat lightTeamColor[] = { 100.0/255, 100.0/255, 100.0/255};
+GLfloat lightTeamColor[] = { 140.0/255, 140.0/255, 135.0/255};
 GLfloat darkTeamColor[] = { 150/255, 75/255, 0/255 };
-float mat_specular[] = {0.992157, 0.941176, 0.807843, 1.0};
-float shininess = 10;
+float mat_specular[] = {0.5, 0.5, 0.5, 1.0};
+float shininess = 50;
 
 
 void crossproduct3f(float *first, float *second, float *wheretoreturn)
@@ -42,6 +42,7 @@ void rescalenormals(float* array)
 
 void Space::draw(bool enhanced)
 {
+    glClearColor(0.0, 0.7, 1.0, 1.0); // sky color is light blue
     if(enhanced)
     {
         drawEnhanced();
@@ -100,7 +101,6 @@ void Space::drawRook()
 
 void Space::drawKnight()
 {
-
     glPushMatrix();
     setColor();
     glTranslatef(0,0,.4);
@@ -111,7 +111,6 @@ void Space::drawKnight()
 
 void Space::drawBishop()
 {
-
     glPushMatrix();
     setColor();
     glutSolidCone(.5, 1, 20, 20);
@@ -120,7 +119,6 @@ void Space::drawBishop()
 
 void Space::drawQueen()
 {
-
     glPushMatrix();
     setColor();
     glTranslatef(0,0,.7);
@@ -1582,12 +1580,10 @@ void Space::setColor()
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     if(team)
     {
-//        glColor3f(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
-glColor3f(1,0,0);
+        glColor3f(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
     }
     else
     {
-//        glColor3f(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
-        glColor3f(0,1,0);
+        glColor3f(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
     }
 }

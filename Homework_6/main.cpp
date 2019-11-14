@@ -30,11 +30,10 @@ float angle = 0.0; // angle of rotation for the camera direction
 float deltaAngle = 0.0; // additional angle change when dragging
 
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
-GLfloat light0_specular[] = { 0.8, 0.8, 0.8, 1.0 };
-GLfloat light0_position[] = { 4.0, 4.0, 10.0, 0.0 };
 
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light1_position[] = { 1, 1, 2};
+GLfloat light1_specular[] = { 0.3, 0.3, 0.3, 1.0 };
+GLfloat light1_position[] = { 5, 5, 8};
 
 void changeSize(int w, int h)
 {
@@ -148,8 +147,6 @@ void renderScene()
         glDisable(GL_LIGHT0);
     }
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-    glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
 
     if(gl1Enable)
     {
@@ -159,6 +156,7 @@ void renderScene()
     {
         glDisable(GL_LIGHT1);
     }
+    glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
     glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 
