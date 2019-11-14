@@ -15,13 +15,13 @@ constexpr unsigned int Board::boardSize;
 
 Board::Board()
 {
-    bool team = false;
+    bool team = true;
     for(int i=0; i < boardSize; i++)
     {
         // After finishing the first team, the second team will be true
-        if(i > 2)
+        if(i > 3)
         {
-            team  = true;
+            team = false;
         }
         for(int j=0; j < boardSize; j++)
         {
