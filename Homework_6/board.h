@@ -16,6 +16,7 @@ class Board {
 public: // Methods
     Board();
     void drawPieces(bool enhanced);
+    void movePawn();
 
 public: // Members
     static constexpr unsigned int boardSize = 8;

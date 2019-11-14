@@ -22,12 +22,6 @@ bool enhanced{true};
 
 // Camera position
 float x = 4, y = -10, z = 10; // initially 5 units south of origin
-float deltaMove = 0.0; // initially camera doesn't move
-
-// Camera direction
-float lx = 1.0, ly = 0; // camera points initially along y-axis
-float angle = 0.0; // angle of rotation for the camera direction
-float deltaAngle = 0.0; // additional angle change when dragging
 
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 
@@ -47,10 +41,6 @@ void changeSize(int w, int h)
 
 void update(void)
 {
-    if (deltaMove) { // update camera position
-        x += deltaMove * lx * 0.1;
-        y += deltaMove * ly * 0.1;
-    }
     glutPostRedisplay(); // redisplay everything
 }
 void processNormalKeys(unsigned char key, int xx, int yy)
@@ -91,6 +81,10 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     {
         enhanced = !enhanced;
     }
+    else if(key == 'p' || key == 'P')
+    {
+        board.movePawn();
+    }
 }
 
 
@@ -98,9 +92,6 @@ void pressSpecialKey(int key, int xx, int yy)
 {
     switch (key)
     {
-        std::cout << "Pressed" << std::endl;
-        case GLUT_KEY_UP: deltaMove = 1.0; break;
-        case GLUT_KEY_DOWN: deltaMove = -1.0; break;
     }
 }
 
@@ -108,8 +99,6 @@ void releaseSpecialKey(int key, int x, int y)
 {
     switch (key)
     {
-        case GLUT_KEY_UP: deltaMove = 0.0; break;
-        case GLUT_KEY_DOWN: deltaMove = 0.0; break;
     }
 }
 
