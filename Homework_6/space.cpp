@@ -9,8 +9,8 @@ Description:
 
 #include "space.h"
 
-GLfloat lightTeamColor[] = { 100.0, 100.0, 100.0};
-GLfloat darkTeamColor[] = { 150, 75, 0 };
+GLfloat lightTeamColor[] = { 100.0/255, 100.0/255, 100.0/255};
+GLfloat darkTeamColor[] = { 150/255, 75/255, 0/255 };
 float mat_specular[] = {0.992157, 0.941176, 0.807843, 1.0};
 float shininess = 10;
 
@@ -108,10 +108,10 @@ void Space::setColor()
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     if(team)
     {
-        glColor3i(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
+        glColor3f(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
     }
     else
     {
-        glColor3i(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
+        glColor3f(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
     }
 }
