@@ -104,6 +104,7 @@ void Space::drawKnight()
     glPushMatrix();
     setColor();
     glTranslatef(0,0,.4);
+    glRotatef(90,1,0,0);
     glutSolidTeapot(.4);
     glPopMatrix();
 }
