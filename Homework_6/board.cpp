@@ -152,6 +152,7 @@ void Board::movePawn()
             // Loop through the 2 possible moves the pawn can do
             for(int i=0; i<2;i++)
             {
+                // Determine the new x and y coordinates based on the direction
                 int newX = x;
                 int newY = y+direction;
 
@@ -226,14 +227,18 @@ void Board::moveKnight()
             triedKnights.at(triedKnightsCounter) = std::make_tuple(x, y);
             triedKnightsCounter++;
 
-            // Randomly determine the direction the pawn will move first
+            // Randomly determine the direction the knight will move first
+            // This helps make some randomness in the movement of the knights
             int direction = distr(eng);
 
-            // Loop through the 2 possible moves the pawn can do
+            // Loop through the 8 possible moves the knight can do
             for(int i=0; i<8;i++)
             {
                 int newX{0}, newY{0};
+                // From the randomly choicen number, loop through all the possible moves the knight can do
                 int move = direction +i % 8;
+
+                // Each move case corresponds to a different move the knight can do
                 if(move == 0)
                 {
                     newX = x + 1;
@@ -275,13 +280,13 @@ void Board::moveKnight()
                     newY = y-1;
                 }
 
+                // Check to see if the move is valid, if it is then move the piece
                 if(checkIfValid(newX, newY))
                 {
                     movePiece(x,y,newX,newY);
                     pieceMoved = true;
                     break;
                 }
-
             }
         }
     }
