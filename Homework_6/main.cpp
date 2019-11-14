@@ -61,10 +61,11 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     }
     else if (key == 'r' || key == 'R')
     {
-        double theta = atan(y/x);
+        double theta = atan2((y-4),(x-4));
         theta = theta - (10.0/180)*3.14;
-        x = cos(theta);
-        y = sin(theta);
+        double r = sqrt((x-4)*(x-4) + (y-4)*(y-4));
+        x = r*cos(theta) + 4;
+        y = r*sin(theta) + 4;
     }
     else if(key == 'd' || key == 'D')
     {
