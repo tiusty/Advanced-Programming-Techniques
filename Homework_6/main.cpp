@@ -85,6 +85,10 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     {
         board.movePawn();
     }
+    else if(key == 'k' || key == 'K')
+    {
+        board.moveKnight();
+    }
 }
 
 

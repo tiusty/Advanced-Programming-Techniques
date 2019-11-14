@@ -220,7 +220,7 @@ void Board::moveKnight()
         }
 
         // If the space has a pawn and it is occupied then attempt to move the pawn
-        if(board.at(y).at(x).type == Piece::pawn && board.at(y).at(x).occupied)
+        if(board.at(y).at(x).type == Piece::knight && board.at(y).at(x).occupied)
         {
             // Mark that the pawn has been tried
             triedKnights.at(triedKnightsCounter) = std::make_tuple(x, y);
@@ -233,9 +233,46 @@ void Board::moveKnight()
             for(int i=0; i<8;i++)
             {
                 int newX{0}, newY{0};
-                if(direction+i % 8 == 0)
+                int move = direction +i % 8;
+                if(move == 0)
                 {
-//                    if(check)
+                    newX = x + 1;
+                    newY = y + 2;
+                }
+                else if (move == 1)
+                {
+                    newX = x + 2;
+                    newY = y+1;
+                }
+                else if (move == 2)
+                {
+                    newX = x + 2;
+                    newY = y-1;
+                }
+                else if (move == 3)
+                {
+                    newX = x+1;
+                    newY = y-2;
+                }
+                else if (move == 4)
+                {
+                    newX = x-1;
+                    newY = y-2;
+                }
+                else if (move == 5)
+                {
+                    newX = x-2;
+                    newY = y-1;
+                }
+                else if (move == 6)
+                {
+                    newX = x-2;
+                    newY = y+1;
+                }
+                else if (move == 7)
+                {
+                    newX = x-1;
+                    newY = y-1;
                 }
 
                 if(checkIfValid(newX, newY))
