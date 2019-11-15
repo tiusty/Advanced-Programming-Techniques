@@ -277,7 +277,7 @@ void Board::moveKnight()
                 else if (move == 7)
                 {
                     newX = x-1;
-                    newY = y-1;
+                    newY = y+2;
                 }
 
                 // Check to see if the move is valid, if it is then move the piece
