@@ -108,7 +108,16 @@ void Space::drawKnight()
 {
     glPushMatrix();
     setColor();
-    glTranslatef(0,0,.4);
+    glTranslatef(0,0,.45);
+    if(team)
+    {
+        glRotatef(90,0,0,1);
+    }
+    else
+    {
+        glRotatef(-90,0,0,1);
+    }
+    glScalef(1,1,1.25);
     glRotatef(90,1,0,0);
     glutSolidTeapot(.5);
     glPopMatrix();
@@ -126,8 +135,9 @@ void Space::drawQueen()
 {
     glPushMatrix();
     setColor();
-    glTranslatef(0,0,.7);
+    glTranslatef(0,0,.45);
     glRotatef(50, 0,.5,.5);
+    glScalef(.8,.8,.8);
     glutSolidTetrahedron();
     glPopMatrix();
 }
@@ -136,8 +146,9 @@ void Space::drawKing()
 {
     glPushMatrix();
     setColor();
-    glTranslatef(0,0,.7);
-    glRotatef(50, 0,.5,.5);
+    glTranslatef(0,0,.53);
+    glRotatef(70, 0,.5,.5);
+    glScalef(.8,.8,.8);
     glutSolidOctahedron();
     glPopMatrix();
 }
