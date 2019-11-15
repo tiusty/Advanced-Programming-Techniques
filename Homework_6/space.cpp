@@ -174,8 +174,8 @@ void Space::drawEnhanced()
     else if(type == Piece::bishop)
     {
         setColor();
-        glTranslatef(-.6,.6,0);
-        glScalef(5, 5, 4);
+        glTranslatef(-.1,.1,0);
+        glScalef(.9, .9, .75);
         glRotatef(90,1,0,0);
         drawBishopEnhanced();
     }
@@ -923,7 +923,7 @@ void Space::drawBishopEnhanced()
 {
 
     glPushMatrix();
-    float scale = 3.72*4.0;
+    float scale = 3.72*0.75;
     float x=0, y=0;
     GLUquadricObj* object;
     object = gluNewQuadric();
@@ -1289,7 +1289,7 @@ void Space::drawKingEnhanced()
     glTexCoord2f(0, 8.02/scale); glVertex3f(0, 8.02/scale, -.2/scale);
     glTexCoord2f(.31/scale, 7.81/scale); glVertex3f(.31/scale, 7.81/scale, -.2/scale);
     glTexCoord2f(.24/scale, 7.70/scale); glVertex3f(.24/scale, 7.70/scale, -.2/scale);
-    glTexCoord2f(-.24/scale, 7.70/scale); glVertex3f(-.24/scale, 7.70/scale, -.2/scale);
+    glTexCoord2f(-.24/scale, 7/.70/scale); glVertex3f(-.24/scale, 7.70/scale, -.2/scale);
     glTexCoord2f(-.31/scale, 7.81/scale); glVertex3f(-.31/scale, 7.81/scale, -.2/scale);
     glEnd();
     //Back of Middle Rectangle
@@ -1583,7 +1583,7 @@ void Space::drawKingEnhanced()
 void Space::setColor()
 {
     // Clear the color
-    glClearColor(0.0, 0.0, 0, 1.0); // sky color is light blue
+    glClearColor(0.0, 0.0, 0, 1.0);
 
     // Set material properties
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
