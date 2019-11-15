@@ -272,7 +272,8 @@ void Space::drawPawnEnhanced()
     gluDisk(object, 0, 1.25/scale, 10, 10);
     glPopMatrix();
 
-    gluDeleteQuadric(object);}
+    gluDeleteQuadric(object);
+}
 
 void Space::drawRookEnhanced()
 {
@@ -362,7 +363,8 @@ void Space::drawRookEnhanced()
     gluDisk(object, 0, 1.09/scale, 10, 10);
     glPopMatrix();
 
-    gluDeleteQuadric(object);}
+    gluDeleteQuadric(object);
+}
 
 void Space::drawKnightEnhanced()
 {
@@ -917,7 +919,8 @@ void Space::drawKnightEnhanced()
     gluSphere(object, .04/4.0, 10, 10);
     glPopMatrix();
 
-    gluDeleteQuadric(object);}
+    gluDeleteQuadric(object);
+}
 
 void Space::drawBishopEnhanced()
 {
@@ -1219,7 +1222,8 @@ void Space::drawQueenEnhanced()
     gluDisk(object, 0, 1.59/scale, 10, 10);
     glPopMatrix();
 
-    gluDeleteQuadric(object);}
+    gluDeleteQuadric(object);
+}
 
 void Space::drawKingEnhanced()
 {
@@ -1578,7 +1582,8 @@ void Space::drawKingEnhanced()
     gluCylinder(object, 1.51/scale, 1.51/scale, .31/scale, 10, 10);
     glPopMatrix();
 
-    gluDeleteQuadric(object);}
+    gluDeleteQuadric(object);
+}
 
 void Space::setColor()
 {

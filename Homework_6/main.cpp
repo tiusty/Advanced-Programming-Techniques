@@ -25,6 +25,7 @@ bool enhanced{true};
 float x = 4, y = -10, z = 10; // initially 5 units south of origin
 
 // Set light properties
+GLfloat light_off[] = {0,0,0,0};
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -144,6 +145,8 @@ void renderScene()
         glDisable(GL_LIGHT0);
     }
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_off);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_off);
 
     // Enable/Disable light 1
     if(gl1Enable)
@@ -155,6 +158,7 @@ void renderScene()
         glDisable(GL_LIGHT1);
     }
     // set light 1 properties
+    glLightfv(GL_LIGHT1, GL_AMBIENT, light_off);
     glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
     glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
