@@ -46,9 +46,6 @@ void rescalenormals(float* array)
 
 void Space::draw(bool enhanced)
 {
-    // Clear the color
-    glClearColor(0.0, 0.7, 1.0, 1.0); // sky color is light blue
-
     // Determine which version of the piece to draw
     if(enhanced)
     {
@@ -1585,9 +1582,13 @@ void Space::drawKingEnhanced()
 
 void Space::setColor()
 {
+    // Clear the color
+    glClearColor(0.0, 0.0, 0, 1.0); // sky color is light blue
+
     // Set material properties
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glShadeModel(GL_SMOOTH);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
     // Set color based on team
     if(team)
