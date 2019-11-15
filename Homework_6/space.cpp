@@ -18,10 +18,6 @@ Description:
 GLfloat lightTeamColor[] = { 140.0/255, 140.0/255, 135.0/255};
 GLfloat darkTeamColor[] = { 150/255, 75/255, 0/255 };
 
-// Determine piece material properties
-float mat_specular[] = {0.5, 0.5, 0.5, 1.0};
-float shininess = 50;
-
 // Helper functions for drawing pieces
 void crossproduct3f(float *first, float *second, float *wheretoreturn)
 {
@@ -1600,10 +1596,6 @@ void Space::setColor()
 {
     // Clear the color
     glClearColor(0.0, 0.0, 0, 1.0);
-
-    // Set material properties
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
     // Set color based on team
     if(team)

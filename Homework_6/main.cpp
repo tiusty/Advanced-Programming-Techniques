@@ -21,6 +21,10 @@ bool gl0Enable{true};
 bool gl1Enable{true};
 bool enhanced{true};
 
+// Determine piece material properties
+float mat_specular[] = {0.5, 0.5, 0.5, 1.0};
+float shininess = 50;
+
 // Camera position
 float x = 4, y = -10, z = 10; // initially 5 units south of origin
 
@@ -168,6 +172,10 @@ void renderScene()
     // Set Shade model
     glShadeModel(GL_SMOOTH);
 
+
+    // Set material properties
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
     // Set the camera centered at (x,y,1) and looking along directional
     // vector (lx, ly, 0), with the z-axis pointing up
