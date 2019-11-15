@@ -161,6 +161,8 @@ void renderScene()
 
     // Enable depth test so things are rendered based on depth
     glEnable(GL_DEPTH_TEST);
+    // Set Shade model
+    glShadeModel(GL_SMOOTH);
 
 
     // Set the camera centered at (x,y,1) and looking along directional

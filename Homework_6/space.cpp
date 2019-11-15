@@ -1586,7 +1586,6 @@ void Space::setColor()
     glClearColor(0.0, 0.0, 0, 1.0); // sky color is light blue
 
     // Set material properties
-    glShadeModel(GL_SMOOTH);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
