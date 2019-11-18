@@ -32,6 +32,9 @@ GLfloat light1_diffuse[] = { .5, .5, .5, 1.0 };
 GLfloat light1_specular[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light1_position[] = { 5, 5, 8};
 
+/**
+ * Changes the size of the window based on if the window is resized
+ */
 void changeSize(int w, int h)
 {
     float ratio = ((float)w) / ((float)h); // window aspect ratio
@@ -42,10 +45,17 @@ void changeSize(int w, int h)
     glViewport(0, 0, w, h); // set viewport (drawing area) to entire window
 }
 
+/**
+ * Given changes to the window, updates the screen
+ */
 void update(void)
 {
     glutPostRedisplay(); // redisplay everything
 }
+
+/**
+ * Processes changes made by normal keys from the keyboard
+ */
 void processNormalKeys(unsigned char key, int xx, int yy)
 {
     if (key == ESC || key == 'q' || key == 'Q')
@@ -101,15 +111,21 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     }
 }
 
-
+// Handles any special key presses
 void pressSpecialKey(int key, int xx, int yy)
 {
 }
 
+/**
+ * Handles any special key releases
+ */
 void releaseSpecialKey(int key, int x, int y)
 {
 }
 
+/**
+ * Draws a single square of the chess board
+ */
 void drawSquare()
 {
     // Draws a single square
@@ -121,7 +137,9 @@ void drawSquare()
     glEnd();
 }
 
-
+/**
+ * Renders the whole scene of the chess game
+ */
 void renderScene()
 {
     // Clear color and depth buffers
@@ -212,6 +230,13 @@ void renderScene()
     glutSwapBuffers(); // Make it all visible
 }
 
+/**
+ * main function that initializes the scene etc
+ * Becomes blocked by the glut main program
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, char **argv)
 {
 
