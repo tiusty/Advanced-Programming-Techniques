@@ -15,8 +15,12 @@ Description:
 #include "space.h"
 
 // Determine team colors
-GLfloat lightTeamColor[] = { 140.0/255, 140.0/255, 135.0/255};
-GLfloat darkTeamColor[] = { 150/255, 75/255, 0/255 };
+unsigned char lightTeamColor[] = {140, 140, 135};
+unsigned char darkTeamColor[] = { 150, 75, 0};
+
+// Determine piece material properties
+GLfloat mat_specular[] = {0.5, 0.5, 0.5, 1.0};
+GLfloat shininess[] = {50.0};
 
 // Helper functions for drawing pieces
 void crossproduct3f(float *first, float *second, float *wheretoreturn)
@@ -1594,16 +1598,20 @@ void Space::drawKingEnhanced()
 
 void Space::setColor()
 {
+    // Set material properties
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
     // Clear the color
     glClearColor(0.0, 0.0, 0, 1.0);
 
     // Set color based on team
     if(team)
     {
-        glColor3f(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
+        glColor3ub(lightTeamColor[0], lightTeamColor[1], lightTeamColor[2]); // set drawing color to white
     }
     else
     {
-        glColor3f(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
+        glColor3ub(darkTeamColor[0], darkTeamColor[1], darkTeamColor[2]); // set drawing color to white
     }
 }
