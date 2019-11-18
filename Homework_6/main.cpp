@@ -17,17 +17,21 @@ Description:
 // Global board class
 Board board;
 
+// Light and enhancement enables
 bool gl0Enable{true};
 bool gl1Enable{true};
 bool enhanced{true};
 
-// Camera position
-float x = 4, y = -10, z = 10; // initially 5 units south of origin
+// Initial camera position
+float x = 4, y = -10, z = 10;
 
 // Set light properties
 GLfloat light_off[] = {0,0,0,0};
+
+// Light 0 properties
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 
+// Light 1 properties
 GLfloat light1_diffuse[] = { .5, .5, .5, 1.0 };
 GLfloat light1_specular[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light1_position[] = { 5, 5, 8};
