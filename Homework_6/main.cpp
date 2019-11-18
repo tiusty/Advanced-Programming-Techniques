@@ -137,6 +137,8 @@ void renderScene()
 
     // Enable lighting
     glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
+
     // Enable material color since lighting without material color looks black
     glEnable(GL_COLOR_MATERIAL);
     // Enable/Disable light 0
@@ -203,6 +205,7 @@ void renderScene()
             }
             // Draw the square piece
             glPushMatrix();
+            glNormal3f(0.0f, 0.0f, 1.0f);
             // Move the square to the right spot
             glTranslatef(i*Board::boardLen, j*Board::boardLen, 0);
             drawSquare();
