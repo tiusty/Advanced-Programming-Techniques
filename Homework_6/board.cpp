@@ -112,7 +112,6 @@ void Board::movePawn()
             break;
         }
 
-        // Generate a random number between .8 and 1.2 to simulate misfiring
         std::random_device rd; // obtain a random number from hardware
         std::mt19937 eng(rd()); // seed the generator
         std::uniform_int_distribution<> distr(0, 7); // define the range
@@ -199,7 +198,6 @@ void Board::moveKnight()
             break;
         }
 
-        // Generate a random number between .8 and 1.2 to simulate misfiring
         std::random_device rd; // obtain a random number from hardware
         std::mt19937 eng(rd()); // seed the generator
         std::uniform_int_distribution<> distr(0, 7); // define the range
