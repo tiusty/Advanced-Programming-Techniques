@@ -32,15 +32,17 @@ public: // Methods
     double distanceFromCenterOfSphere();
     Coordinate calculateForceUnitVec();
     double calculateForceMag();
+    double velMag();
     void evolveSystem();
 public: // Members
     static constexpr double mass = 1; //kg
-    static constexpr double kSpring = .1;
+    static constexpr double kSpring = 1;
     static constexpr double timeStep = .1; //seconds
     static constexpr double maxForce = 20;
     Coordinate location;
     Coordinate velocity;
     Coordinate sphereCenter;
+    bool initApproach{true};
 };
 
 
