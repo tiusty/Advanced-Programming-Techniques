@@ -15,9 +15,9 @@ Description:
 struct Coordinate
 {
     Coordinate() = default;
-    Coordinate(float x, float y, float z)
+    Coordinate(double x, double y, double z)
     :x{x}, y{y}, z{z} {}
-    float x{0},y{0},z{0};
+    double x{0},y{0},z{0};
 };
 
 /**
@@ -29,9 +29,15 @@ public: // Methods
     void setCenter(Coordinate center);
     void drawUAV() const;
     void setColor() const;
-    void calculateForce();
+    double distanceFromCenterOfSphere();
+    Coordinate calculateForceUnitVec();
+    double calculateForceMag();
+    void evolveSystem();
 public: // Members
-    static constexpr unsigned int mass = 1; //kg
+    static constexpr double mass = 1; //kg
+    static constexpr double kSpring = .1;
+    static constexpr double timeStep = .1; //seconds
+    static constexpr double maxForce = 20;
     Coordinate location;
     Coordinate velocity;
     Coordinate sphereCenter;

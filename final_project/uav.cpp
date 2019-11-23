@@ -8,6 +8,8 @@ Description:
 
 #include "uav.h"
 #include <GL/glut.h>
+#include <cmath>
+#include <iostream>
 
 // Determine piece material properties
 GLfloat mat_specular[] = {0.5, 0.5, 0.5, 1.0};
@@ -15,16 +17,73 @@ GLfloat shininess[] = {50.0};
 unsigned char uavColor[] = {255,0,0};
 
 // Define constexpr
-constexpr unsigned int UAV::mass; //kg
+constexpr double UAV::mass; //kg
+constexpr double UAV::kSpring;
+constexpr double UAV::timeStep;
+constexpr double UAV::maxForce;
+
+
+// Overloads the multiplcation operator so a Coordiante can be multiplied by a scalar to represent
+// a unit vector being multiplied by the magnitude
+Coordinate operator* (double scalar, const Coordinate& coord)
+{
+    return Coordinate{coord.x * scalar, coord.y * scalar, coord.z*scalar};
+}
+
+Coordinate operator* (const Coordinate& y, double scalar)
+{
+    return scalar*y;
+}
 
 void UAV::setCenter(Coordinate center)
 {
     sphereCenter = center;
+    std::cout << "Center x:" << sphereCenter.x << ", Center y: " << sphereCenter.y << ", Center z: " << sphereCenter.z << std::endl;
 }
 
-void UAV::calculateForce()
+double UAV::distanceFromCenterOfSphere()
 {
+    return sqrt(pow(sphereCenter.x - location.x,2) + pow(sphereCenter.y - location.y, 2) + pow(sphereCenter.z - location.z,2));
+}
 
+Coordinate UAV::calculateForceUnitVec()
+{
+    double distance = distanceFromCenterOfSphere();
+    return Coordinate{(sphereCenter.x - location.x)/distance, (sphereCenter.y - location.y)/distance, (sphereCenter.z - location.z)/distance};
+}
+
+double UAV::calculateForceMag()
+{
+    double force =  -kSpring*(10 - distanceFromCenterOfSphere());
+    if (force > maxForce)
+    {
+        return maxForce;
+    }
+    else if (force < -maxForce)
+    {
+        return -maxForce;
+    }
+    else
+    {
+        return force;
+    }
+}
+
+void UAV::evolveSystem()
+{
+    Coordinate force = calculateForceMag()*calculateForceUnitVec();
+    std::cout << "force x:" << calculateForceUnitVec().x << ", force y: " << calculateForceUnitVec().y << ", force z: " << calculateForceUnitVec().z << std::endl;
+    std::cout << "force x:" << force.x << ", force y: " << force.y << ", force z: " << force.z << std::endl;
+    std::cout << "Before x:" << location.x << ", Before y: " << location.y << ", Before z: " << location.z << std::endl;
+    location.x = location.x + velocity.x*timeStep + .5*force.x/mass*pow(timeStep,2);
+    location.y = location.y + velocity.y*timeStep + .5*force.y/mass*pow(timeStep,2);
+    location.z = location.z + velocity.z*timeStep + .5*force.z/mass*pow(timeStep,2);
+    std::cout << "After x:" << location.x << ", AFter y: " << location.y << ", After z: " << location.z << std::endl;
+
+    velocity.x = velocity.x + force.x/mass*timeStep;
+    velocity.y = velocity.y + force.y/mass*timeStep;
+    velocity.z = velocity.z + force.z/mass*timeStep;
+    std::cout << "velocity x:" << velocity.x << ", velocity y: " << velocity.y << ", velocity z: " << velocity.z << std::endl;
 }
 
 void UAV::drawUAV() const

@@ -103,6 +103,10 @@ void renderScene()
     field.drawField();
     field.drawSphere();
 
+    for(auto &uav : field.uavs)
+    {
+            uav.evolveSystem();
+    }
     field.drawUAVS();
 
     glutSwapBuffers(); // Make it all visible
@@ -159,10 +163,6 @@ int main(int argc, char**argv)
     std::this_thread::sleep_for(std::chrono::seconds(5));
     for (int ii = 0; ii < 600 ; ii++)
     {
-        for(auto &uav : field.uavs)
-        {
-//            uav.
-        }
     }
     printf("Done\n");
     t1.join();

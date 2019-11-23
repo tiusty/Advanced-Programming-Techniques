@@ -15,10 +15,10 @@ constexpr unsigned int FootballField::numUAVs;
 
 FootballField::FootballField()
 {
-    initializeUAVs();
     origin.x = widthFootballField/2;
     origin.y = lenFootballField/2;
     origin.z = 0;
+    initializeUAVs();
 }
 
 Coordinate FootballField::sphereLocation()
