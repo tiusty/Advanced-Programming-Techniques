@@ -21,6 +21,7 @@ constexpr double UAV::mass; //kg
 constexpr double UAV::kSpring;
 constexpr double UAV::timeStep;
 constexpr double UAV::maxForce;
+constexpr double UAV::gravity;
 
 
 // Overloads the multiplcation operator so a Coordiante can be multiplied by a scalar to represent
@@ -107,9 +108,42 @@ double UAV::calculateForceMag()
     }
 }
 
+Coordinate UAV::getForce()
+{
+    // Get the force magnitude
+    // To compensate for gravity we always limit the magnitude to 10 (since the max is 20)
+    //   then we will assume the uav is always firing the extra 10N to counter the effect of gravity
+    double mag = calculateForceMag();
+
+    // Limit the force of the UAV motors to +=10 so that the extra 10 newton are always
+    //  being used to counter the effets of gravity
+    if(mag > 10)
+    {
+        mag = 10;
+    }
+    else if (mag < -10)
+    {
+        mag = -10;
+    }
+
+    // calculate the force of the desired direction
+    Coordinate force = mag*calculateForceUnitVec();
+
+    // The two statements below counter each other but left to display what it is doing
+    // Add the effect of gravity
+    force.z -= gravity;
+
+    // With the extra 10 Newtons (reserved), apply the force in the z direction to counter the
+    //  effect of grabity
+    force.z += gravity;
+
+    // Return the new force vector
+    return force;
+}
+
 void UAV::evolveSystem()
 {
-    Coordinate force = calculateForceMag()*calculateForceUnitVec();
+    Coordinate force = getForce();
 
     // Equations of motion for the new position
     location.x = location.x + velocity.x*timeStep + .5*force.x/mass*pow(timeStep,2);

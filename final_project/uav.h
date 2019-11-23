@@ -33,12 +33,14 @@ public: // Methods
     Coordinate calculateForceUnitVec();
     double calculateForceMag();
     double velMag();
+    Coordinate getForce();
     void evolveSystem();
 public: // Members
     static constexpr double mass = 1; //kg
     static constexpr double kSpring = 1;
     static constexpr double timeStep = .1; //seconds
     static constexpr double maxForce = 20;
+    static constexpr double gravity = -10;
     Coordinate location;
     Coordinate velocity;
     Coordinate sphereCenter;
