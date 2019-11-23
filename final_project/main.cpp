@@ -22,6 +22,8 @@ Description:
 #include <chrono>
 #include <thread>
 
+#include "uav.h"
+
 // Send location and velocity vector in each direction
 const int numElements = 6; // x, y, z, vx, vy, vz
 
@@ -31,6 +33,8 @@ double* rcvbuffer = new double[rcvSize];
 
 double sendBuffer[numElements];
 
+
+UAV uav1;
 
 // Football field parameters
 float yardToMeter(float yardValue)
@@ -66,12 +70,15 @@ void changeSize(int w, int h)
 
 void displayFootballField()
 {
-    glBegin(GL_QUADS);
-    glVertex3f(0, 0, 0.0);
-    glVertex3f(lenFootballField, 0, 0.0);
-    glVertex3f(lenFootballField, widthFootballField, 0.0);
-    glVertex3f(0, widthFootballField, 0.0);
-    glEnd();
+    glPushMatrix();
+        glColor3f(0.0, 1.0, 0.0); // set drawing color to white
+        glBegin(GL_QUADS);
+        glVertex3f(0, 0, 0.0);
+        glVertex3f(lenFootballField, 0, 0.0);
+        glVertex3f(lenFootballField, widthFootballField, 0.0);
+        glVertex3f(0, widthFootballField, 0.0);
+        glEnd();
+    glPopMatrix();
 }
 
 //----------------------------------------------------------------------
@@ -84,7 +91,7 @@ void renderScene()
 {
 
     // Clear color and depth buffers
-    glClearColor(0.0, 1.0, 0.0, 1.0); // background color to green??
+    glClearColor(0.0, 0.0, 1.0, 1.0); // background color to green??
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Reset transformations
@@ -100,6 +107,7 @@ void renderScene()
     displayFootballField();
 
 //    drawUAVs();
+    uav1.drawUAV();
 
     glutSwapBuffers(); // Make it all visible
 

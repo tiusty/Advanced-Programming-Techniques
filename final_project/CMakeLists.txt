@@ -12,10 +12,17 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_executable(${PROJECT_NAME}
-        main.cpp)
+        main.cpp
+        uav.cpp)
 
 target_link_libraries (${PROJECT_NAME}
         PUBLIC
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES}
+        )
+
+
+target_include_directories(${PROJECT_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}
         )
