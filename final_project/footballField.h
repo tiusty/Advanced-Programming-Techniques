@@ -24,7 +24,7 @@ public: // Methods
     void drawField();
     void drawUAVS();
 public: // Members
-    static constexpr float lenFootballField{yardToMeter(120)};
+    static constexpr float lenFootballField{yardToMeter(100)};
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};
     static constexpr unsigned int numUAVs{15};
     std::array<UAV, numUAVs> uavs;
