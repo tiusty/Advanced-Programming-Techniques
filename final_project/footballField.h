@@ -19,12 +19,14 @@ constexpr float yardToMeter(float yardValue)
 
 class FootballField {
 public: // Methods
+    FootballField();
+    void initializeUAVs();
     void drawField();
     void drawUAVS();
 public: // Members
     static constexpr float lenFootballField{yardToMeter(120)};
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};
-    static constexpr unsigned int numUAVs{1};
+    static constexpr unsigned int numUAVs{15};
     std::array<UAV, numUAVs> uavs;
 };
 

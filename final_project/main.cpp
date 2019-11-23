@@ -34,12 +34,11 @@ double* rcvbuffer = new double[rcvSize];
 
 double sendBuffer[numElements];
 
-
+// Define an instance of a football field
 FootballField field;
-UAV uav1;
 
 // Camera Parameters
-float eye_x = 40, eye_y = -40, eye_z = 20;
+float eye_x = 50, eye_y = 0, eye_z = 40;
 float center_x = field.lenFootballField/2, center_y = field.widthFootballField/2, center_z = 0;
 
 
@@ -57,7 +56,7 @@ void changeSize(int w, int h)
     float ratio = ((float)w) / ((float)h); // window aspect ratio
     glMatrixMode(GL_PROJECTION); // projection matrix is active
     glLoadIdentity(); // reset the projection
-    gluPerspective(60.0, ratio, 0.1, 1000.0); // perspective transformation
+    gluPerspective(120.0, ratio, 0.1, 1000.0); // perspective transformation
     glMatrixMode(GL_MODELVIEW); // return to modelview mode
     glViewport(0, 0, w, h); // set viewport (drawing area) to entire window
 }
@@ -72,7 +71,7 @@ void renderScene()
 {
 
     // Clear color and depth buffers
-    glClearColor(0.0, 0.0, 1.0, 1.0); // background color to green??
+    glClearColor(0.0, 0.0, 1.0, 1.0); // background color to blue??
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Reset transformations

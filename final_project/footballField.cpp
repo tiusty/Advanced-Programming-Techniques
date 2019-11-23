@@ -13,6 +13,11 @@ constexpr float FootballField::lenFootballField;
 constexpr float FootballField::widthFootballField;
 constexpr unsigned int FootballField::numUAVs;
 
+FootballField::FootballField()
+{
+    initializeUAVs();
+}
+
 void FootballField::drawField()
 {
     glPushMatrix();
@@ -24,6 +29,23 @@ void FootballField::drawField()
         glVertex3f(0, widthFootballField, 0.0);
         glEnd();
     glPopMatrix();
+}
+
+void FootballField::initializeUAVs()
+{
+    unsigned int counter = 0;
+    unsigned int column = 0;
+    for(auto &uav : uavs)
+    {
+        uav.location.x = yardToMeter(25*column + 10);
+        uav.location.y = yardToMeter((counter%3)*widthFootballField/2);
+        counter++;
+        if (counter %3 == 0)
+        {
+            column++;
+        }
+    }
+
 }
 
 void FootballField::drawUAVS()
