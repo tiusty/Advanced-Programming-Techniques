@@ -17,18 +17,24 @@ unsigned char uavColor[] = {255,0,0};
 // Define constexpr
 constexpr unsigned int UAV::mass; //kg
 
-void calcluateForce()
+void UAV::setCenter(Coordinate center)
+{
+    sphereCenter = center;
+}
+
+void UAV::calculateForce()
 {
 
 }
 
 void UAV::drawUAV() const
 {
+    // Draws the UAV which we are representing as a solid red sphere
     glPushMatrix();
-    setColor();
-    glTranslatef(location.x, location.y, location.z);
-    glTranslatef(0, 0, .5);
-    glutSolidSphere(.5, 20, 20);
+        setColor();
+        glTranslatef(location.x, location.y, location.z);
+        glTranslatef(0, 0, .5);
+        glutSolidSphere(.5, 20, 20);
     glPopMatrix();
 }
 

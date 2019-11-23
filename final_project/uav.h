@@ -14,6 +14,9 @@ Description:
  */
 struct Coordinate
 {
+    Coordinate() = default;
+    Coordinate(float x, float y, float z)
+    :x{x}, y{y}, z{z} {}
     float x{0},y{0},z{0};
 };
 
@@ -22,13 +25,16 @@ struct Coordinate
  */
 class UAV {
 public: // Methods
+    UAV() = default;
+    void setCenter(Coordinate center);
     void drawUAV() const;
     void setColor() const;
-    void calcluateForce();
+    void calculateForce();
 public: // Members
     static constexpr unsigned int mass = 1; //kg
     Coordinate location;
     Coordinate velocity;
+    Coordinate sphereCenter;
 };
 
 

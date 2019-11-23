@@ -21,12 +21,17 @@ FootballField::FootballField()
     origin.z = 0;
 }
 
+Coordinate FootballField::sphereLocation()
+{
+    return Coordinate{origin.x, origin.y, origin.z + 50};
+}
+
 void FootballField::drawSphere()
 {
+    Coordinate sphereLoc = sphereLocation();
     glPushMatrix();
         glColor3f(1.0,1.0,0.0);
-        glTranslatef(0,0,50);
-        glTranslatef(origin.x, origin.y, origin.z);
+        glTranslatef(sphereLoc.x, sphereLoc.y, sphereLoc.z);
         glutWireSphere(10, 10,20);
     glPopMatrix();
 }
@@ -53,6 +58,7 @@ void FootballField::initializeUAVs()
     unsigned int column = 0;
     for(auto &uav : uavs)
     {
+        uav.setCenter(sphereLocation());
         uav.location.y = yardToMeter(25*column);
         uav.location.x = (counter%3)*widthFootballField/2;
         counter++;
