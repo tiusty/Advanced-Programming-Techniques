@@ -218,6 +218,8 @@ void renderScene()
             }
             // Draw the square piece
             glPushMatrix();
+            // Set Normal vector. Important since the amount of light reflected is 
+            //  dependent on surface normal. If it is not correct, weird lighting behavior occurs
             glNormal3f(0.0f, 0.0f, 1.0f);
             // Move the square to the right spot
             glTranslatef(i*Board::boardLen, j*Board::boardLen, 0);
