@@ -14,6 +14,9 @@ GLfloat mat_specular[] = {0.5, 0.5, 0.5, 1.0};
 GLfloat shininess[] = {50.0};
 unsigned char uavColor[] = {255,0,0};
 
+// Define constexpr
+constexpr unsigned int UAV::mass; //kg
+
 void UAV::drawUAV() const
 {
     glPushMatrix();

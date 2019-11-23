@@ -35,8 +35,8 @@ double sendBuffer[numElements];
 FootballField field;
 
 // Camera Parameters
-float eye_x = 50, eye_y = 0, eye_z = 40;
-float center_x = field.lenFootballField/2, center_y = field.widthFootballField/2, center_z = 0;
+float eye_x = 0, eye_y = 50, eye_z = 40;
+float center_x = field.widthFootballField/2, center_y = field.lenFootballField/2, center_z = 0;
 
 
 //----------------------------------------------------------------------
@@ -56,6 +56,25 @@ void changeSize(int w, int h)
     gluPerspective(120.0, ratio, 0.1, 1000.0); // perspective transformation
     glMatrixMode(GL_MODELVIEW); // return to modelview mode
     glViewport(0, 0, w, h); // set viewport (drawing area) to entire window
+}
+
+/**
+ * Processes changes made by normal keys from the keyboard
+ */
+void processNormalKeys(unsigned char key, int xx, int yy)
+{
+    if (key == 'r' || key == 'R')
+    {
+        // We want it to circle around the point (4,4) which is the center of the chess board
+        double theta = atan2((eye_z-center_z),(eye_x-center_x));
+        // Add 10 degree to the angle
+        theta = theta - (10.0/180)*3.14;
+        // Find the distance from the center
+        double r = sqrt((eye_x-center_x)*(eye_x-center_x) + (eye_y-center_y)*(eye_y-center_y));
+        // Calculate the new position of the camera
+        eye_x = r*cos(theta) + center_x;
+        eye_y = r*sin(theta) + center_y;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -120,6 +139,7 @@ void mainOpenGL(int argc, char**argv)
     glutReshapeFunc(changeSize);
     glutDisplayFunc(renderScene);
     glutTimerFunc(100, timerFunction, 0);
+    glutKeyboardFunc(processNormalKeys);
     glutMainLoop();
 }
 //////////////////////////////////////////////////////////////////////

@@ -28,6 +28,7 @@ public: // Members
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};
     static constexpr unsigned int numUAVs{15};
     std::array<UAV, numUAVs> uavs;
+    Coordinate origin;
 };
 
 

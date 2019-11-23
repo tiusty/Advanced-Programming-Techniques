@@ -14,15 +14,20 @@ Description:
  */
 struct Coordinate
 {
-    float x{50},y{50},z{1};
+    float x{0},y{0},z{0};
 };
 
+/**
+ * Class stores information regarding a single UAV and actions it may perform
+ */
 class UAV {
 public: // Methods
     void drawUAV() const;
     void setColor() const;
 public: // Members
+    static constexpr unsigned int mass = 1; //kg
     Coordinate location;
+    Coordinate velocity;
 };
 
 
