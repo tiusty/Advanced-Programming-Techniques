@@ -13,7 +13,8 @@ endif()
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        uav.cpp)
+        uav.cpp
+        footballField.cpp)
 
 target_link_libraries (${PROJECT_NAME}
         PUBLIC

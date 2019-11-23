@@ -22,6 +22,7 @@ Description:
 #include <chrono>
 #include <thread>
 
+#include <footballField.h>
 #include "uav.h"
 
 // Send location and velocity vector in each direction
@@ -34,19 +35,12 @@ double* rcvbuffer = new double[rcvSize];
 double sendBuffer[numElements];
 
 
+FootballField field;
 UAV uav1;
-
-// Football field parameters
-float yardToMeter(float yardValue)
-{
-    return yardValue*.9144;
-}
-float lenFootballField = yardToMeter(120);
-float widthFootballField = yardToMeter((53*3+1)/3);
 
 // Camera Parameters
 float eye_x = 40, eye_y = -40, eye_z = 20;
-float center_x = lenFootballField/2, center_y = widthFootballField/2, center_z = 0;
+float center_x = field.lenFootballField/2, center_y = field.widthFootballField/2, center_z = 0;
 
 
 //----------------------------------------------------------------------
@@ -66,19 +60,6 @@ void changeSize(int w, int h)
     gluPerspective(60.0, ratio, 0.1, 1000.0); // perspective transformation
     glMatrixMode(GL_MODELVIEW); // return to modelview mode
     glViewport(0, 0, w, h); // set viewport (drawing area) to entire window
-}
-
-void displayFootballField()
-{
-    glPushMatrix();
-        glColor3f(0.0, 1.0, 0.0); // set drawing color to white
-        glBegin(GL_QUADS);
-        glVertex3f(0, 0, 0.0);
-        glVertex3f(lenFootballField, 0, 0.0);
-        glVertex3f(lenFootballField, widthFootballField, 0.0);
-        glVertex3f(0, widthFootballField, 0.0);
-        glEnd();
-    glPopMatrix();
 }
 
 //----------------------------------------------------------------------
@@ -104,7 +85,7 @@ void renderScene()
 
     glMatrixMode(GL_MODELVIEW);
 
-    displayFootballField();
+    field.drawField();
 
 //    drawUAVs();
     uav1.drawUAV();
