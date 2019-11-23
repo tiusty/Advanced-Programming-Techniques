@@ -24,6 +24,7 @@ class UAV {
 public: // Methods
     void drawUAV() const;
     void setColor() const;
+    void calcluateForce();
 public: // Members
     static constexpr unsigned int mass = 1; //kg
     Coordinate location;

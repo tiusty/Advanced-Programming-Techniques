@@ -35,8 +35,8 @@ double sendBuffer[numElements];
 FootballField field;
 
 // Camera Parameters
-float eye_x = 0, eye_y = 50, eye_z = 40;
-float center_x = field.widthFootballField/2, center_y = field.lenFootballField/2, center_z = 0;
+float eye_x = 0, eye_y = 50, eye_z = 50;
+float center_x = field.widthFootballField/2, center_y = field.lenFootballField/2, center_z = 25;
 
 
 //----------------------------------------------------------------------
@@ -101,6 +101,7 @@ void renderScene()
     glMatrixMode(GL_MODELVIEW);
 
     field.drawField();
+    field.drawSphere();
 
     field.drawUAVS();
 

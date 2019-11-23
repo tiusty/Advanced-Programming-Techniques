@@ -16,9 +16,19 @@ constexpr unsigned int FootballField::numUAVs;
 FootballField::FootballField()
 {
     initializeUAVs();
-    origin.x = lenFootballField/2;
-    origin.y = widthFootballField/2;
+    origin.x = widthFootballField/2;
+    origin.y = lenFootballField/2;
     origin.z = 0;
+}
+
+void FootballField::drawSphere()
+{
+    glPushMatrix();
+        glColor3f(1.0,1.0,0.0);
+        glTranslatef(0,0,50);
+        glTranslatef(origin.x, origin.y, origin.z);
+        glutWireSphere(10, 10,20);
+    glPopMatrix();
 }
 
 void FootballField::drawField()

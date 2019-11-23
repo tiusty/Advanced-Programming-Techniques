@@ -17,6 +17,11 @@ unsigned char uavColor[] = {255,0,0};
 // Define constexpr
 constexpr unsigned int UAV::mass; //kg
 
+void calcluateForce()
+{
+
+}
+
 void UAV::drawUAV() const
 {
     glPushMatrix();
