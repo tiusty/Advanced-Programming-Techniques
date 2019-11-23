@@ -63,7 +63,7 @@ double UAV::calculateForceMag()
 
     if (initApproach)
     {
-        if(velMag() < 2)
+        if(velMag() < 1.5)
         {
             force =  -kSpring*(10 - distanceFromCenterOfSphere());
         }
@@ -71,7 +71,7 @@ double UAV::calculateForceMag()
         {
             force = 0;
         }
-        if(distance < 12)
+        if(distance < 11)
         {
             initApproach = false;
         }
@@ -79,6 +79,14 @@ double UAV::calculateForceMag()
     else
     {
         force =  -kSpring*(10 - distanceFromCenterOfSphere());
+        // To prevent unstable oscillations, if the uav is not trying to slow down,
+        // Then limit the force to prevent "slamming on the accelerator"
+        // The slowing down for should simulate slaming on the brakes.
+        // This stabilzes the uav towards the equilibrium based on Hooke's law
+        if(!slowingDown)
+        {
+            force *=.8;
+        }
     }
 
     if (force > maxForce)
@@ -102,9 +110,19 @@ void UAV::evolveSystem()
     location.y = location.y + velocity.y*timeStep + .5*force.y/mass*pow(timeStep,2);
     location.z = location.z + velocity.z*timeStep + .5*force.z/mass*pow(timeStep,2);
 
+    double beforeMag = velMag();
     velocity.x = velocity.x + force.x/mass*timeStep;
     velocity.y = velocity.y + force.y/mass*timeStep;
     velocity.z = velocity.z + force.z/mass*timeStep;
+    double afterMag = velMag();
+    if(afterMag < beforeMag)
+    {
+        slowingDown = true;
+    }
+    else
+    {
+        slowingDown = false;
+    }
     std::cout << "velocity x:" << velocity.x << ", velocity y: " << velocity.y << ", velocity z: " << velocity.z << std::endl;
 }
 

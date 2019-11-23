@@ -43,6 +43,7 @@ public: // Members
     Coordinate velocity;
     Coordinate sphereCenter;
     bool initApproach{true};
+    bool slowingDown{false};
 };
 
 
