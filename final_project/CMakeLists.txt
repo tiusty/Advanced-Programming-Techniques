@@ -3,6 +3,7 @@ project(FinalProject)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
+find_package( Threads )
 
 # CMake 3.1 or older needs this method of setting compiler standards
 add_compile_options(-std=c++11)
@@ -12,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_executable(${PROJECT_NAME}
-        main.cpp
+        mainNotMpi.cpp
         uav.cpp
         footballField.cpp)
 
@@ -20,6 +21,7 @@ target_link_libraries (${PROJECT_NAME}
         PUBLIC
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT}
         )
 
 

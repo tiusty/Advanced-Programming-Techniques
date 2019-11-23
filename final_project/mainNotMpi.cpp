@@ -11,9 +11,6 @@ Description:
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef MPI
-    #include "mpi.h"
-#endif
 #include "iomanip"
 #include <cmath>
 #include <math.h>
@@ -89,10 +86,6 @@ void renderScene()
     field.drawUAVS();
 
     glutSwapBuffers(); // Make it all visible
-
-#ifdef MPI
-    MPI_Allgather(sendBuffer, numElements, MPI_DOUBLE, rcvbuffer, numElements, MPI_DOUBLE, MPI_COMM_WORLD);
-#endif
 }
 //----------------------------------------------------------------------
 // timerFunction  - called whenever the timer fires
@@ -138,42 +131,19 @@ void mainOpenGL(int argc, char**argv)
 int main(int argc, char**argv)
 
 {
-    int numTasks, rank=0;
+    std::thread t1(mainOpenGL, argc, argv);
 
-#ifdef MPI
-    int rc = MPI_Init(&argc, &argv);
-
-    if (rc != MPI_SUCCESS)
+    printf("hiii\n");
+    // Sleep for 5 seconds
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    for (int ii = 0; ii < 600 ; ii++)
     {
-        printf("Error starting MPI program. Terminating.\n");
-        MPI_Abort(MPI_COMM_WORLD, rc);
-    }
-
-    MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
-
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-    int gsize = 0;
-
-    MPI_Comm_size(MPI_COMM_WORLD, &gsize);
-#endif
-
-
-    if (rank == 0)
-    {
-        mainOpenGL(argc, argv);
-    }
-    else
-    {
-        // Sleep for 5 seconds
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-        for (int ii = 0; ii < 600 ; ii++)
+        for(auto &uav : field.uavs)
         {
-//            CalcualteUAVsLocation(rank);
-#ifdef MPI
-            MPI_Allgather(sendBuffer, numElements, MPI_DOUBLE, rcvbuffer, numElements, MPI_DOUBLE, MPI_COMM_WORLD);
-#endif
+//            uav.
         }
     }
+    printf("Done\n");
+    t1.join();
     return 0;
 }
