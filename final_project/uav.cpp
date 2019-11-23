@@ -14,7 +14,7 @@ GLfloat mat_specular[] = {0.5, 0.5, 0.5, 1.0};
 GLfloat shininess[] = {50.0};
 unsigned char uavColor[] = {255,0,0};
 
-void UAV::drawUAV()
+void UAV::drawUAV() const
 {
     glPushMatrix();
     setColor();
@@ -24,7 +24,7 @@ void UAV::drawUAV()
     glPopMatrix();
 }
 
-void UAV::setColor()
+void UAV::setColor() const
 {
     // Set material properties
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);

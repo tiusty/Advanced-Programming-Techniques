@@ -19,8 +19,8 @@ struct Coordinate
 
 class UAV {
 public: // Methods
-    void drawUAV();
-    void setColor();
+    void drawUAV() const;
+    void setColor() const;
 public: // Members
     Coordinate location;
 };

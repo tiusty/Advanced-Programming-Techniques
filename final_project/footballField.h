@@ -8,6 +8,9 @@ Description:
 #ifndef FINALPROJECT_FOOTBALLFIELD_H
 #define FINALPROJECT_FOOTBALLFIELD_H
 
+#include <array>
+#include "uav.h"
+
 // Football field parameters
 constexpr float yardToMeter(float yardValue)
 {
@@ -17,9 +20,12 @@ constexpr float yardToMeter(float yardValue)
 class FootballField {
 public: // Methods
     void drawField();
+    void drawUAVS();
 public: // Members
     static constexpr float lenFootballField{yardToMeter(120)};
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};
+    static constexpr unsigned int numUAVs{1};
+    std::array<UAV, numUAVs> uavs;
 };
 
 

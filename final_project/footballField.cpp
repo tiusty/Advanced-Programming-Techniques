@@ -11,6 +11,7 @@ Description:
 // Define constexpr variables
 constexpr float FootballField::lenFootballField;
 constexpr float FootballField::widthFootballField;
+constexpr unsigned int FootballField::numUAVs;
 
 void FootballField::drawField()
 {
@@ -23,4 +24,12 @@ void FootballField::drawField()
         glVertex3f(0, widthFootballField, 0.0);
         glEnd();
     glPopMatrix();
+}
+
+void FootballField::drawUAVS()
+{
+    for(const auto &uav : uavs)
+    {
+        uav.drawUAV();
+    }
 }

@@ -87,8 +87,7 @@ void renderScene()
 
     field.drawField();
 
-//    drawUAVs();
-    uav1.drawUAV();
+    field.drawUAVS();
 
     glutSwapBuffers(); // Make it all visible
 
