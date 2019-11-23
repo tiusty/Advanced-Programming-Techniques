@@ -77,3 +77,14 @@ void FootballField::drawUAVS()
         uav.drawUAV();
     }
 }
+
+bool FootballField::checkAllUavsAtSphere()
+{
+    bool status{true};
+    for (const auto &uav : uavs)
+    {
+        status = status and !uav.initApproach;
+    }
+
+    return status;
+}

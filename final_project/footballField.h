@@ -25,6 +25,7 @@ public: // Methods
     void drawUAVS();
     void drawSphere();
     Coordinate sphereLocation();
+    bool checkAllUavsAtSphere();
 public: // Members
     static constexpr float lenFootballField{yardToMeter(100)};
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};

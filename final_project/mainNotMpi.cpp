@@ -94,9 +94,18 @@ void renderScene()
     glLoadIdentity();
 
 
-    gluLookAt(eye_x, eye_y, eye_z,
-              center_x, center_y, center_z,
-              0.0, 0.0, 1.0);
+    if(field.checkAllUavsAtSphere())
+    {
+        gluLookAt(eye_x+10, eye_y, eye_z+5,
+                  field.sphereLocation().x, field.sphereLocation().y, field.sphereLocation().z,
+                  0.0, 0.0, 1.0);
+    }
+    else
+    {
+        gluLookAt(eye_x, eye_y, eye_z,
+                  center_x, center_y, center_z,
+                  0.0, 0.0, 1.0);
+    }
 
     glMatrixMode(GL_MODELVIEW);
 

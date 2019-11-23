@@ -134,7 +134,7 @@ Coordinate UAV::getForce()
     force.z -= gravity;
 
     // With the extra 10 Newtons (reserved), apply the force in the z direction to counter the
-    //  effect of grabity
+    //  effect of gravity
     force.z += gravity;
 
     // Return the new force vector
