@@ -17,6 +17,10 @@ constexpr float yardToMeter(float yardValue)
     return yardValue*.9144;
 }
 
+/**
+ * Data format is:
+ * x,y,z,velx,vely,velz, initApproach
+ */
 class FootballField {
 public: // Methods
     FootballField();
@@ -34,7 +38,7 @@ public: // Members
     static constexpr float lenFootballField{yardToMeter(100)};
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};
     static constexpr unsigned int numUAVs{15};
-    static constexpr unsigned int numElements{6};
+    static constexpr unsigned int numElements{7};
     std::array<UAV, numUAVs> uavs;
     Coordinate origin;
 };

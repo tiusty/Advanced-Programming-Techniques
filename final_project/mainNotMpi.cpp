@@ -21,9 +21,6 @@ Description:
 
 #include "footballField.h"
 
-// Send location and velocity vector in each direction
-const int numElements = 6; // x, y, z, vx, vy, vz
-
 const int rcvSize = 16 * 6; // (Main task + 15 UAVs) * numElements
 
 double* rcvbuffer = new double[rcvSize];

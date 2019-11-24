@@ -129,6 +129,7 @@ void FootballField::setFieldData(double data[])
         uav.velocity.x = data[counter*numElements+3];
         uav.velocity.y = data[counter*numElements+4];
         uav.velocity.z = data[counter*numElements+5];
+        uav.initApproach = data[counter*numElements+6];
         counter++;
     }
 }
@@ -141,4 +142,5 @@ void FootballField::getUavData(double data[], unsigned int uavNum)
     data[3] = uavs.at(uavNum).velocity.x;
     data[4] = uavs.at(uavNum).velocity.y;
     data[5] = uavs.at(uavNum).velocity.z;
+    data[6] = uavs.at(uavNum).initApproach;
 }
