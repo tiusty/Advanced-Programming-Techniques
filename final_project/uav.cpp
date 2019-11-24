@@ -84,7 +84,7 @@ double UAV::calculateForceMag()
     }
     else
     {
-        force =  -kSpring*(10 - distanceFromCenterOfSphere());
+        force =  -kSpring*(8 - distanceFromCenterOfSphere());
         // To prevent unstable oscillations, if the uav is not trying to slow down,
         // Then limit the force to prevent "slamming on the accelerator"
         // The slowing down for should simulate slamming on the brakes and thus is not reduced.
@@ -120,6 +120,7 @@ Coordinate UAV::getOrthogonalVector(Coordinate vec)
     double z = distr(eng);
     Coordinate newVec;
 
+    // Determine an orthogonal matrix to the arugument.
     if(vec.x != 0)
     {
         newVec = {(-y*vec.y - z*vec.z)/vec.x, y, z};
@@ -149,13 +150,13 @@ Coordinate UAV::getForce()
 
     // Limit the force of the UAV motors to +=10 so that the extra 10 newton are always
     //  being used to counter the effets of gravity
-    if(mag > 8)
+    if(mag > 9)
     {
-        mag = 8;
+        mag = 9;
     }
-    else if (mag < -8)
+    else if (mag < -9)
     {
-        mag = -8;
+        mag = -9;
     }
 
     // calculate the force of the desired direction
@@ -167,7 +168,7 @@ Coordinate UAV::getForce()
 
         if(velMag() < 5)
         {
-            double leftOverForce = 2;
+            double leftOverForce = 1;
             Coordinate ortho = getOrthogonalVector(unitVec);
             force.x += leftOverForce*ortho.x;
             force.y += leftOverForce*ortho.y;

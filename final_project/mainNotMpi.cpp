@@ -96,7 +96,7 @@ void renderScene()
 
     if(field.checkAllUavsAtSphere())
     {
-        gluLookAt(eye_x+10, eye_y, eye_z+5,
+        gluLookAt(eye_x, eye_y, eye_z+10,
                   field.sphereLocation().x, field.sphereLocation().y, field.sphereLocation().z,
                   0.0, 0.0, 1.0);
     }
@@ -167,13 +167,11 @@ int main(int argc, char**argv)
 {
     std::thread t1(mainOpenGL, argc, argv);
 
-    printf("hiii\n");
     // Sleep for 5 seconds
     std::this_thread::sleep_for(std::chrono::seconds(5));
     for (int ii = 0; ii < 600 ; ii++)
     {
     }
-    printf("Done\n");
     t1.join();
     return 0;
 }
