@@ -33,6 +33,8 @@ double sendBuffer[numElements];
 
 // Define an instance of a football field
 FootballField field;
+unsigned int timeStep{0};
+bool decrease{false};
 
 // Camera Parameters
 float eye_x = 0, eye_y = 50, eye_z = 50;
@@ -117,7 +119,25 @@ void renderScene()
             uav.evolveSystem();
     }
     field.checkCollisions();
-    field.drawUAVS();
+    field.drawUAVS(timeStep);
+
+    if(timeStep == 128)
+    {
+        decrease = true;
+    }
+    else if (timeStep == 0)
+    {
+        decrease = false;
+    }
+
+    if(decrease)
+    {
+        timeStep--;
+    }
+    else
+    {
+        timeStep++;
+    }
 
     glutSwapBuffers(); // Make it all visible
 }

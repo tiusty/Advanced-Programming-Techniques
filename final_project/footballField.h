@@ -22,7 +22,7 @@ public: // Methods
     FootballField();
     void initializeUAVs();
     void drawField();
-    void drawUAVS();
+    void drawUAVS(unsigned int timeStep);
     void drawSphere();
     double distanceBetweenUavs(const UAV &uav1, const UAV &uav2) const;
     Coordinate sphereLocation();

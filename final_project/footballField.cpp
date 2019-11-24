@@ -96,11 +96,11 @@ void FootballField::initializeUAVs()
 
 }
 
-void FootballField::drawUAVS()
+void FootballField::drawUAVS(unsigned int timeStep)
 {
     for(const auto &uav : uavs)
     {
-        uav.drawUAV();
+        uav.drawUAV(timeStep);
     }
 }
 

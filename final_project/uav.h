@@ -27,8 +27,8 @@ class UAV {
 public: // Methods
     UAV() = default;
     void setCenter(Coordinate center);
-    void drawUAV() const;
-    void setColor() const;
+    void drawUAV(unsigned int timeStep) const;
+    void setColor(unsigned int timeStep) const;
     double distanceFromCenterOfSphere();
     Coordinate calculateForceUnitVec();
     Coordinate velUnitVec();

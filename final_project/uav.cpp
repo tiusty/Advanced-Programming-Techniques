@@ -244,18 +244,18 @@ void UAV::evolveSystem()
     std::cout << "velocity x:" << velocity.x << ", velocity y: " << velocity.y << ", velocity z: " << velocity.z << std::endl;
 }
 
-void UAV::drawUAV() const
+void UAV::drawUAV(unsigned int timeStep) const
 {
     // Draws the UAV which we are representing as a solid red sphere
     glPushMatrix();
-        setColor();
+        setColor(timeStep);
         glTranslatef(location.x, location.y, location.z);
         glTranslatef(0, 0, .5);
         glutSolidSphere(.5, 20, 20);
     glPopMatrix();
 }
 
-void UAV::setColor() const
+void UAV::setColor(unsigned int timestep) const
 {
     // Set material properties
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
@@ -265,5 +265,6 @@ void UAV::setColor() const
     glClearColor(0.0, 0.0, 0, 1.0);
 
     // Set color of the UAV
-    glColor3ub(uavColor[0], uavColor[1], uavColor[2]); // set drawing color to white
+    // The red color oscillations every time step
+    glColor3ub(timestep + 127, uavColor[1], uavColor[2]); // set drawing color to white
 }
