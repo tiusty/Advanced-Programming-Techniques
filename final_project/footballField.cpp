@@ -13,6 +13,7 @@ Description:
 constexpr float FootballField::lenFootballField;
 constexpr float FootballField::widthFootballField;
 constexpr unsigned int FootballField::numUAVs;
+constexpr unsigned int FootballField::numElements;
 
 FootballField::FootballField()
 {
@@ -113,4 +114,31 @@ bool FootballField::checkAllUavsAtSphere()
     }
 
     return status;
+}
+
+void FootballField::setFieldData(double data[])
+{
+    // The first numElements contain no data since it
+    //  is just from rendering the world
+    unsigned int counter{1};
+    for(auto &uav : uavs)
+    {
+        uav.location.x = data[counter*numElements+0];
+        uav.location.y = data[counter*numElements+1];
+        uav.location.z = data[counter*numElements+2];
+        uav.velocity.x = data[counter*numElements+3];
+        uav.velocity.y = data[counter*numElements+4];
+        uav.velocity.z = data[counter*numElements+5];
+        counter++;
+    }
+}
+
+void FootballField::getUavData(double data[], unsigned int uavNum)
+{
+    data[0] = uavs.at(uavNum).location.x;
+    data[1] = uavs.at(uavNum).location.y;
+    data[2] = uavs.at(uavNum).location.z;
+    data[3] = uavs.at(uavNum).velocity.x;
+    data[4] = uavs.at(uavNum).velocity.y;
+    data[5] = uavs.at(uavNum).velocity.z;
 }

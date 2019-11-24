@@ -20,6 +20,8 @@ constexpr float yardToMeter(float yardValue)
 class FootballField {
 public: // Methods
     FootballField();
+    void getUavData(double data[], unsigned int uavNum);
+    void setFieldData(double data[]);
     void initializeUAVs();
     void drawField();
     void drawUAVS(unsigned int timeStep);
@@ -32,6 +34,7 @@ public: // Members
     static constexpr float lenFootballField{yardToMeter(100)};
     static constexpr float widthFootballField{yardToMeter((53*3+1)/3)};
     static constexpr unsigned int numUAVs{15};
+    static constexpr unsigned int numElements{6};
     std::array<UAV, numUAVs> uavs;
     Coordinate origin;
 };
