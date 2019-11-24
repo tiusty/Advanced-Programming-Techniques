@@ -90,7 +90,7 @@ double UAV::calculateForceMag()
     }
     else
     {
-        force =  -kSpring*(10 - distanceFromCenterOfSphere());
+        force =  -kSpring*(9 - distanceFromCenterOfSphere());
         // To prevent unstable oscillations, if the uav is not trying to slow down,
         // Then limit the force to prevent "slamming on the accelerator"
         // The slowing down for should simulate slamming on the brakes and thus is not reduced.

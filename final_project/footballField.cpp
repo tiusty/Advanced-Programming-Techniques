@@ -7,6 +7,7 @@ Description:
 
 #include "footballField.h"
 #include <GL/glut.h>
+#include <cmath>
 
 // Define constexpr variables
 constexpr float FootballField::lenFootballField;
@@ -21,11 +22,28 @@ FootballField::FootballField()
     initializeUAVs();
 }
 
+double FootballField::distanceBetweenUavs(const UAV &uav1, const UAV &uav2) const
+{
+    return sqrt(
+            pow(uav2.location.x - uav1.location.x, 2) +
+            pow(uav2.location.y - uav1.location.y, 2) +
+            pow(uav2.location.z - uav1.location.z, 2));
+}
+
 void FootballField::checkCollisions()
 {
     for(int i=0; i<uavs.size(); i++)
     {
-
+        for(int j=i; j < uavs.size(); j++)
+        {
+            // If another UAV comes within .01 of it then swap velocity vectors
+            if(distanceBetweenUavs(uavs.at(i), uavs.at(j)) < .51)
+            {
+                Coordinate vel1 = uavs.at(i).velocity;
+                uavs.at(i).velocity = uavs.at(j).velocity;
+                uavs.at(j).velocity = vel1;
+            }
+        }
     }
 }
 

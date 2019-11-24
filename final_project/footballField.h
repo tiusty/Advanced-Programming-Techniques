@@ -24,6 +24,7 @@ public: // Methods
     void drawField();
     void drawUAVS();
     void drawSphere();
+    double distanceBetweenUavs(const UAV &uav1, const UAV &uav2) const;
     Coordinate sphereLocation();
     bool checkAllUavsAtSphere();
     void checkCollisions();

@@ -116,6 +116,7 @@ void renderScene()
     {
             uav.evolveSystem();
     }
+    field.checkCollisions();
     field.drawUAVS();
 
     glutSwapBuffers(); // Make it all visible
