@@ -1,0 +1,5 @@
+#/bin/bash
+
+module load gcc mvapich2 mesa
+mpic++ mainMpi.cpp footballField.cpp uav.cpp -o exec -std=c++11 -lGLU -lglut
+qsub finalProject.pbs

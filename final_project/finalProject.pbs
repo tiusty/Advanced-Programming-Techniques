@@ -1,0 +1,12 @@
+#PBS -N job1
+#PBS -q coc-ice
+#PBS -o test.out
+#PBS -l nodes=8:ppn=2
+#PBS -l walltime=00:30
+
+#PBS -j oe
+
+cd ~/data/final_project/
+echo "Started Job..."
+module load gcc mvapich2 mesa
+mpirun -np 16 ./exec

@@ -17,6 +17,8 @@ Description:
 #include <chrono>
 #include <thread>
 
+#include "footballField.h"
+
 // Send location and velocity vector in each direction
 const int numElements = 6; // x, y, z, vx, vy, vz
 
@@ -115,12 +117,12 @@ void renderScene()
     field.setFieldData(rcvbuffer);
 }
 //----------------------------------------------------------------------
-// mainOpenGL  - standard GLUT initializations and callbacks
+// timerFunction  - called whenever the timer fires
 //----------------------------------------------------------------------
-void timer(int id)
+void timerFunction(int id)
 {
     glutPostRedisplay();
-    glutTimerFunc(100, timer, 0);
+    glutTimerFunc(100, timerFunction, 0);
 }
 //----------------------------------------------------------------------
 // mainOpenGL  - standard GLUT initializations and callbacks
@@ -148,14 +150,6 @@ void mainOpenGL(int argc, char**argv)
     glutDisplayFunc(renderScene);
     glutTimerFunc(100, timerFunction, 0);
     glutMainLoop();
-}
-//----------------------------------------------------------------------
-// timerFunction  - called whenever the timer fires
-//----------------------------------------------------------------------
-void timerFunction(int id)
-{
-    glutPostRedisplay();
-    glutTimerFunc(100, timerFunction, 0);
 }
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -197,7 +191,6 @@ int main(int argc, char**argv)
         for (int ii = 0; ii < 600 ; ii++)
         {
             field.checkCollisions();
-            CalcualteUAVsLocation(rank);
             field.uavs.at(uavNum).evolveSystem();
             field.getUavData(sendBuffer, uavNum);
             MPI_Allgather(sendBuffer, numElements, MPI_DOUBLE, rcvbuffer, numElements, MPI_DOUBLE, MPI_COMM_WORLD);

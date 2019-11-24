@@ -19,8 +19,7 @@ Description:
 #include <chrono>
 #include <thread>
 
-#include <footballField.h>
-#include "uav.h"
+#include "footballField.h"
 
 // Send location and velocity vector in each direction
 const int numElements = 6; // x, y, z, vx, vy, vz
