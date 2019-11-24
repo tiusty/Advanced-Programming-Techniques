@@ -10,6 +10,7 @@ Description:
 #include <GL/glut.h>
 #include <cmath>
 #include <iostream>
+#include <random>
 
 // Determine piece material properties
 GLfloat mat_specular[] = {0.5, 0.5, 0.5, 1.0};
@@ -67,7 +68,7 @@ double UAV::calculateForceMag()
     {
         // The velocity should be limited on the approach to the sphere to prevent
         //  mass velocity that makes slowing down the UAV take a long time
-        if(velMag() < 3)
+        if(velMag() < 2)
         {
             force =  -kSpring*(10 - distanceFromCenterOfSphere());
         }
@@ -108,6 +109,37 @@ double UAV::calculateForceMag()
     }
 }
 
+Coordinate UAV::getOrthogonalVector(Coordinate vec)
+{
+
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 eng(rd()); // seed the generator
+    std::uniform_int_distribution<> distr(1, 5); // define the range
+    double x = distr(eng);
+    double y = distr(eng);
+    double z = distr(eng);
+    Coordinate newVec;
+
+    if(vec.x != 0)
+    {
+        newVec = {(-y*vec.y - z*vec.z)/vec.x, y, z};
+    }
+    else if (vec.y != 0)
+    {
+        newVec = {(-x*vec.x - z*vec.z)/vec.y, y, z};
+    }
+    else if (vec.z != 0)
+    {
+        newVec = {(-x*vec.x - y*vec.y)/vec.z, y, z};
+    }
+    else
+    {
+        newVec = {1,1,1};
+    }
+    double mag =  sqrt(pow(newVec.x, 2) + pow(newVec.y, 2) + pow(newVec.z,2));
+    return (1/mag)*newVec;
+}
+
 Coordinate UAV::getForce()
 {
     // Get the force magnitude
@@ -117,18 +149,32 @@ Coordinate UAV::getForce()
 
     // Limit the force of the UAV motors to +=10 so that the extra 10 newton are always
     //  being used to counter the effets of gravity
-    if(mag > 10)
+    if(mag > 8)
     {
-        mag = 10;
+        mag = 8;
     }
-    else if (mag < -10)
+    else if (mag < -8)
     {
-        mag = -10;
+        mag = -8;
     }
 
     // calculate the force of the desired direction
-    Coordinate force = mag*calculateForceUnitVec();
+    Coordinate unitVec = calculateForceUnitVec();
+    Coordinate force = mag*unitVec;
 
+    if(!initApproach)
+    {
+
+        if(velMag() < 5)
+        {
+            double leftOverForce = 2;
+            Coordinate ortho = getOrthogonalVector(unitVec);
+            force.x += leftOverForce*ortho.x;
+            force.y += leftOverForce*ortho.y;
+            force.z += leftOverForce*ortho.z;
+        }
+
+    }
     // The two statements below counter each other but left to display what it is doing
     // Add the effect of gravity
     force.z -= gravity;

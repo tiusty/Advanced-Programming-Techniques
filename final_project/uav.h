@@ -34,6 +34,7 @@ public: // Methods
     double calculateForceMag();
     double velMag();
     Coordinate getForce();
+    Coordinate getOrthogonalVector(Coordinate vec);
     void evolveSystem();
 public: // Members
     static constexpr double mass = 1; //kg
