@@ -31,6 +31,7 @@ public: // Methods
     void setColor() const;
     double distanceFromCenterOfSphere();
     Coordinate calculateForceUnitVec();
+    Coordinate velUnitVec();
     double calculateForceMag();
     double velMag();
     Coordinate getForce();

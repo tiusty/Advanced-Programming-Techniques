@@ -58,6 +58,12 @@ Coordinate UAV::calculateForceUnitVec()
     return Coordinate{(sphereCenter.x - location.x)/distance, (sphereCenter.y - location.y)/distance, (sphereCenter.z - location.z)/distance};
 }
 
+Coordinate UAV::velUnitVec()
+{
+    double mag = velMag();
+    return Coordinate{velocity.x/mag, velocity.y/mag, velocity.z/mag};
+}
+
 double UAV::calculateForceMag()
 {
     double distance = distanceFromCenterOfSphere();
@@ -70,7 +76,7 @@ double UAV::calculateForceMag()
         //  mass velocity that makes slowing down the UAV take a long time
         if(velMag() < 2)
         {
-            force =  -kSpring*(10 - distanceFromCenterOfSphere());
+            force =  -kSpring*(9 - distanceFromCenterOfSphere());
         }
         else
         {
@@ -84,7 +90,7 @@ double UAV::calculateForceMag()
     }
     else
     {
-        force =  -kSpring*(8 - distanceFromCenterOfSphere());
+        force =  -kSpring*(10 - distanceFromCenterOfSphere());
         // To prevent unstable oscillations, if the uav is not trying to slow down,
         // Then limit the force to prevent "slamming on the accelerator"
         // The slowing down for should simulate slamming on the brakes and thus is not reduced.
@@ -114,26 +120,50 @@ Coordinate UAV::getOrthogonalVector(Coordinate vec)
 
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
-    std::uniform_int_distribution<> distr(1, 5); // define the range
+    std::uniform_int_distribution<> distr(1, 3); // define the range
     double x = distr(eng);
     double y = distr(eng);
     double z = distr(eng);
+    double increment = distr(eng);
     Coordinate newVec;
+    bool set{false};
 
-    // Determine an orthogonal matrix to the arugument.
-    if(vec.x != 0)
+    // Find an orthogonal vector
+    // Randomly select two elements of the Coordinate, and find the
+    // third so that it is orthogonal
+    for(int i=0; i<3; i++)
     {
-        newVec = {(-y*vec.y - z*vec.z)/vec.x, y, z};
+        int test = i + increment;
+        switch(test%3)
+        {
+            case 0:
+                if(vec.x != 0)
+                {
+                    newVec = {(-y*vec.y - z*vec.z)/vec.x, y, z};
+                    set = true;
+                }
+                break;
+            case 1:
+                if (vec.y != 0)
+                {
+                    newVec = {(-x*vec.x - z*vec.z)/vec.y, y, z};
+                    set = true;
+                }
+                break;
+            case 2:
+                if (vec.z != 0)
+                {
+                    newVec = {(-x*vec.x - y*vec.y)/vec.z, y, z};
+                    set = true;
+                }
+                break;
+        }
+        if(set)
+        {
+            break;
+        }
     }
-    else if (vec.y != 0)
-    {
-        newVec = {(-x*vec.x - z*vec.z)/vec.y, y, z};
-    }
-    else if (vec.z != 0)
-    {
-        newVec = {(-x*vec.x - y*vec.y)/vec.z, y, z};
-    }
-    else
+    if(!set)
     {
         newVec = {1,1,1};
     }
@@ -143,30 +173,35 @@ Coordinate UAV::getOrthogonalVector(Coordinate vec)
 
 Coordinate UAV::getForce()
 {
-    // Get the force magnitude
-    // To compensate for gravity we always limit the magnitude to 10 (since the max is 20)
-    //   then we will assume the uav is always firing the extra 10N to counter the effect of gravity
-    double mag = calculateForceMag();
+    Coordinate force;
 
-    // Limit the force of the UAV motors to +=10 so that the extra 10 newton are always
-    //  being used to counter the effets of gravity
-    if(mag > 9)
+    if( velMag() > 5)
     {
-        mag = 9;
+        force = -10*velUnitVec();
     }
-    else if (mag < -9)
+    else
     {
-        mag = -9;
-    }
+        // Get the force magnitude
+        // To compensate for gravity we always limit the magnitude to 10 (since the max is 20)
+        //   then we will assume the uav is always firing the extra 10N to counter the effect of gravity
+        double mag = calculateForceMag();
 
-    // calculate the force of the desired direction
-    Coordinate unitVec = calculateForceUnitVec();
-    Coordinate force = mag*unitVec;
+        // Limit the force of the UAV motors to +=10 so that the extra 10 newton are always
+        //  being used to counter the effets of gravity
+        if(mag > 9)
+        {
+            mag = 9;
+        }
+        else if (mag < -9)
+        {
+            mag = -9;
+        }
 
-    if(!initApproach)
-    {
+        // calculate the force of the desired direction
+        Coordinate unitVec = calculateForceUnitVec();
+        force = mag*unitVec;
 
-        if(velMag() < 5)
+        if(!initApproach)
         {
             double leftOverForce = 1;
             Coordinate ortho = getOrthogonalVector(unitVec);
@@ -174,7 +209,6 @@ Coordinate UAV::getForce()
             force.y += leftOverForce*ortho.y;
             force.z += leftOverForce*ortho.z;
         }
-
     }
     // The two statements below counter each other but left to display what it is doing
     // Add the effect of gravity

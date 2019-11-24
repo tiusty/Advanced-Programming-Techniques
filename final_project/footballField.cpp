@@ -21,6 +21,14 @@ FootballField::FootballField()
     initializeUAVs();
 }
 
+void FootballField::checkCollisions()
+{
+    for(int i=0; i<uavs.size(); i++)
+    {
+
+    }
+}
+
 Coordinate FootballField::sphereLocation()
 {
     return Coordinate{origin.x, origin.y, origin.z + 50};
