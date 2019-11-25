@@ -115,6 +115,10 @@ void renderScene()
     glutSwapBuffers(); // Make it all visible
 
     // Gather all the data to synchronize all the uavs
+    // Note, tha master process (i.e rank 0)  does not actually run the code for a UAV
+    //  Instead it just runs the blocking GLMain function
+    //  Therefore sendBuffer should always be blank since the master process doesn't actually
+    //  store anyinformation
     MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
 
     // Based on the data from all the uavs, set the field data so that the window draws properly
