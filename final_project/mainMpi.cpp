@@ -24,7 +24,7 @@ FootballField field;
 unsigned int colorOscillations{0};
 bool decrease{false};
 
-
+// Variables for MPI framework
 const int rcvSize = 16 * field.numElements; // (Main task + 15 UAVs) * numElements
 
 double* rcvbuffer = new double[rcvSize];
@@ -71,7 +71,8 @@ void renderScene()
     // Reset transformations
     glLoadIdentity();
 
-
+    // Determines the look angle based on the state of the uavs. Once all the uavs
+    //  approach the sphere, focus on the sphere rather than the field
     if(field.checkAllUavsAtSphere())
     {
         gluLookAt(eye_x, eye_y, eye_z+10,
@@ -87,10 +88,12 @@ void renderScene()
 
     glMatrixMode(GL_MODELVIEW);
 
+    // Draw elements on the window
     field.drawField();
     field.drawSphere();
     field.drawUAVS(colorOscillations);
 
+    // color oscillation changes the color of the uav every 100ms
     if(colorOscillations == 128)
     {
         decrease = true;
@@ -111,7 +114,10 @@ void renderScene()
 
     glutSwapBuffers(); // Make it all visible
 
+    // Gather all the data to synchronize all the uavs
     MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
+
+    // Based on the data from all the uavs, set the field data so that the window draws properly
     field.setFieldData(rcvbuffer);
 }
 //----------------------------------------------------------------------
@@ -158,6 +164,7 @@ void mainOpenGL(int argc, char**argv)
 int main(int argc, char**argv)
 
 {
+    // Set MPI variables
     int numTasks, rank;
 
     int rc = MPI_Init(&argc, &argv);
@@ -177,6 +184,7 @@ int main(int argc, char**argv)
     MPI_Comm_size(MPI_COMM_WORLD, &gsize);
 
 
+    // Separate functionality for main process and sub-processes
     if (rank == 0)
     {
         mainOpenGL(argc, argv);
@@ -188,10 +196,21 @@ int main(int argc, char**argv)
         std::this_thread::sleep_for(std::chrono::seconds(5));
         for (int ii = 0; ii < 600 ; ii++)
         {
+            // For each uav process
+
+            // Check for collisions
             field.checkCollisions();
+
+            // Evolve the particular process's UAV
             field.uavs.at(uavNum).evolveSystem();
+
+            // Get that data for that UAV
             field.getUavData(sendBuffer, uavNum);
+
+            // Set it to the all gather so everyone gets a copy of the field data
             MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
+
+            // Everyone receive the updated state for the field
             field.setFieldData(rcvbuffer);
         }
     }

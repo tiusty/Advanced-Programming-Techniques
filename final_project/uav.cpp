@@ -1,7 +1,7 @@
 /*
 Author: Alex Agudelo
 Class: ECE 6122
-Last date modified: 11/22/2019
+Last date modified: 11/25/2019
 Description:
  Implements the uav class
 */
@@ -25,13 +25,13 @@ constexpr double UAV::maxForce;
 constexpr double UAV::gravity;
 
 
-// Overloads the multiplcation operator so a Coordiante can be multiplied by a scalar to represent
+// Overloads the multiplication operator so a coordiante can be multiplied by a scalar to represent
 // a unit vector being multiplied by the magnitude
 Coordinate operator* (double scalar, const Coordinate& coord)
 {
     return Coordinate{coord.x * scalar, coord.y * scalar, coord.z*scalar};
 }
-
+// Uses the above overloading
 Coordinate operator* (const Coordinate& y, double scalar)
 {
     return scalar*y;
@@ -210,15 +210,20 @@ Coordinate UAV::getForce()
             force.z += leftOverForce*ortho.z;
         }
     }
-    // The two statements below counter each other but left to display what it is doing
-    // Add the effect of gravity
-    force.z -= gravity;
-
     // With the extra 10 Newtons (reserved), apply the force in the z direction to counter the
     //  effect of gravity
     force.z += gravity;
 
     // Return the new force vector
+    double forceMag = sqrt(pow(force.x,2) + pow(force.y, 2) + pow(force.z, 2));
+    if(forceMag > 20)
+    {
+        std::cout << "Issues!" << std::endl;
+    }
+
+    // Now add the effect of gravity to the resultant force
+    force.z -= gravity;
+
     return force;
 }
 
@@ -241,7 +246,6 @@ void UAV::evolveSystem()
     // Determines if the UAV is slowing down or speeding up
     // Used in the force calculation to reduce the oscillations
     slowingDown = afterMag < beforeMag;
-    std::cout << "velocity x:" << velocity.x << ", velocity y: " << velocity.y << ", velocity z: " << velocity.z << std::endl;
 }
 
 void UAV::drawUAV(unsigned int timeStep) const

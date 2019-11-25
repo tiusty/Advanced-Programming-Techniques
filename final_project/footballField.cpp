@@ -71,10 +71,10 @@ void FootballField::drawField()
     glPushMatrix();
         glColor3f(0.0, 1.0, 0.0); // set drawing color to white
         glBegin(GL_QUADS);
-        glVertex3f(0, 0-yardToMeter(10), 0.0);
-        glVertex3f(0, lenFootballField+yardToMeter(10), 0.0);
-        glVertex3f(widthFootballField, lenFootballField+yardToMeter(10), 0.0);
-        glVertex3f(widthFootballField, 0-yardToMeter(10), 0.0);
+        glVertex3f(0-yardToMeter(3), 0-yardToMeter(10), 0.0);
+        glVertex3f(0-yardToMeter(3), lenFootballField+yardToMeter(10), 0.0);
+        glVertex3f(widthFootballField+yardToMeter(3), lenFootballField+yardToMeter(10), 0.0);
+        glVertex3f(widthFootballField+yardToMeter(3), 0-yardToMeter(10), 0.0);
         glEnd();
     glPopMatrix();
 }

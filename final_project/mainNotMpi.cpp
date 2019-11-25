@@ -6,8 +6,6 @@ Description:
  Main function that executes the program
 */
 
-//#define MPI
-
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,12 +18,6 @@ Description:
 #include <thread>
 
 #include "footballField.h"
-
-const int rcvSize = 16 * 6; // (Main task + 15 UAVs) * numElements
-
-double* rcvbuffer = new double[rcvSize];
-
-double sendBuffer[numElements];
 
 // Define an instance of a football field
 FootballField field;
@@ -182,13 +174,6 @@ void mainOpenGL(int argc, char**argv)
 int main(int argc, char**argv)
 
 {
-    std::thread t1(mainOpenGL, argc, argv);
-
-    // Sleep for 5 seconds
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    for (int ii = 0; ii < 600 ; ii++)
-    {
-    }
-    t1.join();
+    mainOpenGL(argc, argv);
     return 0;
 }
