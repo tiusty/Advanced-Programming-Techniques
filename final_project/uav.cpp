@@ -175,7 +175,7 @@ Coordinate UAV::getForce()
 {
     Coordinate force;
 
-    if( velMag() > 5)
+    if( velMag() > 8)
     {
         force = -10*velUnitVec();
     }
@@ -188,13 +188,13 @@ Coordinate UAV::getForce()
 
         // Limit the force of the UAV motors to +=10 so that the extra 10 newton are always
         //  being used to counter the effets of gravity
-        if(mag > 9)
+        if(mag > 8)
         {
-            mag = 9;
+            mag = 8;
         }
-        else if (mag < -9)
+        else if (mag < -8)
         {
-            mag = -9;
+            mag = -8;
         }
 
         // calculate the force of the desired direction
@@ -203,7 +203,7 @@ Coordinate UAV::getForce()
 
         if(!initApproach)
         {
-            double leftOverForce = 1;
+            double leftOverForce = 2;
             Coordinate ortho = getOrthogonalVector(unitVec);
             force.x += leftOverForce*ortho.x;
             force.y += leftOverForce*ortho.y;
