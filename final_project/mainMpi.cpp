@@ -27,9 +27,14 @@ bool decrease{false};
 // Variables for MPI framework
 const int rcvSize = 16 * field.numElements; // (Main task + 15 UAVs) * numElements
 
+// The field data received from all gather
 double* rcvbuffer = new double[rcvSize];
 
+// Buffer to send to all gather
 double sendBuffer[field.numElements];
+
+// Used to indicate when to start all gather
+int counterStart = 0;
 
 // Camera Parameters
 float eye_x = 0, eye_y = 50, eye_z = 50;
@@ -114,15 +119,24 @@ void renderScene()
 
     glutSwapBuffers(); // Make it all visible
 
-    // Gather all the data to synchronize all the uavs
-    // Note, tha master process (i.e rank 0)  does not actually run the code for a UAV
-    //  Instead it just runs the blocking GLMain function
-    //  Therefore sendBuffer should always be blank since the master process doesn't actually
-    //  store anyinformation
-    MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
-
-    // Based on the data from all the uavs, set the field data so that the window draws properly
-    field.setFieldData(rcvbuffer);
+    // Since we are waiting 5 seconds on the child processes before starting,
+    // since every timer increment is 100ms, 50 increments will be 5 seconds.
+    // Then start syncing with the child processes
+    if(counterStart > 50)
+    {
+        // Gather all the data to synchronize all the uavs
+        // Note, tha master process (i.e rank 0)  does not actually run the code for a UAV
+        //  Instead it just runs the blocking GLMain function
+        //  Therefore sendBuffer should always be blank since the master process doesn't actually
+        //  store any information
+        MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
+        // Based on the data from all the uavs, set the field data so that the window draws properly
+        field.setFieldData(rcvbuffer);
+    }
+    else
+    {
+        counterStart++;
+    }
 }
 //----------------------------------------------------------------------
 // timerFunction  - called whenever the timer fires
@@ -198,7 +212,10 @@ int main(int argc, char**argv)
         unsigned int uavNum = rank-1;
         // Sleep for 5 seconds
         std::this_thread::sleep_for(std::chrono::seconds(5));
-        for (int ii = 0; ii < 600 ; ii++)
+        // We want to simulation to run for 60seconds around the sphere.
+        // It takes around 20 seconds to get to the sphere so need 800 iterations
+        // since each iteration is 100ms.
+        for (int ii = 0; ii < 800 ; ii++)
         {
             // For each uav process
 
