@@ -21,7 +21,7 @@ constexpr float yardToMeter(float yardValue)
  * Classes stores the state of the football field and all the uavs on it
  *
  * Data format per UAV is:
- * x,y,z,velx,vely,velz, initApproach
+ * x,y,z,velx,vely,velz, initApproach,end
  *
  * Used for MPI framework for passing data between processes
  */
@@ -97,7 +97,7 @@ public: // Members
     /**
      * The number of elements per UAV to send in the MPI framework
      */
-    static constexpr unsigned int numElements{7};
+    static constexpr unsigned int numElements{8};
     /**
      * Stores all the uavs
      */

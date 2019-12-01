@@ -35,6 +35,8 @@ double sendBuffer[field.numElements];
 
 // Used to indicate when to start all gather
 int counterStart = 0;
+// Runs the number of iterations so it can quit properly on the main process
+int counterRun = 0;
 
 // Camera Parameters
 float eye_x = 0, eye_y = 50, eye_z = 50;
@@ -132,6 +134,14 @@ void renderScene()
         MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
         // Based on the data from all the uavs, set the field data so that the window draws properly
         field.setFieldData(rcvbuffer);
+
+        // Check one of the uavs, and when it indicates the simluation is over then quit the main process
+        if(rcvbuffer[field.numElements + 7])
+        {
+            MPI_Finalize();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            exit(0);
+        }
     }
     else
     {
@@ -227,6 +237,8 @@ int main(int argc, char**argv)
 
             // Get that data for that UAV
             field.getUavData(sendBuffer, uavNum);
+            // Set end = false;
+            sendBuffer[7] = false;
 
             // Set it to the all gather so everyone gets a copy of the field data
             MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
@@ -234,9 +246,16 @@ int main(int argc, char**argv)
             // Everyone receive the updated state for the field
             field.setFieldData(rcvbuffer);
         }
+
+        // Last send with end equal to true to indicate the end of the simulation
+        field.getUavData(sendBuffer, uavNum);
+        sendBuffer[7] = true;
+        // Set it to the all gather so everyone gets a copy of the field data
+        MPI_Allgather(sendBuffer, field.numElements, MPI_DOUBLE, rcvbuffer, field.numElements, MPI_DOUBLE, MPI_COMM_WORLD);
     }
-    
+
     // End MPI
     MPI_Finalize();
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
     return 0;
 }

@@ -37,7 +37,7 @@ void FootballField::checkCollisions()
     {
         for(int j=i; j < uavs.size(); j++)
         {
-            // If another UAV comes within .01 of it then swap velocity vectors
+            // If another UAV comes within .51 of it then swap velocity vectors
             if(distanceBetweenUavs(uavs.at(i), uavs.at(j)) < .51)
             {
                 Coordinate vel1 = uavs.at(i).velocity;
