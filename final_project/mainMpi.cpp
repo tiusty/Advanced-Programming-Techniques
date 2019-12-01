@@ -235,5 +235,8 @@ int main(int argc, char**argv)
             field.setFieldData(rcvbuffer);
         }
     }
+    
+    // End MPI
+    MPI_Finalize();
     return 0;
 }
