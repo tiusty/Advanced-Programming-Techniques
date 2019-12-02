@@ -29,3 +29,13 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
         )
+
+add_executable(textureExample
+        examples/mainTexture.cpp)
+
+target_link_libraries (textureExample
+        PUBLIC
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT}
+        )

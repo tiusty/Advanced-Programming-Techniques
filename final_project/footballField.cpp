@@ -63,19 +63,24 @@ void FootballField::drawSphere()
     glPopMatrix();
 }
 
-void FootballField::drawField()
+void FootballField::drawField(GLuint texture[])
 {
     // To make calculations easier. Yard 0 on the field starts at 0 and ends at 100 yards.
     // Then the vertex is drawn an extra 10 yards on each side, i.e -10 to 110 yards to
     //  draw the end zone.
     glPushMatrix();
-        glColor3f(0.0, 1.0, 0.0); // set drawing color to white
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
         glBegin(GL_QUADS);
-        glVertex3f(0-yardToMeter(3), 0-yardToMeter(10), 0.0);
-        glVertex3f(0-yardToMeter(3), lenFootballField+yardToMeter(10), 0.0);
-        glVertex3f(widthFootballField+yardToMeter(3), lenFootballField+yardToMeter(10), 0.0);
-        glVertex3f(widthFootballField+yardToMeter(3), 0-yardToMeter(10), 0.0);
+        glTexCoord2f(1, 1);
+        glVertex3f(0, 0-yardToMeter(10), 0.0);
+        glTexCoord2f(0, 1);
+        glVertex3f(0, lenFootballField+yardToMeter(10), 0.0);
+        glTexCoord2f(0, 0);
+        glVertex3f(widthFootballField, lenFootballField+yardToMeter(10), 0.0);
+        glTexCoord2f(1, 0);
+        glVertex3f(widthFootballField, 0-yardToMeter(10), 0.0);
         glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 }
 

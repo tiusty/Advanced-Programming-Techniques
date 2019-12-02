@@ -19,6 +19,13 @@ Description:
 
 #include "footballField.h"
 
+#include "uav.h"
+#include "ECE_Bitmap.h"
+
+typedef struct Image Image;
+GLuint texture[1];
+BMP inBitmap;
+
 // Define an instance of a football field
 FootballField field;
 unsigned int colorOscillations{0};
@@ -99,7 +106,7 @@ void renderScene()
 
     glMatrixMode(GL_MODELVIEW);
 
-    field.drawField();
+    field.drawField(texture);
     field.drawSphere();
 
     for(auto &uav : field.uavs)
@@ -137,13 +144,46 @@ void timerFunction(int id)
     glutPostRedisplay();
     glutTimerFunc(100, timerFunction, 0);
 }
+
+void initTexture()
+{
+    glClearColor(0.5, 0.5, 0.5, 0.0);
+
+    glEnable(GL_DEPTH_TEST);
+
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    inBitmap.read("AmFBfield.bmp");
+
+
+    // Create Textures
+    glGenTextures(1, texture);
+
+    // Setup first texture
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inBitmap.bmp_info_header.width, inBitmap.bmp_info_header.height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, &inBitmap.data[0]);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //scale linearly when image bigger than texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //scale linearly when image smalled than texture
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+    glEnable(GL_TEXTURE_2D);
+
+}
 //----------------------------------------------------------------------
 // mainOpenGL  - standard GLUT initializations and callbacks
 //----------------------------------------------------------------------
 void mainOpenGL(int argc, char**argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(400, 400);
 
@@ -155,6 +195,7 @@ void mainOpenGL(int argc, char**argv)
     glEnable(GL_NORMALIZE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    initTexture();
 
     // Setup lights as needed
     // ...

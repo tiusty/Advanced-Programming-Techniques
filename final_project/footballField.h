@@ -10,6 +10,7 @@ Description:
 
 #include <array>
 #include "uav.h"
+#include <GL/glut.h>
 
 // Helper function to convert from yards to meters
 constexpr float yardToMeter(float yardValue)
@@ -50,7 +51,7 @@ public: // Methods
     /**
      * Draws the football field
      */
-    void drawField();
+    void drawField(GLuint texture[]);
     /**
      * Draws all the uavs
      */
