@@ -17,7 +17,13 @@ Description:
 #include <chrono>
 #include <thread>
 
+#include "ECE_Bitmap.h"
 #include "footballField.h"
+
+// Variables for texture
+typedef struct Image Image;
+GLuint texture[1];
+BMP inBitmap;
 
 // Define an instance of a football field
 FootballField field;
@@ -96,7 +102,7 @@ void renderScene()
     glMatrixMode(GL_MODELVIEW);
 
     // Draw elements on the window
-    field.drawField();
+    field.drawField(texture);
     field.drawSphere();
     field.drawUAVS(colorOscillations);
 
@@ -156,6 +162,41 @@ void timerFunction(int id)
     glutPostRedisplay();
     glutTimerFunc(100, timerFunction, 0);
 }
+/**
+ * Initializes the football field texture
+ */
+void initTexture()
+{
+    glClearColor(0.5, 0.5, 0.5, 0.0);
+
+    glEnable(GL_DEPTH_TEST);
+
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    inBitmap.read("AmFBfield.bmp");
+
+
+    // Create Textures
+    glGenTextures(1, texture);
+
+    // Setup first texture
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inBitmap.bmp_info_header.width, inBitmap.bmp_info_header.height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, &inBitmap.data[0]);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //scale linearly when image bigger than texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //scale linearly when image smalled than texture
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+    glEnable(GL_TEXTURE_2D);
+
+}
 //----------------------------------------------------------------------
 // mainOpenGL  - standard GLUT initializations and callbacks
 //----------------------------------------------------------------------
@@ -174,6 +215,7 @@ void mainOpenGL(int argc, char**argv)
     glEnable(GL_NORMALIZE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    initTexture();
 
     // Setup lights as needed
     // ...

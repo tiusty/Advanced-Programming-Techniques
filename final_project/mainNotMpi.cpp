@@ -22,6 +22,7 @@ Description:
 #include "uav.h"
 #include "ECE_Bitmap.h"
 
+// Variables for texture
 typedef struct Image Image;
 GLuint texture[1];
 BMP inBitmap;
@@ -145,6 +146,9 @@ void timerFunction(int id)
     glutTimerFunc(100, timerFunction, 0);
 }
 
+/**
+ * Initializes the football field texture
+ */
 void initTexture()
 {
     glClearColor(0.5, 0.5, 0.5, 0.0);
