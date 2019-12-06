@@ -1,4 +1,4 @@
-# Advanced programming techniques
+# Code for Advanced Programming Techniques
 
 Summary of Assignments:
 - Actual Assignemnts are stored as PDF in folder
