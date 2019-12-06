@@ -1,5 +1,4 @@
-# ece-6122
-Assignments for ECE 6122 Advanced programming techniques
+# Advanced programming techniques
 
 Summary of Assignments:
 - Actual Assignemnts are stored as PDF in folder
